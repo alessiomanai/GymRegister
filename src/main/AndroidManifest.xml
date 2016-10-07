@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.alessiomanai.gymregister">
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+
+    <!-- Permessi per dispositivi tablet -->
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="false"
+        android:xlargeScreens="true" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Gestionepalestre"
+            android:label="@string/title_activity_gestionepalestre"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".GestioneIscritti"
+            android:label="@string/title_activity_gestione_iscritti"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Aggiungi"
+            android:label="@string/title_activity_aggiungi"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Dettagli"
+            android:configChanges="orientation"
+            android:label="@string/title_activity_dettagli"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".EliminaPalestre"
+            android:label="@string/title_activity_elimina_palestre"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AggiungiPalestra"
+            android:label="@string/title_activity_aggiungi_palestra"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ModificaIscritto"
+            android:label="@string/title_activity_modifica_iscritto"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".InfoApp"
+            android:label="@string/title_activity_info_app"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Risultati"
+            android:label="@string/title_activity_risultati"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Note"
+            android:label="@string/title_activity_note"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Trasferimento"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Presenze"
+            android:label="@string/registroPresenze"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".PresenzeUtente"
+            android:label="@string/registroPresenze"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".PagamentiIscritto"
+            android:label="@string/pay"
+            android:screenOrientation="portrait" />
+        <activity android:name=".CercaPresenze" />
+        <activity android:name=".RinominaCorso" />
+        <activity android:name=".TrasferimentiNote">
+
+        </activity>
+    </application>
+
+</manifest>
