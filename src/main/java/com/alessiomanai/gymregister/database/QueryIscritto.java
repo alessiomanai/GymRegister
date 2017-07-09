@@ -3,6 +3,7 @@ package com.alessiomanai.gymregister.database;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import com.alessiomanai.gymregister.classi.Corso;
@@ -25,19 +26,25 @@ public class QueryIscritto extends Query {
     }
 
     /**
-     * aggiunge un nuovo iscritto al database
+     * aggiunge un iscritto alla palestra
+     * creazione utente con prepared statement anti sqlinjection
      */
     public void nuovo(Query context, Iscritto iscritto, Corso corso) {
 
         SQLiteDatabase database = context.getWritableDatabase();
 
-        database.execSQL("INSERT INTO " + Tabelle.InfoTabelle.tabelle[0] +
+        SQLiteStatement stmt = database.compileStatement("INSERT INTO " + Tabelle.InfoTabelle.tabelle[0] +
                 "(nome, dataDiNascita, telefono, indirizzo, " +
                 "citta, corso) VALUES (" +
-                "'" + iscritto.getId() + "', '" + iscritto.getDataDiNascita() +
-                "', '" + iscritto.getTelefono() + "', '" + iscritto.getIndirizzo() +
-                "', '" + iscritto.getCitta() + "', " + corso.getId()
+                "?, '" + iscritto.getDataDiNascita() +
+                "', '" + iscritto.getTelefono() + "', ?" +
+                ", ?, " + corso.getId()
                 + ")");
+
+        stmt.bindString(1, iscritto.getId());
+        stmt.bindString(2, iscritto.getIndirizzo());
+        stmt.bindString(3, iscritto.getCitta());
+        stmt.execute();
 
     }
 
@@ -106,14 +113,19 @@ public class QueryIscritto extends Query {
 
         SQLiteDatabase database = context.getWritableDatabase();
 
-        database.execSQL("UPDATE " + Tabelle.InfoTabelle.tabelle[0] +
-                " SET nome='" + iscritto.getId() + "'," +
+        SQLiteStatement stmt = database.compileStatement("UPDATE " + Tabelle.InfoTabelle.tabelle[0] +
+                " SET nome=?," +
                 " dataDiNascita='" + iscritto.getDataDiNascita() + "'," +
                 " telefono='" + iscritto.getTelefono() + "'," +
-                " indirizzo='" + iscritto.getIndirizzo() + "'," +
-                " citta='" + iscritto.getCitta() + "' " +
+                " indirizzo=?," +
+                " citta=? " +
                 "WHERE id=" + iscritto.getIdDatabase() + " AND " +
                 "corso=" + iscritto.getPalestra().getId() + ";");
+
+        stmt.bindString(1, iscritto.getId());
+        stmt.bindString(2, iscritto.getIndirizzo());
+        stmt.bindString(3, iscritto.getCitta());
+        stmt.execute();
 
         return true;
 

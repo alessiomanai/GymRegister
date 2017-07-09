@@ -3,7 +3,7 @@ package com.alessiomanai.gymregister.database;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
+import android.database.sqlite.SQLiteStatement;
 
 import com.alessiomanai.gymregister.classi.Corso;
 
@@ -28,10 +28,11 @@ public class QueryCorso extends Query {
 
         SQLiteDatabase database = context.getWritableDatabase();
 
-        database.execSQL("INSERT INTO " + Tabelle.InfoTabelle.tabelle[1] +
-                "(" + Tabelle.InfoTabelle.corso[1] + ") VALUES ('" + nuovoCorso.getNome() + "')");
+        SQLiteStatement stmt = database.compileStatement("INSERT INTO " + Tabelle.InfoTabelle.tabelle[1] +
+                "(" + Tabelle.InfoTabelle.corso[1] + ") VALUES (?)");
 
-        Log.v("Corso", "aggiunto");
+        stmt.bindString(1, nuovoCorso.getNome());
+        stmt.execute();
 
     }
 
