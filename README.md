@@ -1,4 +1,5 @@
-# Gym Register - Il registro digitale dei corsi della tua attività sportiva #
+# Gym Register  #
+## Il registro digitale dei corsi della tua attività sportiva
 
 GymRegister è l' applicazione per tablet Android per gestire gli iscritti dei corsi di una palestra o di una qualsiasi attività sportiva.
 
