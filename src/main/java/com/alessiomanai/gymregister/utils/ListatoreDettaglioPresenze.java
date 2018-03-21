@@ -45,8 +45,8 @@ public class ListatoreDettaglioPresenze extends ArrayAdapter<Presenza> {
 
         final View rowView = inflater.inflate(R.layout.listatorepresenzeutente, null, true);    //infila il file xml nell' intent
 
-        TextView txtTitle = (TextView) rowView.findViewById(R.id.nomeTP);
-        ImageButton bottone = (ImageButton) rowView.findViewById(R.id.eliminaPresenza);
+        TextView txtTitle = rowView.findViewById(R.id.nomeTP);
+        ImageButton bottone = rowView.findViewById(R.id.eliminaPresenza);
 
         txtTitle.setText(presenze.get(position).getData());
 

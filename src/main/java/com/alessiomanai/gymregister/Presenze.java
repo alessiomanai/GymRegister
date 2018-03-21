@@ -40,8 +40,14 @@ public class Presenze extends Activity {
         int i = 0;
         ArrayList<Presenza> presenzeOdierne = new ArrayList<>();
 
-        QueryIscritto database = new QueryIscritto(this);
-        elencoIscritti = database.caricaIscritti(database, corso);
+        try {
+
+            QueryIscritto database = new QueryIscritto(this);
+            elencoIscritti = database.caricaIscritti(database, corso);
+
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
 
         QueryPresenze db = new QueryPresenze(this);
         presenzeOdierne = db.presenzeOdierne(db, corso);
@@ -66,7 +72,7 @@ public class Presenze extends Activity {
 
         }
 
-        ListView list1 = (ListView) this.findViewById(R.id.listViewPresenze);
+        ListView list1 = this.findViewById(R.id.listViewPresenze);
         ListatorePresenze adapter = new ListatorePresenze(this, listaPresenze);
         list1.setAdapter(adapter);
 
@@ -90,7 +96,7 @@ public class Presenze extends Activity {
         String data = sdf.format(new Date());
 
         //trova la stringa sul layout
-        TextView asd = (TextView) findViewById(R.id.dataPresenze);
+        TextView asd = findViewById(R.id.dataPresenze);
         //setta la stringa sul layout
         asd.setText(data);
 

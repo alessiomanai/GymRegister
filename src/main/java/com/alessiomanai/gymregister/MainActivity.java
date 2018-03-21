@@ -3,7 +3,7 @@ package com.alessiomanai.gymregister;
 /***
  * Gym Register
  * <p>
- * Copyright (C) 2014-2016  Alessio Manai
+ * Copyright (C) 2014-2018  Alessio Manai
  * <p>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,11 +21,14 @@ package com.alessiomanai.gymregister;
  * alessiomanai.ml      alessio@manai.tk
  */
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -64,10 +67,10 @@ public class MainActivity extends Activity {
             @Override
             public void onFinish() {
 
-				palestre = new Intent(getBaseContext(), Gestionepalestre.class);
-				//avvia la finestra corrispondente
-				startActivity(palestre);
-				finish();    //termina la activity
+                palestre = new Intent(getBaseContext(), Gestionepalestre.class);
+                //avvia la finestra corrispondente
+                startActivity(palestre);
+                finish();    //termina la activity
 
             }
 

@@ -2,12 +2,14 @@ package com.alessiomanai.gymregister;
 
 
 import android.app.Activity;
-import android.app.DialogFragment;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -16,9 +18,7 @@ import com.alessiomanai.gymregister.classi.Corso;
 import com.alessiomanai.gymregister.classi.Iscritto;
 import com.alessiomanai.gymregister.database.QueryIscritto;
 import com.alessiomanai.gymregister.database.QueryPagamento;
-import com.alessiomanai.gymregister.utils.DatePickerFragment;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class Aggiungi extends Activity {
@@ -30,18 +30,12 @@ public class Aggiungi extends Activity {
     View dantf;
     EditText datadinascita;
     String nec = null, addres = null, tel = null, citta, datanasc;
-    DatePickerFragment datePickerFragment;
-    boolean isResumed = false;
-
+    private DatePickerDialog.OnDateSetListener mDateSetListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_aggiungi);
-
-
-        isResumed = false;  // utilizzo questo per gestire il focus in modo corretto
-        datePickerFragment = new DatePickerFragment();
 
         //collego le edit text
         nomeecognome = (EditText) findViewById(R.id.nec);
@@ -57,34 +51,29 @@ public class Aggiungi extends Activity {
         dantf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                datePickerFragment.show(getFragmentManager(), "datePicker");
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog dialog = new DatePickerDialog(
+                        Aggiungi.this,
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        mDateSetListener,
+                        year, month, day);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
             }
         });
 
-        // ... ed anche al focus tramite tastiera
-        dantf.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onFocusChange(View view, boolean focus) {
-                if (focus && isResumed) {
-                    datePickerFragment.show(getFragmentManager(), "datePicker");
-                }
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                month = month + 1;
+                String date = day + "/" + month + "/" + year;
+                datadinascita.setText(date);
             }
-        });
-
-        // ci registriamo agli eventi del popup (ok e annulla)
-        datePickerFragment.setOnDatePickerFragmentChanged(new DatePickerFragment.DatePickerFragmentListener() {
-            @Override
-            public void onDatePickerFragmentOkButton(DialogFragment dialog, Calendar date) {
-                // trasferiamo il valore sul campo di testo
-                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-                datadinascita.setText(format.format(date.getTime()));
-            }
-
-            @Override
-            public void onDatePickerFragmentCancelButton(DialogFragment dialog) {
-                // non facciamo nulla
-            }
-        });
+        };
 
         //se viene premuto il bottone conferma salva i dati del nuovo utente
         conferma.setOnClickListener(new View.OnClickListener() {
@@ -116,13 +105,13 @@ public class Aggiungi extends Activity {
                     citta = citta.replace("#", "-");    //sanitize input
 
 
-                    if (nec == null)
+                    if (nec == null || nec.equals(""))
                         nec = "<no name>";
 
-                    if (addres == null)
+                    if (addres == null || addres.equals(""))
                         addres = "<nessun indirizzo>";
 
-                    if (tel == null)
+                    if (tel == null || tel.equals(""))
                         tel = "<nessun numero>";
 
                     salva(new Iscritto(nec, tel, addres, citta, datanasc), palestra);    //crea un nuovo utente
@@ -171,4 +160,5 @@ public class Aggiungi extends Activity {
     private boolean isEmpty(EditText etText) {
         return etText.getText().toString().trim().length() == 0;
     }
+
 }

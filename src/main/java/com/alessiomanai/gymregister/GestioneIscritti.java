@@ -237,107 +237,6 @@ public class GestioneIscritti extends Activity {
             }
         });
 
-        /*menu.add(R.string.men3).setOnMenuItemClickListener(new OnMenuItemClickListener() {
-            @Override
-			public boolean onMenuItemClick(MenuItem item) {
-
-				try {
-
-					salvaBackup();
-
-				} catch (Exception e) {
-
-					Toast.makeText(GestioneIscritti.this, R.string.ferror, Toast.LENGTH_SHORT).show();
-					e.printStackTrace();
-				}
-				return true;
-			}
-		});
-
-		menu.add(R.string.men4).setOnMenuItemClickListener(new OnMenuItemClickListener() {
-			@Override
-			public boolean onMenuItemClick(MenuItem item) {
-
-				AlertDialog.Builder builder = new AlertDialog.Builder(GestioneIscritti.this);
-
-				builder.setTitle(R.string.conferma);
-				builder.setMessage(R.string.ripristino);
-				builder.setCancelable(false);
-				builder.setPositiveButton(R.string.ripristina, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						// Confermato!
-
-						try {
-
-							caricaBackup();
-
-						} catch (IOException e) {
-
-							messaggioBackupNonPresente();
-						}
-						ricarica();
-
-						dialog.dismiss();
-					}
-				});
-
-				builder.setNegativeButton(R.string.annulla, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						// Annullato!
-						//Toast.makeText(GestioneIscritti.this, "Operazione annullata", Toast.LENGTH_SHORT).show();
-
-						dialog.dismiss();
-					}
-				});
-
-				builder.show();
-
-				return true;
-			}
-		});
-
-		menu.add(R.string.men5).setOnMenuItemClickListener(new OnMenuItemClickListener() {
-			@Override
-			public boolean onMenuItemClick(MenuItem item) {
-
-				//finestra di conferma
-				AlertDialog.Builder builder = new AlertDialog.Builder(GestioneIscritti.this);
-
-				builder.setTitle(R.string.conferma);
-				builder.setMessage(R.string.cleall);
-				builder.setCancelable(false);
-				builder.setPositiveButton(R.string.elimina, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						// Confermato!
-
-						cancelladati();
-						eliminato();
-						ricarica();
-
-						dialog.dismiss();
-					}
-				});
-				//negativa
-				builder.setNegativeButton(R.string.annulla, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						// Annullato!
-						Toast.makeText(GestioneIscritti.this, R.string.opannul, Toast.LENGTH_SHORT).show();
-
-						dialog.dismiss();
-					}
-				});
-				//visualizza la finestra
-				builder.show();
-
-
-				return true;
-			}
-		});*/
-
         return true;
     }
 
@@ -574,6 +473,315 @@ public class GestioneIscritti extends Activity {
 
         alert.show();
 
+
+    }
+
+    /**
+     * salva il backup dei dati
+     */
+    public void salvaBackup() {
+
+        //scrive file
+        try {
+
+            /***dati utenti*/
+            OutputStreamWriter fileid = new OutputStreamWriter(openFileOutput("Backup" + palestra.getNome(), Context.MODE_PRIVATE));
+            OutputStreamWriter fileaddress = new OutputStreamWriter(openFileOutput("Backup" + palestra.getFileIndirizzi(), Context.MODE_PRIVATE));
+            OutputStreamWriter filetel = new OutputStreamWriter(openFileOutput("Backup" + palestra.getFileNumeriTelefono(), Context.MODE_PRIVATE));
+            OutputStreamWriter filedatn = new OutputStreamWriter(openFileOutput("Backup" + palestra.getFiledatanascita(), Context.MODE_PRIVATE));
+            OutputStreamWriter filecit = new OutputStreamWriter(openFileOutput("Backup" + palestra.getFilecitta(), Context.MODE_PRIVATE));
+
+            /***info pagamenti*/
+            OutputStreamWriter filepag = new OutputStreamWriter(openFileOutput("Backup" + palestra.getFileiscrizione(), Context.MODE_PRIVATE));
+
+            //creazione e dichiarazione dei file contenenti le mensilità pagate
+            OutputStreamWriter file0 = new OutputStreamWriter(openFileOutput(palestra.getBackupOf(palestra.getFileSettembre()), Context.MODE_PRIVATE));
+            OutputStreamWriter file1 = new OutputStreamWriter(openFileOutput(palestra.getBackupOf(palestra.getFileOttobre()), Context.MODE_PRIVATE));
+            OutputStreamWriter file2 = new OutputStreamWriter(openFileOutput(palestra.getBackupOf(palestra.getFileNovembre()), Context.MODE_PRIVATE));
+            OutputStreamWriter file3 = new OutputStreamWriter(openFileOutput(palestra.getBackupOf(palestra.getFileDicembre()), Context.MODE_PRIVATE));
+            OutputStreamWriter file4 = new OutputStreamWriter(openFileOutput(palestra.getBackupOf(palestra.getFileGennaio()), Context.MODE_PRIVATE));
+            OutputStreamWriter file5 = new OutputStreamWriter(openFileOutput(palestra.getBackupOf(palestra.getFileFebbraio()), Context.MODE_PRIVATE));
+            OutputStreamWriter file6 = new OutputStreamWriter(openFileOutput(palestra.getBackupOf(palestra.getFileMarzo()), Context.MODE_PRIVATE));
+            OutputStreamWriter file7 = new OutputStreamWriter(openFileOutput(palestra.getBackupOf(palestra.getFileAprile()), Context.MODE_PRIVATE));
+            OutputStreamWriter file8 = new OutputStreamWriter(openFileOutput(palestra.getBackupOf(palestra.getFileMaggio()), Context.MODE_PRIVATE));
+            OutputStreamWriter file9 = new OutputStreamWriter(openFileOutput(palestra.getBackupOf(palestra.getFileGiugno()), Context.MODE_PRIVATE));
+            OutputStreamWriter file10 = new OutputStreamWriter(openFileOutput(palestra.getBackupOf(palestra.getFileLuglio()), Context.MODE_PRIVATE));
+
+
+            //salva i dati nel file
+            for (int i = 0; i < iscritti.size(); i++) {
+
+                fileid.write(iscritti.get(i).getId());    //salva gli id
+
+                fileaddress.write(iscritti.get(i).getIndirizzo());   //salva gli indirizzi
+
+                filetel.write(iscritti.get(i).getTelefono());    //salva i numeri di telefono
+
+                filedatn.write(iscritti.get(i).getDataDiNascita());    //salva le date di nascita
+
+                filecit.write(iscritti.get(i).getCitta());    //salva le citta
+
+                /***salvataggio file pagamenti*/
+
+                filepag.write(iscritti.get(i).getIscrizione());    //salva i dati dell'iscrizione
+
+                file0.write(iscritti.get(i).getSettembre());    //salva i dati dell'iscrizione
+
+                file1.write(iscritti.get(i).getOttobre());    //salva i dati dell'iscrizione
+
+                file2.write(iscritti.get(i).getNovembre());    //salva i dati dell'iscrizione
+
+                file3.write(iscritti.get(i).getDicembre());    //salva i dati dell'iscrizione
+
+                file4.write(iscritti.get(i).getGennaio());    //salva i dati dell'iscrizione
+
+                file5.write(iscritti.get(i).getFebbraio());    //salva i dati dell'iscrizione
+
+                file6.write(iscritti.get(i).getMarzo());    //salva i dati dell'iscrizione
+
+                file7.write(iscritti.get(i).getAprile());    //salva i dati dell'iscrizione
+
+                file8.write(iscritti.get(i).getMaggio());    //salva i dati dell'iscrizione
+
+                file9.write(iscritti.get(i).getGiugno());    //salva i dati dell'iscrizione
+
+                file10.write(iscritti.get(i).getLuglio());    //salva i dati dell'iscrizione
+
+            }
+
+            //chiude i file aperti
+            fileid.close();
+            fileaddress.close();
+            filetel.close();
+            filedatn.close();
+            filecit.close();
+
+            filepag.close();
+
+            //chiusura mesi
+            file0.close();
+            file1.close();
+            file2.close();
+            file3.close();
+            file4.close();
+            file5.close();
+            file6.close();
+            file7.close();
+            file8.close();
+            file9.close();
+            file10.close();
+
+            //Toast.makeText(this, R.string.fsave, Toast.LENGTH_SHORT).show();
+
+        } catch (FileNotFoundException e) {
+            Toast.makeText(this, R.string.ferror, Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        } catch (IOException e) {
+            Toast.makeText(this, R.string.ferror, Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+
+
+        Toast.makeText(this, R.string.backupdone, Toast.LENGTH_SHORT).show();
+
+    }
+
+
+    void caricaBackup() throws IOException {
+
+        String s;
+
+        //carica i nomi
+        FileInputStream in = openFileInput(palestra.getBackupOf(palestra.getFileUsers()));
+        FileInputStream asd = null;
+        FileInputStream w = null;
+        int i;
+
+        InputStreamReader inputStreamReader = new InputStreamReader(in);
+        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+        while ((s = bufferedReader.readLine()) != null) {
+            GestioneIscritti.iscritti.add(new Iscritto(s + "\n"));    //aggiunge un iscritto
+        }
+        in.close();
+
+
+        //carica gli indirizzi
+        asd = openFileInput(palestra.getBackupOf(palestra.getFileIndirizzi()));
+        inputStreamReader = new InputStreamReader(asd);
+        bufferedReader = new BufferedReader(inputStreamReader);
+        i = 0;
+        while ((s = bufferedReader.readLine()) != null) {
+            GestioneIscritti.iscritti.get(i).setIndirizzo(s + "\n");
+            i++;
+        }
+        asd.close();
+
+
+        //carica i numeri di telefono
+        w = openFileInput(palestra.getBackupOf(palestra.getFileNumeriTelefono()));
+        inputStreamReader = new InputStreamReader(w);
+        bufferedReader = new BufferedReader(inputStreamReader);
+        i = 0;
+        while ((s = bufferedReader.readLine()) != null) {
+            GestioneIscritti.iscritti.get(i).setTelefono(s + "\n");
+            i++;
+        }
+        w.close();
+
+        //carica le date di nascita
+        w = openFileInput(palestra.getBackupOf(palestra.getFiledatanascita()));
+        inputStreamReader = new InputStreamReader(w);
+        bufferedReader = new BufferedReader(inputStreamReader);
+        i = 0;
+        while ((s = bufferedReader.readLine()) != null) {
+            GestioneIscritti.iscritti.get(i).setDataDiNascita(s + "\n");
+            i++;
+        }
+        w.close();
+
+        //carica la città
+        w = openFileInput(palestra.getBackupOf(palestra.getFilecitta()));
+        inputStreamReader = new InputStreamReader(w);
+        bufferedReader = new BufferedReader(inputStreamReader);
+        i = 0;
+        while ((s = bufferedReader.readLine()) != null) {
+            GestioneIscritti.iscritti.get(i).setCitta(s + "\n");
+            i++;
+        }
+
+        w.close();
+
+
+        //carica i dati sull'scrizione
+        w = openFileInput(palestra.getBackupOf(palestra.getFileiscrizione()));
+        inputStreamReader = new InputStreamReader(w);
+        bufferedReader = new BufferedReader(inputStreamReader);
+        i = 0;
+        while ((s = bufferedReader.readLine()) != null) {
+            GestioneIscritti.iscritti.get(i).setIscrizione(s + "\n");
+            i++;
+        }
+        w.close();
+
+
+        //carica mensilità
+        in = openFileInput(palestra.getBackupOf(palestra.getFileSettembre()));
+        inputStreamReader = new InputStreamReader(in);
+        bufferedReader = new BufferedReader(inputStreamReader);
+        i = 0;
+        while ((s = bufferedReader.readLine()) != null) {
+            GestioneIscritti.iscritti.get(i).setSettembre(s + "\n");
+            i++;
+        }
+        in.close();
+
+        in = openFileInput(palestra.getBackupOf(palestra.getFileOttobre()));
+        inputStreamReader = new InputStreamReader(in);
+        bufferedReader = new BufferedReader(inputStreamReader);
+        i = 0;
+        while ((s = bufferedReader.readLine()) != null) {
+            GestioneIscritti.iscritti.get(i).setOttobre(s + "\n");
+            i++;
+        }
+        in.close();
+
+
+        in = openFileInput(palestra.getBackupOf(palestra.getFileNovembre()));
+        inputStreamReader = new InputStreamReader(in);
+        bufferedReader = new BufferedReader(inputStreamReader);
+        i = 0;
+        while ((s = bufferedReader.readLine()) != null) {
+            GestioneIscritti.iscritti.get(i).setNovembre(s + "\n");
+            i++;
+        }
+        in.close();
+
+
+        in = openFileInput(palestra.getBackupOf(palestra.getFileDicembre()));
+        inputStreamReader = new InputStreamReader(in);
+        bufferedReader = new BufferedReader(inputStreamReader);
+        i = 0;
+        while ((s = bufferedReader.readLine()) != null) {
+            GestioneIscritti.iscritti.get(i).setDicembre(s + "\n");
+            i++;
+        }
+        in.close();
+
+
+        in = openFileInput(palestra.getBackupOf(palestra.getFileGennaio()));
+        inputStreamReader = new InputStreamReader(in);
+        bufferedReader = new BufferedReader(inputStreamReader);
+        i = 0;
+        while ((s = bufferedReader.readLine()) != null) {
+            GestioneIscritti.iscritti.get(i).setGennaio(s + "\n");
+            i++;
+        }
+        in.close();
+
+
+        in = openFileInput(palestra.getBackupOf(palestra.getFileFebbraio()));
+        inputStreamReader = new InputStreamReader(in);
+        bufferedReader = new BufferedReader(inputStreamReader);
+        i = 0;
+        while ((s = bufferedReader.readLine()) != null) {
+            GestioneIscritti.iscritti.get(i).setFebbraio(s + "\n");
+            i++;
+        }
+        in.close();
+
+
+        in = openFileInput(palestra.getBackupOf(palestra.getFileMarzo()));
+        inputStreamReader = new InputStreamReader(in);
+        bufferedReader = new BufferedReader(inputStreamReader);
+        i = 0;
+        while ((s = bufferedReader.readLine()) != null) {
+            GestioneIscritti.iscritti.get(i).setMarzo(s + "\n");
+            i++;
+        }
+        in.close();
+
+        in = openFileInput(palestra.getBackupOf(palestra.getFileAprile()));
+        inputStreamReader = new InputStreamReader(in);
+        bufferedReader = new BufferedReader(inputStreamReader);
+        i = 0;
+        while ((s = bufferedReader.readLine()) != null) {
+            GestioneIscritti.iscritti.get(i).setAprile(s + "\n");
+            i++;
+        }
+        in.close();
+
+        in = openFileInput(palestra.getBackupOf(palestra.getFileMaggio()));
+        inputStreamReader = new InputStreamReader(in);
+        bufferedReader = new BufferedReader(inputStreamReader);
+        i = 0;
+        while ((s = bufferedReader.readLine()) != null) {
+            GestioneIscritti.iscritti.get(i).setMaggio(s + "\n");
+            i++;
+        }
+        in.close();
+
+
+        in = openFileInput(palestra.getBackupOf(palestra.getFileGiugno()));
+        inputStreamReader = new InputStreamReader(in);
+        bufferedReader = new BufferedReader(inputStreamReader);
+        i = 0;
+        while ((s = bufferedReader.readLine()) != null) {
+            GestioneIscritti.iscritti.get(i).setGiugno(s + "\n");
+            i++;
+        }
+        in.close();
+
+
+        in = openFileInput(palestra.getBackupOf(palestra.getFileLuglio()));
+        inputStreamReader = new InputStreamReader(in);
+        bufferedReader = new BufferedReader(inputStreamReader);
+        i = 0;
+        while ((s = bufferedReader.readLine()) != null) {
+            GestioneIscritti.iscritti.get(i).setLuglio(s + "\n");
+            i++;
+        }
+        in.close();
 
     }
 

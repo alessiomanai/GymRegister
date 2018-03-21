@@ -245,4 +245,38 @@ public class QueryIscritto extends Query {
         return true;
     }
 
+    public boolean aggiornaFotoProfilo(Query context, Iscritto iscritto) {
+
+        SQLiteDatabase database = context.getWritableDatabase();
+
+        database.execSQL("UPDATE " + Tabelle.InfoTabelle.tabelle[0] +
+                " SET fotoProfilo='" + iscritto.getUrlFoto() + "' " +
+                "WHERE id=" + iscritto.getIdDatabase());
+
+        return true;
+    }
+
+    public String getUrlPhoto(Query context, Iscritto iscritto) {
+
+        SQLiteDatabase database = context.getReadableDatabase();
+
+        Cursor risultati = database.rawQuery("SELECT fotoProfilo FROM Iscritto WHERE id =" + iscritto.getIdDatabase(), null);
+        risultati.moveToFirst();
+
+        return risultati.getString(0);
+
+    }
+
+    public boolean cambiaCorsoUtente(Query context, Iscritto iscritto, Corso nuovoCorso) {
+
+        SQLiteDatabase database = context.getWritableDatabase();
+
+        database.execSQL("UPDATE " + Tabelle.InfoTabelle.tabelle[0] +
+                " SET corso='" + nuovoCorso.getId() + "' " +
+                "WHERE id=" + iscritto.getIdDatabase());
+
+        return true;
+
+    }
+
 }

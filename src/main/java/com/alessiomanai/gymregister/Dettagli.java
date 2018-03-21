@@ -2,15 +2,22 @@ package com.alessiomanai.gymregister;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,15 +25,36 @@ import com.alessiomanai.gymregister.classi.Corso;
 import com.alessiomanai.gymregister.classi.Iscritto;
 import com.alessiomanai.gymregister.database.QueryIscritto;
 import com.alessiomanai.gymregister.database.QueryPagamento;
+import com.alessiomanai.gymregister.utils.FileDialog;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FilenameFilter;
+import java.io.IOException;
+
+import static android.content.ContentValues.TAG;
 
 public class Dettagli extends Activity {
 
+    private static final String FTYPE = ".jpg";
+    private static final int DIALOG_LOAD_FILE = 1000;
     static public TextView riepilogoPagamentiT;
     static int posizione;    //posizione all' interno dell array utenti
     static Corso palestra;        //nome palestra usata
     static Iscritto iscritto;   //dettagli utente
     ImageButton modifica;
-    ImageButton elimina, pagamenti, presenze, note;
+    ImageButton elimina, pagamenti, presenze, note, cambia;
+    ImageView fotoProfilo;  //foto profilo utente
+
+    /**
+     * per il caricamento della foto
+     */
+    private String[] mFileList;
+    private File mPath = new File(Environment.getExternalStorageDirectory() + "//yourdir//");
+    private String mChosenFile;
+
 
     public static void caricaRiepilogoPagamenti(Context context) {
 
@@ -35,68 +63,74 @@ public class Dettagli extends Activity {
 
         riepilogo += " " + context.getResources().getString(R.string.pay) + ":\n";
 
-        if (iscritto.getIscrizione().charAt(0) == 'p') {
-            riepilogo += "" + context.getResources().getString(R.string.iscrizione);
-            nessunPagamento = false;
-        }
+        try {
 
-        if (iscritto.getSettembre().charAt(0) == 'p') {
-            riepilogo += " " + context.getResources().getString(R.string.sept);
-            nessunPagamento = false;
-        }
+            if (iscritto.getIscrizione().charAt(0) == 'p') {
+                riepilogo += "" + context.getResources().getString(R.string.iscrizione);
+                nessunPagamento = false;
+            }
 
-        if (iscritto.getOttobre().charAt(0) == 'p') {
-            riepilogo += " " + context.getResources().getString(R.string.oct);
-            nessunPagamento = false;
-        }
+            if (iscritto.getSettembre().charAt(0) == 'p') {
+                riepilogo += " " + context.getResources().getString(R.string.sept);
+                nessunPagamento = false;
+            }
 
-        if (iscritto.getNovembre().charAt(0) == 'p') {
-            riepilogo += " " + context.getResources().getString(R.string.nov);
-            nessunPagamento = false;
-        }
+            if (iscritto.getOttobre().charAt(0) == 'p') {
+                riepilogo += " " + context.getResources().getString(R.string.oct);
+                nessunPagamento = false;
+            }
 
-        if (iscritto.getDicembre().charAt(0) == 'p') {
-            riepilogo += " " + context.getResources().getString(R.string.dec);
-            nessunPagamento = false;
-        }
+            if (iscritto.getNovembre().charAt(0) == 'p') {
+                riepilogo += " " + context.getResources().getString(R.string.nov);
+                nessunPagamento = false;
+            }
 
-        if (iscritto.getGennaio().charAt(0) == 'p') {
-            riepilogo += " " + context.getResources().getString(R.string.jan);
-            nessunPagamento = false;
-        }
+            if (iscritto.getDicembre().charAt(0) == 'p') {
+                riepilogo += " " + context.getResources().getString(R.string.dec);
+                nessunPagamento = false;
+            }
 
-        if (iscritto.getFebbraio().charAt(0) == 'p') {
-            riepilogo += " " + context.getResources().getString(R.string.feb);
-            nessunPagamento = false;
-        }
+            if (iscritto.getGennaio().charAt(0) == 'p') {
+                riepilogo += " " + context.getResources().getString(R.string.jan);
+                nessunPagamento = false;
+            }
 
-        if (iscritto.getMarzo().charAt(0) == 'p') {
-            riepilogo += " " + context.getResources().getString(R.string.mar);
-            nessunPagamento = false;
-        }
+            if (iscritto.getFebbraio().charAt(0) == 'p') {
+                riepilogo += " " + context.getResources().getString(R.string.feb);
+                nessunPagamento = false;
+            }
 
-        if (iscritto.getAprile().charAt(0) == 'p') {
-            riepilogo += " " + context.getResources().getString(R.string.apr);
-            nessunPagamento = false;
-        }
+            if (iscritto.getMarzo().charAt(0) == 'p') {
+                riepilogo += " " + context.getResources().getString(R.string.mar);
+                nessunPagamento = false;
+            }
 
-        if (iscritto.getMaggio().charAt(0) == 'p') {
-            riepilogo += " " + context.getResources().getString(R.string.mag);
-            nessunPagamento = false;
-        }
+            if (iscritto.getAprile().charAt(0) == 'p') {
+                riepilogo += " " + context.getResources().getString(R.string.apr);
+                nessunPagamento = false;
+            }
 
-        if (iscritto.getGiugno().charAt(0) == 'p') {
-            riepilogo += " " + context.getResources().getString(R.string.jun);
-            nessunPagamento = false;
-        }
+            if (iscritto.getMaggio().charAt(0) == 'p') {
+                riepilogo += " " + context.getResources().getString(R.string.mag);
+                nessunPagamento = false;
+            }
 
-        if (iscritto.getLuglio().charAt(0) == 'p') {
-            riepilogo += " " + context.getResources().getString(R.string.jul);
-            nessunPagamento = false;
-        }
+            if (iscritto.getGiugno().charAt(0) == 'p') {
+                riepilogo += " " + context.getResources().getString(R.string.jun);
+                nessunPagamento = false;
+            }
 
-        if (nessunPagamento) {
-            riepilogo += context.getResources().getString(R.string.nopay);
+            if (iscritto.getLuglio().charAt(0) == 'p') {
+                riepilogo += " " + context.getResources().getString(R.string.jul);
+                nessunPagamento = false;
+            }
+
+            if (nessunPagamento) {
+                riepilogo += context.getResources().getString(R.string.nopay);
+            }
+
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
 
         riepilogoPagamentiT.setText(riepilogo);
@@ -112,30 +146,78 @@ public class Dettagli extends Activity {
         TextView detid, detaddr, dettel, detnasc, detcit;
 
         //collego le textview alla gui
-        detid = (TextView) findViewById(R.id.detid);
-        detaddr = (TextView) findViewById(R.id.detaddr);
-        dettel = (TextView) findViewById(R.id.dettel);
-        detnasc = (TextView) findViewById(R.id.detnasc);
-        detcit = (TextView) findViewById(R.id.detcit);
+        detid = findViewById(R.id.detid);
+        detaddr = findViewById(R.id.detaddr);
+        dettel = findViewById(R.id.dettel);
+        detnasc = findViewById(R.id.detnasc);
+        detcit = findViewById(R.id.detcit);
 
         //mostra a schermo i dettagli utente
-        detid.setText(iscritto.getId());
-        detaddr.setText(iscritto.getIndirizzo());
-        dettel.setText(iscritto.getTelefono());
-        detnasc.setText(iscritto.getDataDiNascita());
-        detcit.setText(iscritto.getCitta());
+        try {
+            detid.setText(iscritto.getId());
+        } catch (NullPointerException e) {
+            detid.setText(" ");
+        }
 
-        riepilogoPagamentiT = (TextView) findViewById(R.id.riepilogoPagamenti);
-        caricaRiepilogoPagamenti(this);
+        try {
+            detaddr.setText(iscritto.getIndirizzo());
+        } catch (NullPointerException e) {
+            detaddr.setText(" ");
+        }
 
-        modifica();
+        try {
+            dettel.setText(iscritto.getTelefono());
+        } catch (NullPointerException e) {
+            dettel.setText(" ");
+        }
+
+        try {
+            detnasc.setText(iscritto.getDataDiNascita());
+        } catch (NullPointerException e) {
+            detnasc.setText(" ");
+        }
+
+        try {
+            detcit.setText(iscritto.getCitta());
+        } catch (NullPointerException e) {
+            detcit.setText(" ");
+        }
+
+        riepilogoPagamentiT = findViewById(R.id.riepilogoPagamenti);
+
+        try {
+            caricaRiepilogoPagamenti(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        modifica();     //carica il menù di modifica
+
         final QueryIscritto database = new QueryIscritto(this);
 
-        elimina = (ImageButton) findViewById(R.id.buttoneli1);
-        pagamenti = (ImageButton) findViewById(R.id.buttonpay);
-        presenze = (ImageButton) findViewById(R.id.buttonPresenzeUtente);
-        note = (ImageButton) findViewById(R.id.buttonNote);
+        fotoProfilo = findViewById(R.id.fotoProfilo);
+        elimina = findViewById(R.id.buttoneli1);
+        pagamenti = findViewById(R.id.buttonpay);
+        presenze = findViewById(R.id.buttonPresenzeUtente);
+        note = findViewById(R.id.buttonNote);
+        cambia = findViewById(R.id.buttonCambiaPalestra);
 
+        try {   //sicuramente al primo avvio crasha perché non contiene foto
+            iscritto.setUrlFoto(database.getUrlPhoto(database, iscritto));
+            loadImageFromStorage(iscritto.getUrlFoto());
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+
+        }
+
+        fotoProfilo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+
+                cambiaFotoProfilo();
+
+            }
+        });
 
         note.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -226,7 +308,26 @@ public class Dettagli extends Activity {
             }
         });
 
+
+        cambia.setOnClickListener(new View.OnClickListener() {
+            @Override
+
+            public void onClick(View arg0) {
+
+                //invio i dati dell' utente
+                CambiaCorso.iscritto = iscritto;
+
+                Intent cambiapalestra = new Intent(getBaseContext(), CambiaCorso.class);
+                startActivity(cambiapalestra);
+
+            }
+        });
+
     }    //fine oncreate
+
+    /**
+     * onBackPressed
+     */
 
     @Override
     public void onBackPressed() {
@@ -281,9 +382,13 @@ public class Dettagli extends Activity {
         }
     }
 
+    /**
+     * Opzioni di modifica utente e relativa funzione
+     */
+
     void modifica() {
 
-        modifica = (ImageButton) findViewById(R.id.buttonmod1);
+        modifica = findViewById(R.id.buttonmod1);
 
         modifica.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -303,7 +408,6 @@ public class Dettagli extends Activity {
 
     }
 
-
     /**
      * salva i dati di tutti gli utenti
      */
@@ -313,6 +417,167 @@ public class Dettagli extends Activity {
         QueryPagamento pagamento = new QueryPagamento(this);
         pagamento.update(pagamento, iscritto);
 
+        QueryIscritto fotoUpdate = new QueryIscritto(getApplicationContext());
+        if (fotoUpdate.aggiornaFotoProfilo(fotoUpdate, iscritto)) {
+            //Toast.makeText(getApplicationContext(), "Foto aggiornata", Toast.LENGTH_SHORT).show();
+            Log.e("Foto", "aggiornata");
+        }
+
+    }
+
+    /**
+     * Funzioni per la gestione delle immagini del profilo
+     * <p>
+     * https://stackoverflow.com/questions/17674634/saving-and-reading-bitmaps-images-from-internal-memory-in-android
+     */
+
+    void cambiaFotoProfilo() {
+
+        loadFileList();
+
+        File mPath = new File(Environment.getExternalStorageDirectory() + "//DIR//");
+        FileDialog fileDialog = new FileDialog(this, mPath, ".jpg");
+        fileDialog.addFileListener(new FileDialog.FileSelectedListener() {
+            public void fileSelected(File file) {
+                Log.d(getClass().getName(), "selected file " + file.toString());
+                //Toast.makeText(getApplicationContext(), "selected file " + file.toString(), Toast.LENGTH_SHORT).show();
+
+                loadImageFromStorage(file.toString());  //Carica l'immagine dato in ingresso il percorso delle foto e le setta nella imageview
+
+                Log.e("Foto presa da ", file.toString());
+
+                fotoProfilo.buildDrawingCache();    //prepara la foto in bitmap
+                aggiornaFoto(fotoProfilo.getDrawingCache());    //da in ingresso l'immagine bitmap e restituisce il percorso di salvataggio dopo averla settata nell'oggetto
+
+            }
+        });
+        fileDialog.showDialog();
+
+        Toast.makeText(this, "Cambia foto", Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * salva nella memoria interna l'immagine selezionata e restituisce il percorso
+     */
+
+    private String saveToInternalStorage(Bitmap bitmapImage) {
+
+        String nomeFoto = iscritto.getIdCorso() + " " + iscritto.getIdDatabase() + ".jpg";
+
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        // path to /data/data/yourapp/app_data/imageDir
+        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        // Create imageDir
+        File mypath = new File(directory, nomeFoto);
+
+        FileOutputStream fos = null;
+
+        try {
+
+            fos = new FileOutputStream(mypath);
+            // Use the compress method on the BitMap object to write image to the OutputStream
+            bitmapImage.compress(Bitmap.CompressFormat.PNG, 60, fos);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        Log.e("patH", mypath.getPath());
+
+        return mypath.getPath(); //corretto
+    }
+
+    /**
+     * Aggiorna il parametro dell'oggetto iscritto e salva nella memoria interna l'immagine selezionata
+     *
+     * @param bitmapImage da in ingresso l'immagine bitmap e restituisce il percorso di salvataggio dopo averla settata nell'oggetto
+     **/
+
+    private void aggiornaFoto(Bitmap bitmapImage) {
+
+        iscritto.setUrlFoto(saveToInternalStorage(bitmapImage));
+
+    }
+
+    /**
+     * Carica l'immagine dato in ingresso il percorso delle foto e le setta nella imageview
+     *
+     * @param path il percorso dell'immagine
+     */
+
+    private void loadImageFromStorage(String path) {
+
+        try {
+
+            File f = new File(path);
+            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
+            fotoProfilo = findViewById(R.id.fotoProfilo);
+            fotoProfilo.setImageBitmap(b);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * Carica la lista dei file da visualizzare
+     **/
+
+    private void loadFileList() {
+        try {
+            mPath.mkdirs();
+        } catch (SecurityException e) {
+            Log.e(TAG, "unable to write on the sd card " + e.toString());
+        }
+        if (mPath.exists()) {
+            FilenameFilter filter = new FilenameFilter() {
+
+                @Override
+                public boolean accept(File dir, String filename) {
+                    File sel = new File(dir, filename);
+                    return filename.contains(FTYPE) || sel.isDirectory();
+                }
+
+            };
+            mFileList = mPath.list(filter);
+        } else {
+            mFileList = new String[0];
+        }
+    }
+
+
+    /**
+     * Crea la finestra di dialogo per la visualizzazione dellle cartelle
+     */
+
+    protected Dialog onCreateDialog(int id) {
+        Dialog dialog = null;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        switch (id) {
+            case DIALOG_LOAD_FILE:
+                builder.setTitle("Choose your file");
+                if (mFileList == null) {
+                    Log.e(TAG, "Showing file picker before loading the file list");
+                    dialog = builder.create();
+                    return dialog;
+                }
+                builder.setItems(mFileList, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        mChosenFile = mFileList[which];
+                        //you can do stuff with the file here too
+                    }
+                });
+                break;
+        }
+        dialog = builder.show();
+        return dialog;
     }
 
 }

@@ -33,7 +33,7 @@ public class ListatoreIscritti extends ArrayAdapter<Iscritto> {
 
         View rowView = inflater.inflate(R.layout.listatore, null, true);	//infila il file xml nell' intent
 
-        TextView txtTitle = (TextView) rowView.findViewById(R.id.nomeT);
+        TextView txtTitle = rowView.findViewById(R.id.nomeT);
 
         txtTitle.setText(iscritti.get(position).toString());
 

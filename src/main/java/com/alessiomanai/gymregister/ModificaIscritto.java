@@ -1,12 +1,14 @@
 package com.alessiomanai.gymregister;
 
 import android.app.Activity;
-import android.app.DialogFragment;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -14,9 +16,7 @@ import android.widget.Toast;
 import com.alessiomanai.gymregister.classi.Corso;
 import com.alessiomanai.gymregister.classi.Iscritto;
 import com.alessiomanai.gymregister.database.QueryIscritto;
-import com.alessiomanai.gymregister.utils.DatePickerFragment;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 
@@ -27,16 +27,13 @@ public class ModificaIscritto extends Activity {
     static int posizione;    //posizione dell'iscritto all'interno della listview
     String nome, indirizzo, telefono, datadinascita, citta;
     EditText nomed, indirizzod, telefonod, datadinascitad, cittad;
-    DatePickerFragment datePickerFragment;
-    boolean isResumed = false;
+    private DatePickerDialog.OnDateSetListener mDateSetListener;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modifica_iscritto);
-
-        isResumed = false;  // utilizzo questo per gestire il focus in modo corretto
-        datePickerFragment = new DatePickerFragment();
 
         //elimino l'ultimo spazio dalle stringhe acquisite
         nome = iscritto.getId();
@@ -66,34 +63,29 @@ public class ModificaIscritto extends Activity {
         datadinascitad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                datePickerFragment.show(getFragmentManager(), "datePicker");
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog dialog = new DatePickerDialog(
+                        ModificaIscritto.this,
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        mDateSetListener,
+                        year, month, day);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
             }
         });
 
-        // ... ed anche al focus tramite tastiera
-        datadinascitad.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        mDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onFocusChange(View view, boolean focus) {
-                if (focus && isResumed) {
-                    datePickerFragment.show(getFragmentManager(), "datePicker");
-                }
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                month = month + 1;
+                String date = day + "/" + month + "/" + year;
+                datadinascitad.setText(date);
             }
-        });
-
-        // ci registriamo agli eventi del popup (ok e annulla)
-        datePickerFragment.setOnDatePickerFragmentChanged(new DatePickerFragment.DatePickerFragmentListener() {
-            @Override
-            public void onDatePickerFragmentOkButton(DialogFragment dialog, Calendar date) {
-                // trasferiamo il valore sul campo di testo
-                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-                datadinascitad.setText(format.format(date.getTime()));
-            }
-
-            @Override
-            public void onDatePickerFragmentCancelButton(DialogFragment dialog) {
-                // non facciamo nulla
-            }
-        });
+        };
 
         conferma.setOnClickListener(new View.OnClickListener() {
             @Override

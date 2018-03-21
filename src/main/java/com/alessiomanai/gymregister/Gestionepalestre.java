@@ -1,9 +1,13 @@
 package com.alessiomanai.gymregister;
 
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,6 +25,7 @@ import java.util.ArrayList;
 public class Gestionepalestre extends Activity {
 
     private ArrayList<Corso> palestre = new ArrayList<>(); //stringhe selezione palestre
+    final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1000;
 
     /***
      * avvio del codice
@@ -35,6 +40,37 @@ public class Gestionepalestre extends Activity {
         palestre = caricaDatabase();
 
         bottoni();    //avvia i bottoni interattivi
+
+        //richiedere permessi scrittura
+        int permissionCheck = ContextCompat.checkSelfPermission(Gestionepalestre.this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(Gestionepalestre.this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(Gestionepalestre.this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(Gestionepalestre.this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
 
         if (palestre.size() > 0) {    //se ci sono palestre in memoria mostra la lista di selezione
 
@@ -191,6 +227,30 @@ public class Gestionepalestre extends Activity {
             }
         });
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
     }
 
 }
