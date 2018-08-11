@@ -2,6 +2,7 @@ package com.alessiomanai.gymregister.database;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
@@ -82,12 +83,19 @@ public class QueryCorso extends Query {
 
         SQLiteDatabase database = context.getWritableDatabase();
 
-        database.execSQL("UPDATE Corso " +
-                "SET nome='" + nuovoNome + "' " +
-                "WHERE id=" + corso.getId());
+        try {
+            SQLiteStatement stmt = database.compileStatement("UPDATE Corso " +
+                    "SET nome= ? " +
+                    "WHERE id=" + corso.getId());
 
-        return true;
+            stmt.bindString(1, nuovoNome);
+            stmt.execute();
 
+            return true;
+
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
 }

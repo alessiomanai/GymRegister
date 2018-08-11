@@ -18,6 +18,7 @@ public class Iscritto {
     private Drawable foto;
     private String notePath;
     private Pagamento pagamenti = new Pagamento();
+    private Importi importi = new Importi();
     private String corso;
     private Corso palestra = new Corso();
 
@@ -336,5 +337,13 @@ public class Iscritto {
 
     public void setPagamenti(Pagamento pagamenti) {
         this.pagamenti = pagamenti;
+    }
+
+    public Importi getImporti() {
+        return importi;
+    }
+
+    public void setImporti(Importi importi) {
+        this.importi = importi;
     }
 }

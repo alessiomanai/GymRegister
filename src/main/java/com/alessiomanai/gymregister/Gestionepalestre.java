@@ -3,6 +3,8 @@ package com.alessiomanai.gymregister;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -15,9 +17,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.alessiomanai.gymregister.classi.Corso;
 import com.alessiomanai.gymregister.database.QueryCorso;
+import com.alessiomanai.gymregister.utils.BackupManager;
 
 import java.util.ArrayList;
 
@@ -172,9 +176,10 @@ public class Gestionepalestre extends Activity {
      */
     void bottoni() {
 
-        ImageButton aggiungipalestra = (ImageButton) findViewById(R.id.paladd);
-        ImageButton eliminapalestra = (ImageButton) findViewById(R.id.palelim);
-        ImageButton rinominaPalestra = (ImageButton) findViewById(R.id.renameCorso);
+        ImageButton aggiungipalestra = findViewById(R.id.paladd);
+        ImageButton eliminapalestra = findViewById(R.id.palelim);
+        ImageButton rinominaPalestra = findViewById(R.id.renameCorso);
+        ImageButton backupRestore = findViewById(R.id.backupData);
 
 
         aggiungipalestra.setOnClickListener(new View.OnClickListener() {
@@ -226,6 +231,95 @@ public class Gestionepalestre extends Activity {
                 finish();
             }
         });
+
+        backupRestore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+
+                backupData();
+
+            }
+        });  //fine bottone
+
+    }
+
+    void backupData() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(Gestionepalestre.this);
+
+        builder.setTitle(R.string.backupmenu);
+        builder.setMessage(R.string.backupdescription);
+
+        builder.setCancelable(false);
+
+        builder.setNeutralButton(R.string.annulla, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Confermato!
+
+                dialog.dismiss();
+            }
+        });
+
+        builder.setPositiveButton(R.string.ripristina, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Confermato!
+
+                restoreDialogGym();
+
+                dialog.dismiss();
+            }
+        });
+        //negativa
+        builder.setNegativeButton(R.string.backup, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                BackupManager bm = new BackupManager();
+
+                bm.doBackup(getApplicationContext());
+
+                dialog.dismiss();
+
+            }
+        });
+        //visualizza la finestra
+        builder.show();
+
+    }
+
+    void restoreDialogGym() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(Gestionepalestre.this);
+
+        builder.setTitle(R.string.conferma);
+        builder.setMessage(R.string.ripristino);
+
+        builder.setCancelable(false);
+        builder.setPositiveButton(R.string.conferma, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Confermato!
+
+                BackupManager bm = new BackupManager();
+
+                bm.doRestore(getApplicationContext());
+
+            }
+        });
+        //negativa
+        builder.setNegativeButton(R.string.annulla, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Annullato!
+                Toast.makeText(Gestionepalestre.this, R.string.opannul, Toast.LENGTH_SHORT).show();
+
+                dialog.dismiss();
+            }
+        });
+        //visualizza la finestra
+        builder.show();
 
     }
 

@@ -1,5 +1,6 @@
 package com.alessiomanai.gymregister;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -7,10 +8,13 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,10 +48,10 @@ public class Dettagli extends Activity {
     static int posizione;    //posizione all' interno dell array utenti
     static Corso palestra;        //nome palestra usata
     static Iscritto iscritto;   //dettagli utente
+    final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1001;
     ImageButton modifica;
     ImageButton elimina, pagamenti, presenze, note, cambia;
     ImageView fotoProfilo;  //foto profilo utente
-
     /**
      * per il caricamento della foto
      */
@@ -193,6 +197,8 @@ public class Dettagli extends Activity {
 
         modifica();     //carica il menù di modifica
 
+        richiestaPermessiLettura();
+
         final QueryIscritto database = new QueryIscritto(this);
 
         fotoProfilo = findViewById(R.id.fotoProfilo);
@@ -214,8 +220,18 @@ public class Dettagli extends Activity {
             @Override
             public void onClick(View arg0) {
 
-                cambiaFotoProfilo();
+                try {
 
+                    cambiaFotoProfilo();
+
+                } catch (NullPointerException e) {
+
+                    e.printStackTrace();
+
+                    richiestaPermessiLettura();
+
+                    dialogPermessi();
+                }
             }
         });
 
@@ -337,8 +353,12 @@ public class Dettagli extends Activity {
         //avvia la finestra corrispondente
         startActivity(gestioneiscritti);
 
-        salvaModifiche();
-
+        try {
+            salvaModifiche();
+        } catch (NullPointerException npe) {
+            Toast.makeText(this,
+                    "Something went wrong. Please delete user", Toast.LENGTH_LONG).show();
+        }
         finish();
     }    //fine tasto back
 
@@ -453,7 +473,6 @@ public class Dettagli extends Activity {
         });
         fileDialog.showDialog();
 
-        Toast.makeText(this, "Cambia foto", Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -578,6 +597,89 @@ public class Dettagli extends Activity {
         }
         dialog = builder.show();
         return dialog;
+    }
+
+    /**richiesta permessi lettura memoria interna */
+
+    void richiestaPermessiLettura() {
+
+        //richiedere permessi scrittura
+        int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        // Here, thisActivity is the current activity
+        if (permissionCheck
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(Dettagli.this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(Dettagli.this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+
+                    finish();
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
+    /**finestra di dialogo per la richiesta dei permessi, utente di merda che non ti fidi*/
+
+    void dialogPermessi() {
+
+        //finestra di conferma
+        AlertDialog.Builder builder = new AlertDialog.Builder(Dettagli.this);
+
+        builder.setTitle(R.string.profilePic);
+        builder.setMessage(R.string.richiestaPermessi);
+        builder.setCancelable(false);
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                dialog.dismiss();
+
+            }
+        });
+        builder.show();
+
     }
 
 }

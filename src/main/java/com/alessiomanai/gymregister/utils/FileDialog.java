@@ -68,7 +68,11 @@ public class FileDialog {
                 String fileChosen = fileList[which];
                 File chosenFile = getChosenFile(fileChosen);
                 if (chosenFile.isDirectory()) {
-                    loadFileList(chosenFile);
+                    try {
+                        loadFileList(chosenFile);
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
                     dialog.cancel();
                     dialog.dismiss();
                     showDialog();
@@ -123,7 +127,7 @@ public class FileDialog {
         });
     }
 
-    private void loadFileList(File path) {
+    private void loadFileList(File path) throws NullPointerException {
         this.currentPath = path;
         List<String> r = new ArrayList<String>();
         if (path.exists()) {

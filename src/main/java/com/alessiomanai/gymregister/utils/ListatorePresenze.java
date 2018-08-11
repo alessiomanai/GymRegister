@@ -3,6 +3,7 @@ package com.alessiomanai.gymregister.utils;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.sqlite.SQLiteConstraintException;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -93,8 +94,13 @@ public class ListatorePresenze extends ArrayAdapter<Presenza> {
 
                     QueryPresenze database = new QueryPresenze(v.getContext());
 
-                    database.aggiungi(database, presenze.get(posizioneClick).getIscritto(),
-                            presenze.get(posizioneClick).getCorso());
+                    try {
+                        database.aggiungi(database, presenze.get(posizioneClick).getIscritto(),
+                                presenze.get(posizioneClick).getCorso());
+
+                    } catch (SQLiteConstraintException exception) {
+                        exception.printStackTrace();
+                    }
 
                     presenze.get(posizioneClick).setData(data);
 

@@ -9,6 +9,8 @@ import android.util.Log;
 import com.alessiomanai.gymregister.classi.Corso;
 import com.alessiomanai.gymregister.classi.Iscritto;
 
+import java.util.ArrayList;
+
 /**
  * Created by alessio on 02/09/16.
  * Completa
@@ -75,6 +77,36 @@ public class QueryPagamento extends Query {
                 null, null, null, null);
 
         return informazioni;
+    }
+
+    public ArrayList<String> utentiNotPay(Query context, String mese, String month, Corso corso) {
+
+        ArrayList<String> nomi = new ArrayList<>();
+
+        SQLiteDatabase db = context.getReadableDatabase();
+
+        Cursor c = db.rawQuery("SELECT nome FROM Iscritto, Pagamento, Presenze " +
+                "WHERE Pagamento.iscritto = Iscritto.id AND " + mese + " = 'nonpagato' " +
+                "AND Iscritto.corso = " + corso.getId() +
+                " AND giornoPresenza like '%/" + month + "/%';", null);
+
+        if (c.getCount() == 0) {
+            Log.v("Risultati join", "nessun risultato ");
+            return nomi;
+        }
+
+        c.moveToFirst();
+
+        do {
+
+            nomi.add(c.getString(0));
+
+        } while (c.moveToNext());
+
+        c.close();
+
+        return nomi;
+
     }
 
 }

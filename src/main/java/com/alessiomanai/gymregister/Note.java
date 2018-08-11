@@ -59,7 +59,7 @@ public class Note extends Activity {
         nomeT = findViewById(R.id.noteT);
         nomeT.setText(nomeid);
 
-        testo = (EditText) findViewById(R.id.noteline);
+        testo = findViewById(R.id.noteline);
 
         //richiedere permessi scrittura
 

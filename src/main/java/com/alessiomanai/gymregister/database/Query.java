@@ -12,11 +12,14 @@ import android.util.Log;
 
 public class Query extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 3;  //11/08/2018
+    private SQLiteDatabase db;
 
     public Query(Context context) {
         super(context, Tabelle.InfoTabelle.DATABASE_NAME, null, DATABASE_VERSION);
         Log.v("Database", "creato");
+        db = getWritableDatabase();
+
     }
 
     @Override
@@ -26,12 +29,12 @@ public class Query extends SQLiteOpenHelper {
         sdb.execSQL(creaTabellaCorso());
         sdb.execSQL(creaTabellaPagamento());
         sdb.execSQL(creaTabellaPresenze());
+        sdb.execSQL(creaTabellaImporti());
         Log.v("Tabelle", "creato");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase arg0, int arg1, int arg2) {
-
     }
 
     private String creaTabellaIscritto() {
@@ -92,5 +95,26 @@ public class Query extends SQLiteOpenHelper {
                 "PRIMARY KEY (iscritto, corso) )";
     }
 
+    private String creaTabellaImporti() {
+
+        return "CREATE TABLE Importi (" +
+                Tabelle.InfoTabelle.pagamento[0] + " INTEGER , " + //iscritto
+                Tabelle.InfoTabelle.pagamento[1] + " INTEGER, " + //corso
+                Tabelle.InfoTabelle.pagamento[2] + " TEXT DEFAULT 0, " + //giorno presenza
+                Tabelle.InfoTabelle.pagamento[3] + " TEXT DEFAULT 0, " +
+                Tabelle.InfoTabelle.pagamento[4] + " TEXT DEFAULT 0, " +
+                Tabelle.InfoTabelle.pagamento[5] + " TEXT DEFAULT 0, " +
+                Tabelle.InfoTabelle.pagamento[6] + " TEXT DEFAULT 0, " +
+                Tabelle.InfoTabelle.pagamento[7] + " TEXT DEFAULT 0, " +
+                Tabelle.InfoTabelle.pagamento[8] + " TEXT DEFAULT 0, " +
+                Tabelle.InfoTabelle.pagamento[9] + " TEXT DEFAULT 0, " +
+                Tabelle.InfoTabelle.pagamento[10] + " TEXT DEFAULT 0, " +
+                Tabelle.InfoTabelle.pagamento[11] + " TEXT DEFAULT 0, " +
+                Tabelle.InfoTabelle.pagamento[12] + " TEXT DEFAULT 0, " +
+                Tabelle.InfoTabelle.pagamento[13] + " TEXT DEFAULT 0, " +
+                "FOREIGN KEY(iscritto) REFERENCES Iscritto(id) ON UPDATE CASCADE ON DELETE NO ACTION, " +
+                "FOREIGN KEY(corso) REFERENCES Corso(id) ON UPDATE CASCADE ON DELETE NO ACTION, " +
+                "PRIMARY KEY (iscritto, corso) )";
+    }
 
 }

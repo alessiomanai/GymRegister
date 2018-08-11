@@ -69,8 +69,14 @@ public class PresenzeUtente extends Activity implements AdapterView.OnItemSelect
         // Apply the adapter to the spinner
         spinner.setAdapter(adapterSpinner);
 
-        QueryPresenze database = new QueryPresenze(this);
-        elencoPresenze = database.presenzeIscritto(database, iscritto);
+        try {
+            QueryPresenze database = new QueryPresenze(this);
+            elencoPresenze = database.presenzeIscritto(database, iscritto);
+        } catch (NullPointerException ne){
+            ne.printStackTrace();
+            Toast.makeText(this,
+                    "Something went wrong. Please delete user", Toast.LENGTH_LONG).show();
+        }
 
         Collections.sort(elencoPresenze, new Comparator<Presenza>() {
             public int compare(Presenza s1, Presenza s2) {
@@ -225,6 +231,8 @@ public class PresenzeUtente extends Activity implements AdapterView.OnItemSelect
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month = month + 1;
 
+                String data;
+
                 String mese = Integer.toString(month);
 
                 if (month >= 1 && month <= 9){  //per visualizzare lo zero iniziale
@@ -233,7 +241,13 @@ public class PresenzeUtente extends Activity implements AdapterView.OnItemSelect
 
                 }
 
-                String data = day + "/" + mese + "/" + year;
+                if (day < 10) {
+                    String giorno = "0" + day;
+                    data = giorno + "/" + mese + "/" + year;
+
+                } else {
+                    data = day + "/" + mese + "/" + year;
+                }
 
                 System.out.println(data);
 

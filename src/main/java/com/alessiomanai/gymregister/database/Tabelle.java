@@ -15,7 +15,7 @@ public class Tabelle {
 
         public static final String DATABASE_NAME = "gymRegister.db";
 
-        public static final String[] tabelle = new String[]{"Iscritto", "Corso", "Presenze", "Pagamento"};
+        public static final String[] tabelle = new String[]{"Iscritto", "Corso", "Presenze", "Pagamento", "Importi"};
 
         /**
          * campi delle tabelle
@@ -28,6 +28,10 @@ public class Tabelle {
         public static final String[] presenze = new String[]{"iscritto", "corso", "giornoPresenza"};
 
         public static final String[] pagamento = new String[]{"iscritto", "corso", "iscrizione",
+                "settembre", "ottobre", "novembre", "dicembre", "gennaio", "febbraio", "marzo", "aprile", "maggio",
+                "giugno", "luglio"};
+
+        public static final String[] importi = new String[]{"iscritto", "corso", "iscrizione",
                 "settembre", "ottobre", "novembre", "dicembre", "gennaio", "febbraio", "marzo", "aprile", "maggio",
                 "giugno", "luglio"};
 
