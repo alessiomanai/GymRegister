@@ -1,17 +1,13 @@
 package com.alessiomanai.gymregister;
 
-
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,18 +20,22 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.alessiomanai.gymregister.classi.Corso;
 import com.alessiomanai.gymregister.classi.Iscritto;
+import com.alessiomanai.gymregister.database.QueryCertificati;
 import com.alessiomanai.gymregister.database.QueryIscritto;
 import com.alessiomanai.gymregister.database.QueryPagamento;
 import com.alessiomanai.gymregister.database.Tabelle;
 import com.alessiomanai.gymregister.utils.BackupManager;
+import com.alessiomanai.gymregister.utils.DocumentCreator;
 import com.alessiomanai.gymregister.utils.ListatoreIscritti;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -45,13 +45,15 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 
+
+
 public class GestioneIscritti extends Activity {
 
     private static final int REQUEST_WRITE_STORAGE = 112;
     public static ArrayList<Iscritto> iscritti = new ArrayList<>();
     public static Corso palestra;
-    private View donotpay;
     String text = "";
+    private View donotpay;
 
     /***
      * avvio del codice
@@ -66,6 +68,8 @@ public class GestioneIscritti extends Activity {
 
         try {
             iscritti = caricaDatabase();
+
+            iscritti = caricaCertificati(iscritti);
         } catch (NullPointerException np) {
             Toast.makeText(this,
                     "Something went wrong. Please delete gym", Toast.LENGTH_LONG).show();
@@ -88,9 +92,29 @@ public class GestioneIscritti extends Activity {
         //gestione bottoni
         gestionebottoni();
 
-        pagamentiArretrati();
+        try {
+            pagamentiArretrati();   //funzionalità non presente in database corrotti
+        } catch (NullPointerException ne) {
+            ne.printStackTrace();
+        }
 
     }    //fine onCreate
+
+
+    /**
+     * restore id over activity in pause for long time
+     */
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        palestra.setId(savedInstanceState.getInt("idCorso"));
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("idCorso", palestra.getId());
+    }
 
 
     /**
@@ -132,6 +156,17 @@ public class GestioneIscritti extends Activity {
 
         return database.caricaIscritti(database, palestra);
 
+    }
+
+    public ArrayList<Iscritto> caricaCertificati(ArrayList<Iscritto> iscritti) {
+
+        QueryCertificati database = new QueryCertificati(this);
+
+        for (int i = 0; i < iscritti.size(); i++) {
+            iscritti.get(i).setCertificatoMedico(database.getCertificatoMedico(database, iscritti.get(i)));
+        }
+
+        return iscritti;
     }
 
     /**
@@ -245,7 +280,7 @@ public class GestioneIscritti extends Activity {
             public boolean onMenuItemClick(MenuItem item) {
 
                 try {
-                    esportaodt();
+                    esportaPDF();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -290,7 +325,7 @@ public class GestioneIscritti extends Activity {
         if (month > 8) {
             mese = Tabelle.InfoTabelle.pagamento[month - 6];
         } else if (month < 8) {
-            mese = Tabelle.InfoTabelle.pagamento[month + 7];
+            mese = Tabelle.InfoTabelle.pagamento[month + 6];    //bug bastardo
         } else {
             //System.out.println("Altro mese");
             mese = "agosto";
@@ -394,21 +429,17 @@ public class GestioneIscritti extends Activity {
     }
 
     /***
-     * esporta l'elenco su file .odt
+     * esporta l'elenco su file .pdf
      */
-    void esportaodt() throws IOException {
+    void esportaPDF() throws IOException {
 
-        String filez = palestra.getNome() + ".odt";    //nome del file
+        String filez = palestra.getNome() + ".pdf";    //nome del file
         String percorso;    //percorso di salvataggio file
         File sdCard;
         File dir;
         File file;
 
-        FileOutputStream f;
-
-        OutputStreamWriter odt;
-
-		/* Checks if external storage is available for read and write */
+        /* Checks if external storage is available for read and write */
         String state = Environment.getExternalStorageState();
 
         /**stratagemma adottato per scrivere nella memoria interna sui nuovi
@@ -421,10 +452,6 @@ public class GestioneIscritti extends Activity {
             dir = new File(sdCard.getAbsolutePath() + "/gymregister/");
             dir.mkdirs();
             file = new File(dir, filez);
-
-            f = new FileOutputStream(file);
-
-            odt = new OutputStreamWriter(f);
 
             percorso = dir.toString();    //trasforma il nome del file in una stringa
 
@@ -451,16 +478,13 @@ public class GestioneIscritti extends Activity {
             dir.mkdirs();    //crea la cartella
             file = new File(dir, filez);
 
-            f = new FileOutputStream(file);
-
-            odt = new OutputStreamWriter(f);
-
             percorso = dir.toString();    //trasforma il nome del file in una stringa
 
         }
 
+        DocumentCreator document = new DocumentCreator(getApplicationContext(), file);
 
-        odt.write("\t" + getString(R.string.nomepalestra) + " : " + palestra.getNome() + "\n\n");
+        document.setTitle(getString(R.string.nomepalestra) + ": " + palestra.getNome());
 
         //note relative alla palestra
         String file1 = "note" + palestra.getNome() + palestra.getNome() + ".txt";
@@ -482,37 +506,36 @@ public class GestioneIscritti extends Activity {
 
         }
 
-        odt.write(totale);    //scrive il testo letto
-
-        odt.write("\n");    //fine note palestra
+        document.newLine(totale);    //scrive il testo letto
 
         for (int i = 0; i < iscritti.size(); i++) {
 
-            //if (id.size() != 0)
-            odt.write(getString(R.string.id) + ": " + iscritti.get(i).getId());
-            odt.write(getString(R.string.data) + ": " + iscritti.get(i).getDataDiNascita());
-            odt.write(getString(R.string.address) + ": " + iscritti.get(i).getIndirizzo());
-            odt.write(getString(R.string.citta) + ": " + iscritti.get(i).getCitta());
-            odt.write(getString(R.string.phone) + ": " + iscritti.get(i).getTelefono());
-            odt.write("\t" + getString(R.string.pay) + "\n");
-            odt.write(getString(R.string.iscrizione) + ": " + iscritti.get(i).getIscrizione());
-            odt.write(getString(R.string.sept) + ": " + iscritti.get(i).getSettembre());
-            odt.write(getString(R.string.oct) + ": " + iscritti.get(i).getOttobre());
-            odt.write(getString(R.string.nov) + ": " + iscritti.get(i).getNovembre());
-            odt.write(getString(R.string.dec) + ": " + iscritti.get(i).getDicembre());
-            odt.write(getString(R.string.jan) + ": " + iscritti.get(i).getGennaio());
-            odt.write(getString(R.string.feb) + ": " + iscritti.get(i).getFebbraio());
-            odt.write(getString(R.string.mar) + ": " + iscritti.get(i).getMarzo());
-            odt.write(getString(R.string.apr) + ": " + iscritti.get(i).getAprile());
-            odt.write(getString(R.string.mag) + ": " + iscritti.get(i).getMaggio());
-            odt.write(getString(R.string.jun) + ": " + iscritti.get(i).getGiugno());
-            odt.write(getString(R.string.jul) + ": " + iscritti.get(i).getLuglio());
-            odt.write("\n");
+            document.newLine(getString(R.string.id) + ": " + iscritti.get(i).getId());
+            document.newLine(getString(R.string.data) + ": " + iscritti.get(i).getDataDiNascita());
+            document.newLine(getString(R.string.address) + ": " + iscritti.get(i).getIndirizzo());
+            document.newLine(getString(R.string.citta) + ": " + iscritti.get(i).getCitta());
+            document.newLine(getString(R.string.phone) + ": " + iscritti.get(i).getTelefono());
+            document.setH4Chapter(getString(R.string.pay));
+            document.addLine(getString(R.string.iscrizione) + ": " + iscritti.get(i).getIscrizione());
+            document.addLine(getString(R.string.sept) + ": " + iscritti.get(i).getSettembre());
+            document.addLine(getString(R.string.oct) + ": " + iscritti.get(i).getOttobre());
+            document.addLine(getString(R.string.nov) + ": " + iscritti.get(i).getNovembre());
+            document.addLine(getString(R.string.dec) + ": " + iscritti.get(i).getDicembre());
+            document.addLine(getString(R.string.jan) + ": " + iscritti.get(i).getGennaio());
+            document.addLine(getString(R.string.feb) + ": " + iscritti.get(i).getFebbraio());
+            document.addLine(getString(R.string.mar) + ": " + iscritti.get(i).getMarzo());
+            document.addLine(getString(R.string.apr) + ": " + iscritti.get(i).getAprile());
+            document.addLine(getString(R.string.mag) + ": " + iscritti.get(i).getMaggio());
+            document.addLine(getString(R.string.jun) + ": " + iscritti.get(i).getGiugno());
+            document.addLine(getString(R.string.jul) + ": " + iscritti.get(i).getLuglio());
+            document.newLine("");
+            document.newLine("");
+            document.newLine("");
         }
 
-        odt.write("\n\n\t\t\tGrazie per aver usato Gym Register!");
+        document.lastLine("Grazie per aver usato Gym Register!");
 
-        odt.close();    //chiudo il file in scrittura
+        document.getPDF();
 
         //mostro il percorso in cui ho salvato il file
         String toasttext = getString(R.string.datiexp) + "\n" + percorso;

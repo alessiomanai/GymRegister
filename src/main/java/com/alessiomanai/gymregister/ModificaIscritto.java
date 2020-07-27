@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.alessiomanai.gymregister.classi.Corso;
 import com.alessiomanai.gymregister.classi.Iscritto;
+import com.alessiomanai.gymregister.database.QueryCertificati;
 import com.alessiomanai.gymregister.database.QueryIscritto;
 
 import java.util.Calendar;
@@ -25,9 +26,9 @@ public class ModificaIscritto extends Activity {
     static Iscritto iscritto;
     static Corso palestra;
     static int posizione;    //posizione dell'iscritto all'interno della listview
-    String nome, indirizzo, telefono, datadinascita, citta;
-    EditText nomed, indirizzod, telefonod, datadinascitad, cittad;
-    private DatePickerDialog.OnDateSetListener mDateSetListener;
+    String nome, indirizzo, telefono, datadinascita, citta, stringCertificatoMedico;
+    EditText nomed, indirizzod, telefonod, datadinascitad, cittad, certificatoMedico;
+    private DatePickerDialog.OnDateSetListener mDateSetListener, certificatoDateSetListener;
 
 
     @Override
@@ -41,6 +42,7 @@ public class ModificaIscritto extends Activity {
         telefono = iscritto.getTelefono();
         datadinascita = iscritto.getDataDiNascita();
         citta = iscritto.getCitta();
+        stringCertificatoMedico = iscritto.getCertificatoMedico();
 
 
         //collego gli oggetti alla gui
@@ -49,6 +51,7 @@ public class ModificaIscritto extends Activity {
         telefonod = (EditText) findViewById(R.id.telefonoedit5);
         datadinascitad = (EditText) findViewById(R.id.detnasc5);
         cittad = (EditText) findViewById(R.id.detcit5);
+        certificatoMedico = findViewById(R.id.modificaCertificato);
 
         //inserisco le stringhe da modificare nell edittext
         nomed.setText(nome);
@@ -56,8 +59,9 @@ public class ModificaIscritto extends Activity {
         telefonod.setText(telefono);
         datadinascitad.setText(datadinascita);
         cittad.setText(citta);
+        certificatoMedico.setText(stringCertificatoMedico);
 
-        ImageButton conferma = (ImageButton) findViewById(R.id.confermabut5);
+        ImageButton conferma = findViewById(R.id.confermabut5);
 
         // il popup con il date picker si lancia al click sul campo di testo...
         datadinascitad.setOnClickListener(new View.OnClickListener() {
@@ -78,12 +82,39 @@ public class ModificaIscritto extends Activity {
             }
         });
 
+        certificatoMedico.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog dialog = new DatePickerDialog(
+                        ModificaIscritto.this,
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        certificatoDateSetListener,
+                        year, month, day);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+            }
+        });
+
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month = month + 1;
                 String date = day + "/" + month + "/" + year;
                 datadinascitad.setText(date);
+            }
+        };
+
+        certificatoDateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                month = month + 1;
+                String date = day + "/" + month + "/" + year;
+                certificatoMedico.setText(date);
             }
         };
 
@@ -105,6 +136,7 @@ public class ModificaIscritto extends Activity {
                     iscritto.setTelefono(telefonod.getText().toString());
                     iscritto.setDataDiNascita(datadinascitad.getText().toString());
                     iscritto.setCitta(cittad.getText().toString());
+                    iscritto.setCertificatoMedico(certificatoMedico.getText().toString());
 
                     salva();
 
@@ -150,6 +182,14 @@ public class ModificaIscritto extends Activity {
         QueryIscritto database = new QueryIscritto(this);
 
         database.aggiorna(database, iscritto);
+
+        QueryCertificati certificati = new QueryCertificati(this);
+
+        if (certificati.certificatoExists(certificati, iscritto)) {
+            certificati.update(certificati, iscritto, iscritto.getCertificatoMedico());
+        } else {
+            certificati.nuovo(certificati, iscritto, iscritto.getCertificatoMedico());
+        }
 
     }
 

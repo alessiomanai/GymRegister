@@ -58,8 +58,7 @@ public class QueryCorso extends Query {
 
         while (risultati.moveToNext()) {
 
-            Corso corso = new Corso(risultati.getString(1));
-            corso.setId(Integer.parseInt(risultati.getString(0)));
+            Corso corso = new Corso(Integer.parseInt(risultati.getString(0)), risultati.getString(1));
 
             palestre.add(corso);
 

@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -26,8 +29,9 @@ import java.util.Locale;
 public class Presenze extends Activity {
 
     static Corso corso;
-    private ArrayList<Presenza> listaPresenze = new ArrayList<>();
-    ArrayList<Iscritto> elencoIscritti = new ArrayList<>();
+    EditText ricerca;
+    ImageButton bottone;
+    boolean risultatiDefault = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +40,53 @@ public class Presenze extends Activity {
 
         mostraData();
 
+        ricerca = findViewById(R.id.searchPresenze);
+        bottone = findViewById(R.id.buttoncercaPresenze);
+
+        bottone.setOnClickListener(new View.OnClickListener() {
+            @Override
+
+            public void onClick(View arg0) {
+
+                cercaUtente(ricerca.getText().toString());
+
+            }
+        });
+
+        caricaPresenze();
+
+        SharedPreferences preferences = getSharedPreferences("RegistroPresenze", Activity.MODE_PRIVATE);    //cerca la sharedPreferecens boot all'avvio del codice
+
+        int appID = preferences.getInt("Presenze", -1);
+
+        if (appID != 1) {
+
+            mostraGuida();
+        }
+
+    }
+
+    /**
+     * mostra il numero degli iscritti sullo schermo
+     */
+    public void mostraData() {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", new Locale("Rome"));
+        String data = sdf.format(new Date());
+
+        //trova la stringa sul layout
+        TextView asd = findViewById(R.id.dataPresenze);
+        //setta la stringa sul layout
+        asd.setText(data);
+
+    }
+
+    public void caricaPresenze() {
+
         int j = 0;
         int i = 0;
         ArrayList<Presenza> presenzeOdierne = new ArrayList<>();
+        ArrayList<Iscritto> elencoIscritti = new ArrayList<>();
 
         try {
 
@@ -48,6 +96,8 @@ public class Presenze extends Activity {
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
+
+        ArrayList<Presenza> listaPresenze = new ArrayList<>();
 
         QueryPresenze db = new QueryPresenze(this);
         presenzeOdierne = db.presenzeOdierne(db, corso);
@@ -76,30 +126,6 @@ public class Presenze extends Activity {
         ListatorePresenze adapter = new ListatorePresenze(this, listaPresenze);
         list1.setAdapter(adapter);
 
-        SharedPreferences preferences = getSharedPreferences("RegistroPresenze", Activity.MODE_PRIVATE);    //cerca la sharedPreferecens boot all'avvio del codice
-
-        int appID = preferences.getInt("Presenze", -1);
-
-        if (appID != 1) {
-
-            mostraGuida();
-        }
-
-    }
-
-    /**
-     * mostra il numero degli iscritti sullo schermo
-     */
-    public void mostraData() {
-
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", new Locale("Rome"));
-        String data = sdf.format(new Date());
-
-        //trova la stringa sul layout
-        TextView asd = findViewById(R.id.dataPresenze);
-        //setta la stringa sul layout
-        asd.setText(data);
-
     }
 
     public void mostraGuida() {
@@ -125,6 +151,64 @@ public class Presenze extends Activity {
             }
         });
         builder.show();
+
+    }
+
+    public void cercaUtente(String chiave) {
+
+        ArrayList<Iscritto> risultati = new ArrayList<Iscritto>();
+
+        QueryIscritto database = new QueryIscritto(getApplicationContext());
+        risultati = database.cercaIscritto(database, corso, chiave);
+
+        ArrayList<Presenza> presenzeOdierne = new ArrayList<>();
+
+        QueryPresenze db = new QueryPresenze(this);
+        presenzeOdierne = db.presenzeOdierne(db, corso);
+
+        ArrayList<Presenza> listaPresenze = new ArrayList<>();
+
+        listaPresenze.clear();
+
+        int j = 0;
+        int i = 0;
+        for (i = 0; i < risultati.size(); i++) {
+
+            listaPresenze.add(new Presenza(risultati.get(i), corso));
+
+            if (presenzeOdierne.size() != 0) {
+
+                for (j = 0; j < presenzeOdierne.size(); j++) {
+
+                    if (listaPresenze.get(i).getIdIscritto() == presenzeOdierne.get(j).getIdIscritto()) {
+
+                        listaPresenze.get(i).setData(presenzeOdierne.get(j).getData());
+
+                    }
+                }
+
+            }
+
+        }
+
+        risultatiDefault = false;
+
+        ListView list1 = this.findViewById(R.id.listViewPresenze);
+        ListatorePresenze adapter = new ListatorePresenze(Presenze.this, listaPresenze);
+        list1.setAdapter(adapter);
+
+    }
+
+
+    @Override
+    public void onBackPressed() {
+
+        if (!risultatiDefault) {
+            caricaPresenze();
+            risultatiDefault = true;
+        } else {
+            finish();
+        }
 
     }
 }

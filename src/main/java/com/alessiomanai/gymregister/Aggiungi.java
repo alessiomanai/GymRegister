@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.alessiomanai.gymregister.classi.Corso;
 import com.alessiomanai.gymregister.classi.Iscritto;
+import com.alessiomanai.gymregister.database.QueryCertificati;
 import com.alessiomanai.gymregister.database.QueryIscritto;
 import com.alessiomanai.gymregister.database.QueryPagamento;
 
@@ -27,10 +28,10 @@ public class Aggiungi extends Activity {
     EditText nomeecognome;
     EditText address;
     EditText telef, citf;
-    View dantf;
-    EditText datadinascita;
-    String nec = null, addres = null, tel = null, citta, datanasc;
-    private DatePickerDialog.OnDateSetListener mDateSetListener;
+    View dantf, certificatoMedico;
+    EditText datadinascita, editCertificatoMedico;
+    String nec = null, addres = null, tel = null, citta, datanasc, stringCertificatoMedico = null;
+    private DatePickerDialog.OnDateSetListener mDateSetListener, certificatoDateSetListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +39,14 @@ public class Aggiungi extends Activity {
         setContentView(R.layout.activity_aggiungi);
 
         //collego le edit text
-        nomeecognome = (EditText) findViewById(R.id.nec);
-        address = (EditText) findViewById(R.id.address);
-        telef = (EditText) findViewById(R.id.telefonoedit);
+        nomeecognome = findViewById(R.id.nec);
+        address = findViewById(R.id.address);
+        telef = findViewById(R.id.telefonoedit);
         dantf = findViewById(R.id.detnasc);
-        citf = (EditText) findViewById(R.id.detcit);
-        datadinascita = (EditText) findViewById(R.id.detnasc);
+        citf = findViewById(R.id.detcit);
+        datadinascita = findViewById(R.id.detnasc);
+        certificatoMedico = findViewById(R.id.aggiungiCertificato);
+        editCertificatoMedico = findViewById(R.id.aggiungiCertificato);
 
         ImageButton conferma = (ImageButton) findViewById(R.id.confermabut);
 
@@ -66,12 +69,39 @@ public class Aggiungi extends Activity {
             }
         });
 
+        certificatoMedico.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog dialog = new DatePickerDialog(
+                        Aggiungi.this,
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        certificatoDateSetListener,
+                        year, month, day);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+            }
+        });
+
         mDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month = month + 1;
                 String date = day + "/" + month + "/" + year;
                 datadinascita.setText(date);
+            }
+        };
+
+        certificatoDateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                month = month + 1;
+                String date = day + "/" + month + "/" + year;
+                editCertificatoMedico.setText(date);
             }
         };
 
@@ -95,6 +125,7 @@ public class Aggiungi extends Activity {
                     tel = telef.getText().toString();
                     datanasc = datadinascita.getText().toString();
                     citta = citf.getText().toString();
+                    stringCertificatoMedico = editCertificatoMedico.getText().toString();
 
                     nec = nec.replace("/", "_");    //sanitize input
                     addres = addres.replace("--", "-");    //sanitize input
@@ -114,7 +145,7 @@ public class Aggiungi extends Activity {
                     if (tel == null || tel.equals(""))
                         tel = "<nessun numero>";
 
-                    salva(new Iscritto(nec, tel, addres, citta, datanasc), palestra);    //crea un nuovo utente
+                    salva(new Iscritto(nec, tel, addres, citta, datanasc), palestra, stringCertificatoMedico);    //crea un nuovo utente
 
                     //Toast
                     Toast.makeText(Aggiungi.this, R.string.addurs, Toast.LENGTH_LONG).show();
@@ -146,14 +177,18 @@ public class Aggiungi extends Activity {
         finish();
     }
 
-    void salva(Iscritto iscritto, Corso corso) {
+    void salva(Iscritto iscritto, Corso corso, String certificatoMedico) {
 
         QueryIscritto database = new QueryIscritto(this);
 
         database.nuovo(database, iscritto, corso);
+        iscritto.setIdDatabase(database.selectLastIDIscritto(database));
 
         QueryPagamento pagamento = new QueryPagamento(this);
         pagamento.inizializza(pagamento, iscritto, corso);
+
+        QueryCertificati certificati = new QueryCertificati(this);
+        certificati.nuovo(certificati, iscritto, certificatoMedico);
 
     }
 

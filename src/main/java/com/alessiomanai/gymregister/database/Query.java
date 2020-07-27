@@ -12,7 +12,7 @@ import android.util.Log;
 
 public class Query extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 3;  //11/08/2018
+    private static final int DATABASE_VERSION = 6;  //02/04/2020
     private SQLiteDatabase db;
 
     public Query(Context context) {
@@ -30,11 +30,22 @@ public class Query extends SQLiteOpenHelper {
         sdb.execSQL(creaTabellaPagamento());
         sdb.execSQL(creaTabellaPresenze());
         sdb.execSQL(creaTabellaImporti());
+        sdb.execSQL(creaTabellaCertificati());
         Log.v("Tabelle", "creato");
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase arg0, int arg1, int arg2) {
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        Log.v("onUpgrade", "Updating table from " + oldVersion + " to " + newVersion);
+
+        if (oldVersion < 3) {
+            db.execSQL(this.creaTabellaImporti());
+        }
+
+        if (oldVersion < 6) {
+            db.execSQL(this.creaTabellaCertificati());
+            Log.v("onUpgrade", "Updated");
+        }
     }
 
     private String creaTabellaIscritto() {
@@ -115,6 +126,15 @@ public class Query extends SQLiteOpenHelper {
                 "FOREIGN KEY(iscritto) REFERENCES Iscritto(id) ON UPDATE CASCADE ON DELETE NO ACTION, " +
                 "FOREIGN KEY(corso) REFERENCES Corso(id) ON UPDATE CASCADE ON DELETE NO ACTION, " +
                 "PRIMARY KEY (iscritto, corso) )";
+    }
+
+    private String creaTabellaCertificati() {
+
+        return "CREATE TABLE Certificato (" +
+                Tabelle.InfoTabelle.certificati[0] + " INTEGER PRIMARY KEY, " + //iscritto
+                Tabelle.InfoTabelle.certificati[1] + " TEXT , " + //data certificato
+                "FOREIGN KEY(iscritto) REFERENCES Iscritto(id) ON UPDATE CASCADE ON DELETE NO ACTION " +
+                ")";
     }
 
 }

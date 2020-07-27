@@ -111,4 +111,18 @@ public class CambiaCorso extends Activity {
         finish();
     }    //fine tasto back
 
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        iscritto.setId(savedInstanceState.getString("iduser"));
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("iduser", iscritto.getId());
+    }
+
 }

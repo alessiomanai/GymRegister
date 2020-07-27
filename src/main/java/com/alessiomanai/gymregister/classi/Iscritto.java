@@ -21,6 +21,7 @@ public class Iscritto {
     private Importi importi = new Importi();
     private String corso;
     private Corso palestra = new Corso();
+    private String certificatoMedico;
 
     public Iscritto() {
     }
@@ -345,5 +346,13 @@ public class Iscritto {
 
     public void setImporti(Importi importi) {
         this.importi = importi;
+    }
+
+    public String getCertificatoMedico() {
+        return certificatoMedico;
+    }
+
+    public void setCertificatoMedico(String certificatoMedico) {
+        this.certificatoMedico = certificatoMedico;
     }
 }

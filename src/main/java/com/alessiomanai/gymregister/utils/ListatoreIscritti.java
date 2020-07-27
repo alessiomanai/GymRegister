@@ -35,7 +35,12 @@ public class ListatoreIscritti extends ArrayAdapter<Iscritto> {
 
         TextView txtTitle = rowView.findViewById(R.id.nomeT);
 
-        txtTitle.setText(iscritti.get(position).toString());
+        try {
+            txtTitle.setText(iscritti.get(position).toString());
+        } catch (RuntimeException re) {
+            re.printStackTrace();
+            txtTitle.setText("error");
+        }
 
         return rowView;
 

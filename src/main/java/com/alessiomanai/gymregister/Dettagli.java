@@ -13,8 +13,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -147,7 +148,7 @@ public class Dettagli extends Activity {
         setContentView(R.layout.activity_dettagli);
 
         //variabili textview
-        TextView detid, detaddr, dettel, detnasc, detcit;
+        TextView detid, detaddr, dettel, detnasc, detcit, detcert;
 
         //collego le textview alla gui
         detid = findViewById(R.id.detid);
@@ -155,6 +156,7 @@ public class Dettagli extends Activity {
         dettel = findViewById(R.id.dettel);
         detnasc = findViewById(R.id.detnasc);
         detcit = findViewById(R.id.detcit);
+        detcert = findViewById(R.id.detcert);
 
         //mostra a schermo i dettagli utente
         try {
@@ -185,6 +187,12 @@ public class Dettagli extends Activity {
             detcit.setText(iscritto.getCitta());
         } catch (NullPointerException e) {
             detcit.setText(" ");
+        }
+
+        try {
+            detcert.setText(iscritto.getCertificatoMedico());
+        } catch (NullPointerException e) {
+            detcit.setText("No data");
         }
 
         riepilogoPagamentiT = findViewById(R.id.riepilogoPagamenti);
