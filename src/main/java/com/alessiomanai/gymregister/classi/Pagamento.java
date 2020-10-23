@@ -15,6 +15,7 @@ public class Pagamento {
     private String maggio;
     private String giugno;
     private String luglio;
+    private String agosto;
     private String note;
 
     public Pagamento() {
@@ -117,4 +118,11 @@ public class Pagamento {
         this.luglio = luglio;
     }
 
+    public String getAgosto() {
+        return agosto;
+    }
+
+    public void setAgosto(String agosto) {
+        this.agosto = agosto;
+    }
 }

@@ -24,7 +24,7 @@ public class PagamentiIscritto extends Activity {
     static Corso corso;
     static Iscritto iscritto;
     private EditText feeIscrizione, feeSettembre, feeOttobre, feeNovembre, feeDicembre,
-            feeGennaio, feeFebbraio, feeMarzo, feeAprile, feeMaggio, feeGiugno, feeLuglio;
+            feeGennaio, feeFebbraio, feeMarzo, feeAprile, feeMaggio, feeGiugno, feeLuglio, feeAgosto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +47,7 @@ public class PagamentiIscritto extends Activity {
         feeMaggio = findViewById(R.id.feeMag);
         feeGiugno = findViewById(R.id.feeGiu);
         feeLuglio = findViewById(R.id.feeLug);
+        feeAgosto = findViewById(R.id.feeAgo);
 
         caricaDatabaseImporti();
 
@@ -69,8 +70,15 @@ public class PagamentiIscritto extends Activity {
 
         iscrizione.setClickable(true);
 
-        //se la prima lettera è "non pagato" rende il check clickabile
-        if (iscritto.getIscrizione().charAt(0) == 'n') {
+        try {
+            //se la prima lettera è "non pagato" rende il check clickabile
+            if (iscritto.getIscrizione().charAt(0) == 'n') {
+                iscrizione.setChecked(false);
+                feeIscrizione.setVisibility(View.GONE);
+
+            }
+        } catch (NullPointerException e) {
+
             iscrizione.setChecked(false);
             feeIscrizione.setVisibility(View.GONE);
 
@@ -97,7 +105,12 @@ public class PagamentiIscritto extends Activity {
         //settembre
         final CheckedTextView settembre = findViewById(R.id.checkedTextView2);
 
-        if (iscritto.getSettembre().charAt(0) == 'n') {
+        try {
+            if (iscritto.getSettembre().charAt(0) == 'n') {
+                settembre.setChecked(false);
+                feeSettembre.setVisibility(View.GONE);
+            }
+        } catch (NullPointerException e) {
             settembre.setChecked(false);
             feeSettembre.setVisibility(View.GONE);
         }
@@ -124,7 +137,12 @@ public class PagamentiIscritto extends Activity {
         //ottobre
         final CheckedTextView ottobre = findViewById(R.id.checkedTextView3);
 
-        if (iscritto.getOttobre().charAt(0) == 'n') {
+        try {
+            if (iscritto.getOttobre().charAt(0) == 'n') {
+                ottobre.setChecked(false);
+                feeOttobre.setVisibility(View.GONE);
+            }
+        } catch (NullPointerException e) {
             ottobre.setChecked(false);
             feeOttobre.setVisibility(View.GONE);
         }
@@ -151,7 +169,12 @@ public class PagamentiIscritto extends Activity {
 
         final CheckedTextView novembre = findViewById(R.id.checkedTextView4);
 
-        if (iscritto.getNovembre().charAt(0) == 'n') {
+        try {
+            if (iscritto.getNovembre().charAt(0) == 'n') {
+                novembre.setChecked(false);
+                feeNovembre.setVisibility(View.GONE);
+            }
+        } catch (NullPointerException e) {
             novembre.setChecked(false);
             feeNovembre.setVisibility(View.GONE);
         }
@@ -176,8 +199,12 @@ public class PagamentiIscritto extends Activity {
         });
 
         final CheckedTextView dicembre = findViewById(R.id.checkedTextView5);
-
-        if (iscritto.getDicembre().charAt(0) == 'n') {
+        try {
+            if (iscritto.getDicembre().charAt(0) == 'n') {
+                dicembre.setChecked(false);
+                feeDicembre.setVisibility(View.GONE);
+            }
+        } catch (NullPointerException e) {
             dicembre.setChecked(false);
             feeDicembre.setVisibility(View.GONE);
         }
@@ -204,7 +231,12 @@ public class PagamentiIscritto extends Activity {
 
         final CheckedTextView gennaio = findViewById(R.id.checkedTextView6);
 
-        if (iscritto.getGennaio().charAt(0) == 'n') {
+        try {
+            if (iscritto.getGennaio().charAt(0) == 'n') {
+                gennaio.setChecked(false);
+                feeGennaio.setVisibility(View.GONE);
+            }
+        } catch (NullPointerException e) {
             gennaio.setChecked(false);
             feeGennaio.setVisibility(View.GONE);
         }
@@ -230,7 +262,12 @@ public class PagamentiIscritto extends Activity {
 
         final CheckedTextView febbraio = findViewById(R.id.checkedTextView7);
 
-        if (iscritto.getFebbraio().charAt(0) == 'n') {
+        try {
+            if (iscritto.getFebbraio().charAt(0) == 'n') {
+                febbraio.setChecked(false);
+                feeFebbraio.setVisibility(View.GONE);
+            }
+        } catch (NullPointerException e) {
             febbraio.setChecked(false);
             feeFebbraio.setVisibility(View.GONE);
         }
@@ -257,7 +294,12 @@ public class PagamentiIscritto extends Activity {
 
         final CheckedTextView marzo = findViewById(R.id.checkedTextView8);
 
-        if (iscritto.getMarzo().charAt(0) == 'n') {
+        try {
+            if (iscritto.getMarzo().charAt(0) == 'n') {
+                marzo.setChecked(false);
+                feeMarzo.setVisibility(View.GONE);
+            }
+        } catch (NullPointerException e) {
             marzo.setChecked(false);
             feeMarzo.setVisibility(View.GONE);
         }
@@ -283,7 +325,12 @@ public class PagamentiIscritto extends Activity {
 
         final CheckedTextView aprile = findViewById(R.id.checkedTextView9);
 
-        if (iscritto.getAprile().charAt(0) == 'n') {
+        try {
+            if (iscritto.getAprile().charAt(0) == 'n') {
+                aprile.setChecked(false);
+                feeAprile.setVisibility(View.GONE);
+            }
+        } catch (NullPointerException e) {
             aprile.setChecked(false);
             feeAprile.setVisibility(View.GONE);
         }
@@ -309,7 +356,12 @@ public class PagamentiIscritto extends Activity {
 
         final CheckedTextView maggio = findViewById(R.id.checkedTextView10);
 
-        if (iscritto.getMaggio().charAt(0) == 'n') {
+        try {
+            if (iscritto.getMaggio().charAt(0) == 'n') {
+                maggio.setChecked(false);
+                feeMaggio.setVisibility(View.GONE);
+            }
+        } catch (NullPointerException e) {
             maggio.setChecked(false);
             feeMaggio.setVisibility(View.GONE);
         }
@@ -335,7 +387,12 @@ public class PagamentiIscritto extends Activity {
 
         final CheckedTextView giugno = findViewById(R.id.checkedTextView11);
 
-        if (iscritto.getGiugno().charAt(0) == 'n') {
+        try {
+            if (iscritto.getGiugno().charAt(0) == 'n') {
+                giugno.setChecked(false);
+                feeGiugno.setVisibility(View.GONE);
+            }
+        } catch (NullPointerException e) {
             giugno.setChecked(false);
             feeGiugno.setVisibility(View.GONE);
         }
@@ -360,7 +417,12 @@ public class PagamentiIscritto extends Activity {
 
         final CheckedTextView luglio = findViewById(R.id.checkedTextView12);
 
-        if (iscritto.getLuglio().charAt(0) == 'n') {
+        try {
+            if (iscritto.getLuglio().charAt(0) == 'n') {
+                luglio.setChecked(false);
+                feeLuglio.setVisibility(View.GONE);
+            }
+        } catch (NullPointerException e) {
             luglio.setChecked(false);
             feeLuglio.setVisibility(View.GONE);
         }
@@ -379,6 +441,36 @@ public class PagamentiIscritto extends Activity {
                     luglio.setChecked(false);
                     GestioneIscritti.iscritti.get(posizione).setLuglio("nonpagato");
                     feeLuglio.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        final CheckedTextView agosto = findViewById(R.id.checkedTextView13);
+
+        try {
+            if (iscritto.getAgosto().charAt(0) == 'n') {
+                agosto.setChecked(false);
+                feeAgosto.setVisibility(View.GONE);
+            }
+        } catch (NullPointerException e) {
+            agosto.setChecked(false);
+            feeAgosto.setVisibility(View.GONE);
+        }
+
+        agosto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (agosto.isChecked() == false) {
+                    agosto.setChecked(true);
+                    GestioneIscritti.iscritti.get(posizione).setAgosto("pagato");
+                    notificaPagamento(R.string.ago);
+                    feeAgosto.setVisibility(View.VISIBLE);
+
+                } else {
+                    agosto.setChecked(false);
+                    GestioneIscritti.iscritti.get(posizione).setAgosto("nonpagato");
+                    feeAgosto.setVisibility(View.GONE);
                 }
             }
         });
@@ -438,6 +530,7 @@ public class PagamentiIscritto extends Activity {
         feeMaggio.setText(iscritto.getImporti().getMaggio());
         feeGiugno.setText(iscritto.getImporti().getGiugno());
         feeLuglio.setText(iscritto.getImporti().getLuglio());
+        feeAgosto.setText(iscritto.getImporti().getAgosto());
 
     }
 
@@ -455,6 +548,7 @@ public class PagamentiIscritto extends Activity {
         iscritto.getImporti().setMaggio(feeMaggio.getText().toString());
         iscritto.getImporti().setGiugno(feeGiugno.getText().toString());
         iscritto.getImporti().setLuglio(feeLuglio.getText().toString());
+        iscritto.getImporti().setAgosto(feeAgosto.getText().toString());
 
         QueryImporti database = new QueryImporti(this);
         try {

@@ -267,6 +267,14 @@ public class Iscritto {
         this.pagamenti.setLuglio(luglio);
     }
 
+    public String getAgosto() {
+        return this.pagamenti.getAgosto();
+    }
+
+    public void setAgosto(String agosto) {
+        this.pagamenti.setAgosto(agosto);
+    }
+
     public Drawable getFoto() {
         return foto;
     }

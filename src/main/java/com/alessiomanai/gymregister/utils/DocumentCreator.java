@@ -45,15 +45,19 @@ public class DocumentCreator {
         this.document += line + " ";
     }
 
-    public void lastLine(String line){
+    public void lastLine(String line) {
         this.document += "<br/> <br/>" + line + "<br/>";
     }
 
-    public Context getContext(){
+    public Context getContext() {
         return this.context;
     }
 
-    public void getPDF(){
+    public String getDocument() {
+        return document;
+    }
+
+    public void getPDF() {
         this.endDocument();
         PdfConverter converter = PdfConverter.getInstance();
         converter.convert(this.getContext(), this.document, this.outputFile);

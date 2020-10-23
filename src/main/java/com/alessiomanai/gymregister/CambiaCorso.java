@@ -121,8 +121,8 @@ public class CambiaCorso extends Activity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
         outState.putString("iduser", iscritto.getId());
+        super.onSaveInstanceState(outState);
     }
 
 }

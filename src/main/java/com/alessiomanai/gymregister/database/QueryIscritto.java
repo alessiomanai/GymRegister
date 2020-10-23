@@ -64,7 +64,7 @@ public class QueryIscritto extends Query {
                         "iscrizione, " +
                         "settembre, ottobre, novembre, dicembre, gennaio, febbraio, " +
                         "marzo, aprile, maggio, " +
-                        "giugno, luglio " +
+                        "giugno, luglio, agosto, fotoProfilo " +
                         "FROM Iscritto, Pagamento " +
                         "WHERE Iscritto.id=Pagamento.iscritto " +
                         "AND Iscritto.corso=" + id.getId() + " ORDER BY nome", null);
@@ -99,6 +99,8 @@ public class QueryIscritto extends Query {
             selezionato.setMaggio(risultati.getString(16));
             selezionato.setGiugno(risultati.getString(17));
             selezionato.setLuglio(risultati.getString(18));
+            selezionato.setAgosto(risultati.getString(19));
+            selezionato.setUrlFoto(risultati.getString(20));
 
             iscritti.add(selezionato);
 
@@ -188,7 +190,7 @@ public class QueryIscritto extends Query {
                         "iscrizione, " +
                         "settembre, ottobre, novembre, dicembre, gennaio, febbraio, " +
                         "marzo, aprile, maggio, " +
-                        "giugno, luglio " +
+                        "giugno, luglio, agosto " +
                         "FROM Iscritto, Pagamento " +
                         "WHERE (Iscritto.id=Pagamento.iscritto " +
                         "AND Iscritto.corso=" + id.getId() + ") AND nome LIKE " +
@@ -224,6 +226,7 @@ public class QueryIscritto extends Query {
             selezionato.setMaggio(risultati.getString(16));
             selezionato.setGiugno(risultati.getString(17));
             selezionato.setLuglio(risultati.getString(18));
+            selezionato.setAgosto(risultati.getString(19));
 
             iscritti.add(selezionato);
 

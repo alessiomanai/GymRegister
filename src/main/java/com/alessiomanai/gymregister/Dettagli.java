@@ -130,6 +130,11 @@ public class Dettagli extends Activity {
                 nessunPagamento = false;
             }
 
+            if (iscritto.getAgosto().charAt(0) == 'p') {
+                riepilogo += " " + context.getResources().getString(R.string.ago);
+                nessunPagamento = false;
+            }
+
             if (nessunPagamento) {
                 riepilogo += context.getResources().getString(R.string.nopay);
             }

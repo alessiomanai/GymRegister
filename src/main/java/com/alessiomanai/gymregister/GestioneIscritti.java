@@ -6,6 +6,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.Editable;
@@ -20,6 +22,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -34,17 +37,17 @@ import com.alessiomanai.gymregister.utils.DocumentCreator;
 import com.alessiomanai.gymregister.utils.ListatoreIscritti;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-
 
 
 public class GestioneIscritti extends Activity {
@@ -54,6 +57,8 @@ public class GestioneIscritti extends Activity {
     public static Corso palestra;
     String text = "";
     private View donotpay;
+    private static final int WRITE_REQUEST_CODE = 122;
+    private String toExportMemory;
 
     /***
      * avvio del codice
@@ -107,13 +112,44 @@ public class GestioneIscritti extends Activity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+        palestra = new Corso();
         palestra.setId(savedInstanceState.getInt("idCorso"));
+
+        try {
+            iscritti = caricaDatabase();
+
+            iscritti = caricaCertificati(iscritti);
+        } catch (NullPointerException np) {
+            np.printStackTrace();
+        }
+
+        /**ordina gli iscritti prima di mostrarli a schermo**/
+        Collections.sort(iscritti, new Comparator<Iscritto>() {
+            public int compare(Iscritto s1, Iscritto s2) {
+                return s1.getId().compareTo(s2.getId());
+            }
+        });
+
+        //mostra il numero di iscritti
+        mostranumero();
+
+        //carica l'elenco
+        caricaelenco();
+
+        //gestione bottoni
+        gestionebottoni();
+
+        try {
+            pagamentiArretrati();   //funzionalità non presente in database corrotti
+        } catch (NullPointerException ne) {
+            ne.printStackTrace();
+        }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
         outState.putInt("idCorso", palestra.getId());
+        super.onSaveInstanceState(outState);
     }
 
 
@@ -428,6 +464,21 @@ public class GestioneIscritti extends Activity {
 
     }
 
+    void esportaPdfQ(String fileName) {
+
+        // when you create document, you need to add Intent.ACTION_CREATE_DOCUMENT
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+
+        // filter to only show openable items.
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        // Create a file with the requested Mime type
+        intent.setType("txt/plain");
+        intent.putExtra(Intent.EXTRA_TITLE, fileName);
+
+        startActivityForResult(intent, WRITE_REQUEST_CODE);
+    }
+
     /***
      * esporta l'elenco su file .pdf
      */
@@ -467,10 +518,9 @@ public class GestioneIscritti extends Activity {
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         REQUEST_WRITE_STORAGE);
 
-                Toast.makeText(this, "The app was not allowed to write to your storage. " +
-                        "Hence, it cannot function properly. " +
-                        "Please consider granting it this permission", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.richiestaPermessiFile, Toast.LENGTH_LONG).show();
 
+                return;
             }
 
             sdCard = Environment.getExternalStorageDirectory();    //ottiene il percorso della memoria esteran
@@ -535,6 +585,14 @@ public class GestioneIscritti extends Activity {
 
         document.lastLine("Grazie per aver usato Gym Register!");
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+
+            document.endDocument();
+            this.toExportMemory = document.getDocument();
+            esportaPdfQ(palestra.getNome() + ".html");
+            return;
+        }
+
         document.getPDF();
 
         //mostro il percorso in cui ho salvato il file
@@ -559,10 +617,7 @@ public class GestioneIscritti extends Activity {
     void ricarica() {
 
         Intent gestioneiscritti = new Intent(getBaseContext(), GestioneIscritti.class);
-
-        //avvia la finestra corrispondente
         startActivity(gestioneiscritti);
-
         finish();
     }
 
@@ -580,7 +635,7 @@ public class GestioneIscritti extends Activity {
         String testo = " " + numero;
 
         //trova la stringa sul layout
-        TextView asd = (TextView) findViewById(R.id.numisc);
+        TextView asd = findViewById(R.id.numisc);
         //setta la stringa sul layout
         asd.setText(testo);
 
@@ -656,6 +711,38 @@ public class GestioneIscritti extends Activity {
             }
         }
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == WRITE_REQUEST_CODE) {
+            switch (resultCode) {
+                case Activity.RESULT_OK:
+                    if (data != null
+                            && data.getData() != null) {
+                        writeInFile(data.getData(), toExportMemory);
+                    }
+                    break;
+                case Activity.RESULT_CANCELED:
+                    break;
+            }
+        }
+    }
+
+    private void writeInFile(@NonNull Uri uri, @NonNull String text) {
+        OutputStream outputStream;
+        try {
+            outputStream = getContentResolver().openOutputStream(uri);
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(outputStream));
+            bw.write(text);
+            bw.flush();
+            bw.close();
+            Toast.makeText(this, getString(R.string.fsave), Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, getString(R.string.ferror), Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

@@ -8,6 +8,8 @@ import android.util.Log;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.alessiomanai.gymregister.R;
+
 import java.io.File;
 
 /**
@@ -44,10 +46,11 @@ public class PdfConverter implements Runnable {
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
-                    throw new RuntimeException("call requires API level 19");
-                else {
-                    PrintDocumentAdapter documentAdapter = mWebView.createPrintDocumentAdapter();
+
+                try {
+                    String jobName = "GymRegister Document";
+
+                    PrintDocumentAdapter documentAdapter = mWebView.createPrintDocumentAdapter(jobName);
                     documentAdapter.onLayout(null, getPdfPrintAttrs(), null, new PrintDocumentAdapter.LayoutResultCallback() {
                     }, null);
                     documentAdapter.onWrite(new PageRange[]{PageRange.ALL_PAGES}, getOutputFileDescriptor(), null, new PrintDocumentAdapter.WriteResultCallback() {
@@ -56,6 +59,8 @@ public class PdfConverter implements Runnable {
                             destroy();
                         }
                     });
+                } catch (Exception e){
+                    e.printStackTrace();
                 }
             }
         });

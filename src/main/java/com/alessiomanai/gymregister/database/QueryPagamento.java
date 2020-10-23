@@ -62,7 +62,8 @@ public class QueryPagamento extends Query {
                 " aprile='" + iscritto.getAprile() + "'," +
                 " maggio='" + iscritto.getMaggio() + "'," +
                 " giugno='" + iscritto.getGiugno() + "'," +
-                " luglio='" + iscritto.getLuglio() + "' " +
+                " luglio='" + iscritto.getLuglio() + "'," +
+                " agosto='" + iscritto.getAgosto() + "' " +
                 "WHERE iscritto=" + iscritto.getIdDatabase() + " AND " +
                 "corso=" + iscritto.getPalestra().getId() + ";");
 
@@ -86,7 +87,8 @@ public class QueryPagamento extends Query {
         SQLiteDatabase db = context.getReadableDatabase();
 
         Cursor c = db.rawQuery("SELECT nome FROM Iscritto, Pagamento, Presenze " +
-                "WHERE Pagamento.iscritto = Iscritto.id AND " + mese + " = 'nonpagato' " +
+                "WHERE Pagamento.iscritto = Iscritto.id AND " +
+                "Presenze.iscritto = Pagamento.iscritto AND " + mese + " = 'nonpagato' " +
                 "AND Iscritto.corso = " + corso.getId() +
                 " AND giornoPresenza like '%/" + month + "/%';", null);
 

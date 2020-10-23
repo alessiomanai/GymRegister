@@ -238,4 +238,38 @@ public class QueryPresenze extends Query {
 
     }
 
+    public ArrayList<Presenza> presenzeCorsoMese(Query context, Iscritto iscritto, Corso corso, String mese) {
+
+        ArrayList<Presenza> elenco = new ArrayList<>();
+        SQLiteDatabase database = context.getReadableDatabase();
+        Cursor informazioni = database.rawQuery(
+                "SELECT iscritto, corso, giornoPresenza FROM Presenze WHERE corso=" + corso.getId() +
+                        " AND giornoPresenza LIKE '%" + mese + "%' AND iscritto = " + iscritto.getIdDatabase()
+                , null);
+
+        if (informazioni.getCount() == 0) {
+            Log.v("Risultati ", "nessuna presenza ");
+            return elenco;
+        }
+
+        informazioni.moveToFirst();
+
+        do {
+
+            Presenza selezionato = new Presenza();
+
+            selezionato.setIdIscritto(Integer.parseInt(informazioni.getString(0)));
+            selezionato.setIdCorso(Integer.parseInt(informazioni.getString(1)));
+            selezionato.setData(informazioni.getString(2));
+
+            elenco.add(selezionato);
+
+        } while (informazioni.moveToNext());
+
+        informazioni.close();
+        database.close();
+
+        return elenco;
+
+    }
 }

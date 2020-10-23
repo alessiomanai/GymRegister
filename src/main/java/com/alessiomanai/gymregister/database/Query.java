@@ -12,7 +12,7 @@ import android.util.Log;
 
 public class Query extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 6;  //02/04/2020
+    private static final int DATABASE_VERSION = 7;  //13/08/2020
     private SQLiteDatabase db;
 
     public Query(Context context) {
@@ -45,6 +45,12 @@ public class Query extends SQLiteOpenHelper {
         if (oldVersion < 6) {
             db.execSQL(this.creaTabellaCertificati());
             Log.v("onUpgrade", "Updated");
+        }
+
+        if (oldVersion < 7) {
+            db.execSQL(this.aggiuntaAgostoImporti());
+            db.execSQL(this.aggiuntaAgostoPagamenti());
+            Log.v("onUpgrade", "Pagamenti");
         }
     }
 
@@ -101,6 +107,7 @@ public class Query extends SQLiteOpenHelper {
                 Tabelle.InfoTabelle.pagamento[11] + " TEXT      NOT NULL DEFAULT nonpagato, " +
                 Tabelle.InfoTabelle.pagamento[12] + " TEXT      NOT NULL DEFAULT nonpagato, " +
                 Tabelle.InfoTabelle.pagamento[13] + " TEXT      NOT NULL DEFAULT nonpagato, " +
+                Tabelle.InfoTabelle.pagamento[14] + " TEXT      NOT NULL DEFAULT nonpagato, " +
                 "FOREIGN KEY(iscritto) REFERENCES Iscritto(id) ON UPDATE CASCADE ON DELETE NO ACTION, " +
                 "FOREIGN KEY(corso) REFERENCES Corso(id) ON UPDATE CASCADE ON DELETE NO ACTION, " +
                 "PRIMARY KEY (iscritto, corso) )";
@@ -111,7 +118,7 @@ public class Query extends SQLiteOpenHelper {
         return "CREATE TABLE Importi (" +
                 Tabelle.InfoTabelle.pagamento[0] + " INTEGER , " + //iscritto
                 Tabelle.InfoTabelle.pagamento[1] + " INTEGER, " + //corso
-                Tabelle.InfoTabelle.pagamento[2] + " TEXT DEFAULT 0, " + //giorno presenza
+                Tabelle.InfoTabelle.pagamento[2] + " TEXT DEFAULT 0, " +
                 Tabelle.InfoTabelle.pagamento[3] + " TEXT DEFAULT 0, " +
                 Tabelle.InfoTabelle.pagamento[4] + " TEXT DEFAULT 0, " +
                 Tabelle.InfoTabelle.pagamento[5] + " TEXT DEFAULT 0, " +
@@ -123,6 +130,7 @@ public class Query extends SQLiteOpenHelper {
                 Tabelle.InfoTabelle.pagamento[11] + " TEXT DEFAULT 0, " +
                 Tabelle.InfoTabelle.pagamento[12] + " TEXT DEFAULT 0, " +
                 Tabelle.InfoTabelle.pagamento[13] + " TEXT DEFAULT 0, " +
+                Tabelle.InfoTabelle.pagamento[14] + " TEXT DEFAULT 0, " +
                 "FOREIGN KEY(iscritto) REFERENCES Iscritto(id) ON UPDATE CASCADE ON DELETE NO ACTION, " +
                 "FOREIGN KEY(corso) REFERENCES Corso(id) ON UPDATE CASCADE ON DELETE NO ACTION, " +
                 "PRIMARY KEY (iscritto, corso) )";
@@ -137,4 +145,15 @@ public class Query extends SQLiteOpenHelper {
                 ")";
     }
 
+    private String aggiuntaAgostoPagamenti() {
+
+        return "ALTER TABLE Pagamento " +
+                "ADD COLUMN " + Tabelle.InfoTabelle.pagamento[14] + " TEXT NOT NULL DEFAULT 'nonpagato'";
+    }
+
+    private String aggiuntaAgostoImporti() {
+
+        return "ALTER TABLE Importi " +
+                "ADD COLUMN " + Tabelle.InfoTabelle.pagamento[14] + " TEXT DEFAULT 0";
+    }
 }

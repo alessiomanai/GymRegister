@@ -29,11 +29,11 @@ public class Tabelle {
 
         public static final String[] pagamento = new String[]{"iscritto", "corso", "iscrizione",
                 "settembre", "ottobre", "novembre", "dicembre", "gennaio", "febbraio", "marzo", "aprile", "maggio",
-                "giugno", "luglio"};
+                "giugno", "luglio", "agosto"};
 
         public static final String[] importi = new String[]{"iscritto", "corso", "iscrizione",
                 "settembre", "ottobre", "novembre", "dicembre", "gennaio", "febbraio", "marzo", "aprile", "maggio",
-                "giugno", "luglio"};
+                "giugno", "luglio", "agosto"};
 
         public static final String[] certificati = new String[]{"iscritto", "data"};
 

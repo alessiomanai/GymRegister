@@ -458,7 +458,7 @@ public class PresenzeUtente extends Activity implements AdapterView.OnItemSelect
             for (int i = 0; i < elencoPresenze.size(); i++) {
 
                 if (elencoPresenze.get(i).getData().contains("/06") ||
-                        elencoPresenze.get(i).getData().contains("/4")) {
+                        elencoPresenze.get(i).getData().contains("/6")) {
                     presenzeSelezionate.add(elencoPresenze.get(i));
                 }
             }
@@ -475,6 +475,22 @@ public class PresenzeUtente extends Activity implements AdapterView.OnItemSelect
 
                 if (elencoPresenze.get(i).getData().contains("/07") ||
                         elencoPresenze.get(i).getData().contains("/7")) {
+                    presenzeSelezionate.add(elencoPresenze.get(i));
+                }
+            }
+
+            adapter = new ListatoreDettaglioPresenze(this, presenzeSelezionate);
+            list1.setAdapter(adapter);
+            mostranumero(presenzeSelezionate);
+
+        }
+
+        if (pos == 12) {
+
+            for (int i = 0; i < elencoPresenze.size(); i++) {
+
+                if (elencoPresenze.get(i).getData().contains("/08") ||
+                        elencoPresenze.get(i).getData().contains("/8")) {
                     presenzeSelezionate.add(elencoPresenze.get(i));
                 }
             }

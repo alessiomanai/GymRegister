@@ -25,9 +25,9 @@ public class QueryImporti extends Query {
         SQLiteStatement stmt = database.compileStatement("INSERT INTO Importi (" +
                 "iscritto, corso, iscrizione," +
                 "settembre, ottobre, novembre, dicembre, gennaio, febbraio, marzo, aprile, maggio," +
-                "giugno, luglio) VALUES (" + iscritto.getIdDatabase() +
+                "giugno, luglio, agosto) VALUES (" + iscritto.getIdDatabase() +
                 ", " + corso.getId() +
-                ", ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? "
+                ", ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? "
                 + ")");
 
         stmt.bindString(1, iscritto.getImporti().getIscrizione());
@@ -42,6 +42,7 @@ public class QueryImporti extends Query {
         stmt.bindString(10, iscritto.getImporti().getMaggio());
         stmt.bindString(11, iscritto.getImporti().getGiugno());
         stmt.bindString(12, iscritto.getImporti().getLuglio());
+        stmt.bindString(13, iscritto.getImporti().getAgosto());
         stmt.execute();
 
     }
@@ -62,7 +63,8 @@ public class QueryImporti extends Query {
                 " aprile=?," +
                 " maggio=?," +
                 " giugno=?," +
-                " luglio=? " +
+                " luglio=?, " +
+                " agosto=? " +
                 "WHERE iscritto=" + iscritto.getIdDatabase() + " AND " +
                 "corso=" + iscritto.getPalestra().getId() + ";");
 
@@ -78,6 +80,7 @@ public class QueryImporti extends Query {
         stmt.bindString(10, iscritto.getImporti().getMaggio());
         stmt.bindString(11, iscritto.getImporti().getGiugno());
         stmt.bindString(12, iscritto.getImporti().getLuglio());
+        stmt.bindString(13, iscritto.getImporti().getAgosto());
         stmt.execute();
 
     }
@@ -95,7 +98,7 @@ public class QueryImporti extends Query {
                             "iscrizione, " +
                             "settembre, ottobre, novembre, dicembre, gennaio, febbraio, " +
                             "marzo, aprile, maggio, " +
-                            "giugno, luglio " +
+                            "giugno, luglio, agosto " +
                             "FROM Importi " +
                             "WHERE iscritto=" + iscritto.getIdDatabase() +
                             " AND corso=" + corso.getId(), null);
@@ -119,6 +122,7 @@ public class QueryImporti extends Query {
             pagamenti.setMaggio(risultati.getString(9));
             pagamenti.setGiugno(risultati.getString(10));
             pagamenti.setLuglio(risultati.getString(11));
+            pagamenti.setAgosto(risultati.getString(12));
 
             risultati.close();
 
@@ -143,6 +147,7 @@ public class QueryImporti extends Query {
                     Tabelle.InfoTabelle.pagamento[11] + " TEXT DEFAULT 0, " +
                     Tabelle.InfoTabelle.pagamento[12] + " TEXT DEFAULT 0, " +
                     Tabelle.InfoTabelle.pagamento[13] + " TEXT DEFAULT 0, " +
+                    Tabelle.InfoTabelle.pagamento[14] + " TEXT DEFAULT 0, " +
                     "FOREIGN KEY(iscritto) REFERENCES Iscritto(id) ON UPDATE CASCADE ON DELETE NO ACTION, " +
                     "FOREIGN KEY(corso) REFERENCES Corso(id) ON UPDATE CASCADE ON DELETE NO ACTION, " +
                     "PRIMARY KEY (iscritto, corso) )");
