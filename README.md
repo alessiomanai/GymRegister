@@ -5,6 +5,9 @@ GymRegister è l'applicazione per tablet Android per gestire gli iscritti dei co
 
 PlayStore: https://play.google.com/store/apps/details?id=com.alessiomanai.gymregister
 
+[![](https://www.paypalobjects.com/en_US/IT/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4T8B232GMP36Q)
+
+
 	Copyright (C) 2014-2020  Alessio Manai
 
  	This program is free software: you can redistribute it and/or modify
