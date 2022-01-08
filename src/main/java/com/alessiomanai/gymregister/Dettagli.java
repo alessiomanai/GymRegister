@@ -1,7 +1,6 @@
 package com.alessiomanai.gymregister;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -30,7 +29,9 @@ import com.alessiomanai.gymregister.classi.Corso;
 import com.alessiomanai.gymregister.classi.Iscritto;
 import com.alessiomanai.gymregister.database.QueryIscritto;
 import com.alessiomanai.gymregister.database.QueryPagamento;
+import com.alessiomanai.gymregister.utils.activity.ExtrasConstants;
 import com.alessiomanai.gymregister.utils.FileDialog;
+import com.alessiomanai.gymregister.utils.activity.GymRegisterBaseActivity;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,14 +42,14 @@ import java.io.IOException;
 
 import static android.content.ContentValues.TAG;
 
-public class Dettagli extends Activity {
+public class Dettagli extends GymRegisterBaseActivity {
 
     private static final String FTYPE = ".jpg";
     private static final int DIALOG_LOAD_FILE = 1000;
-    static public TextView riepilogoPagamentiT;
-    static int posizione;    //posizione all' interno dell array utenti
-    static Corso palestra;        //nome palestra usata
-    static Iscritto iscritto;   //dettagli utente
+    private TextView riepilogoPagamentiT;
+    private int posizione;    //posizione all' interno dell array utenti
+    private Corso palestra;        //nome palestra usata
+    private Iscritto iscritto;   //dettagli utente
     final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1001;
     ImageButton modifica;
     ImageButton elimina, pagamenti, presenze, note, cambia;
@@ -61,96 +62,14 @@ public class Dettagli extends Activity {
     private String mChosenFile;
 
 
-    public static void caricaRiepilogoPagamenti(Context context) {
-
-        String riepilogo = context.getResources().getString(R.string.riepilogo);
-        boolean nessunPagamento = true;
-
-        riepilogo += " " + context.getResources().getString(R.string.pay) + ":\n";
-
-        try {
-
-            if (iscritto.getIscrizione().charAt(0) == 'p') {
-                riepilogo += "" + context.getResources().getString(R.string.iscrizione);
-                nessunPagamento = false;
-            }
-
-            if (iscritto.getSettembre().charAt(0) == 'p') {
-                riepilogo += " " + context.getResources().getString(R.string.sept);
-                nessunPagamento = false;
-            }
-
-            if (iscritto.getOttobre().charAt(0) == 'p') {
-                riepilogo += " " + context.getResources().getString(R.string.oct);
-                nessunPagamento = false;
-            }
-
-            if (iscritto.getNovembre().charAt(0) == 'p') {
-                riepilogo += " " + context.getResources().getString(R.string.nov);
-                nessunPagamento = false;
-            }
-
-            if (iscritto.getDicembre().charAt(0) == 'p') {
-                riepilogo += " " + context.getResources().getString(R.string.dec);
-                nessunPagamento = false;
-            }
-
-            if (iscritto.getGennaio().charAt(0) == 'p') {
-                riepilogo += " " + context.getResources().getString(R.string.jan);
-                nessunPagamento = false;
-            }
-
-            if (iscritto.getFebbraio().charAt(0) == 'p') {
-                riepilogo += " " + context.getResources().getString(R.string.feb);
-                nessunPagamento = false;
-            }
-
-            if (iscritto.getMarzo().charAt(0) == 'p') {
-                riepilogo += " " + context.getResources().getString(R.string.mar);
-                nessunPagamento = false;
-            }
-
-            if (iscritto.getAprile().charAt(0) == 'p') {
-                riepilogo += " " + context.getResources().getString(R.string.apr);
-                nessunPagamento = false;
-            }
-
-            if (iscritto.getMaggio().charAt(0) == 'p') {
-                riepilogo += " " + context.getResources().getString(R.string.mag);
-                nessunPagamento = false;
-            }
-
-            if (iscritto.getGiugno().charAt(0) == 'p') {
-                riepilogo += " " + context.getResources().getString(R.string.jun);
-                nessunPagamento = false;
-            }
-
-            if (iscritto.getLuglio().charAt(0) == 'p') {
-                riepilogo += " " + context.getResources().getString(R.string.jul);
-                nessunPagamento = false;
-            }
-
-            if (iscritto.getAgosto().charAt(0) == 'p') {
-                riepilogo += " " + context.getResources().getString(R.string.ago);
-                nessunPagamento = false;
-            }
-
-            if (nessunPagamento) {
-                riepilogo += context.getResources().getString(R.string.nopay);
-            }
-
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-
-        riepilogoPagamentiT.setText(riepilogo);
-
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dettagli);
+
+        palestra = (Corso) getIntent().getExtras().get(ExtrasConstants.CORSO);
+        posizione = (int) getIntent().getExtras().get(ExtrasConstants.POSITION);
+        iscritto = (Iscritto) getIntent().getExtras().get(ExtrasConstants.ISCRITTO);
 
         //variabili textview
         TextView detid, detaddr, dettel, detnasc, detcit, detcert;
@@ -203,7 +122,7 @@ public class Dettagli extends Activity {
         riepilogoPagamentiT = findViewById(R.id.riepilogoPagamenti);
 
         try {
-            caricaRiepilogoPagamenti(this);
+            riepilogoPagamentiT.setText(caricaRiepilogoPagamenti(iscritto, this));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -254,10 +173,11 @@ public class Dettagli extends Activity {
             public void onClick(View arg0) {
 
                 //invio i dati dell' utente
-                Note.iscritto = iscritto;
-                Note.noteIscritto = true;
-
                 Intent noteI = new Intent(getBaseContext(), Note.class);
+
+                noteI.putExtra(ExtrasConstants.ISCRITTO, iscritto);
+                noteI.putExtra(ExtrasConstants.NOTE_ISCRITTO, true);
+
                 startActivity(noteI);
 
             }
@@ -268,12 +188,7 @@ public class Dettagli extends Activity {
 
             public void onClick(View arg0) {
 
-                PagamentiIscritto.corso = palestra;
-                PagamentiIscritto.iscritto = iscritto;
-                PagamentiIscritto.posizione = posizione;
-
-                Intent asd = new Intent(getBaseContext(), PagamentiIscritto.class);
-                startActivity(asd);
+                getPagamentiIscritto(posizione, iscritto, palestra);
 
             }
         });
@@ -283,10 +198,7 @@ public class Dettagli extends Activity {
 
             public void onClick(View arg0) {
 
-                PresenzeUtente.iscritto = iscritto;
-
-                Intent asd = new Intent(getBaseContext(), PresenzeUtente.class);
-                startActivity(asd);
+                getPresenzeIscritto(iscritto);
 
             }
         });
@@ -311,8 +223,7 @@ public class Dettagli extends Activity {
 
                         confermaeli();    //conferma l'avvenuto eliminazione con un messaggio
 
-                        Intent asd = new Intent(getBaseContext(), GestioneIscritti.class);
-                        startActivity(asd);
+                        getGestioneIscritti(palestra);
 
                         finish();    //chiude l'activity
 
@@ -340,14 +251,9 @@ public class Dettagli extends Activity {
 
         cambia.setOnClickListener(new View.OnClickListener() {
             @Override
-
             public void onClick(View arg0) {
 
-                //invio i dati dell' utente
-                CambiaCorso.iscritto = iscritto;
-
-                Intent cambiapalestra = new Intent(getBaseContext(), CambiaCorso.class);
-                startActivity(cambiapalestra);
+                getCambiaCorso(iscritto);
 
             }
         });
@@ -361,10 +267,7 @@ public class Dettagli extends Activity {
     @Override
     public void onBackPressed() {
 
-        Intent gestioneiscritti = new Intent(getBaseContext(), GestioneIscritti.class);
-
-        //avvia la finestra corrispondente
-        startActivity(gestioneiscritti);
+        getGestioneIscritti(palestra);
 
         try {
             salvaModifiche();
@@ -401,13 +304,7 @@ public class Dettagli extends Activity {
             case R.id.note: {
 
                 //invio i dati dell' utente
-                Note.iscritto = iscritto;
-                Note.noteIscritto = true;
-
-                Intent note = new Intent(getBaseContext(), Note.class);
-
-                //avvia la finestra corrispondente
-                startActivity(note);
+                getNote(iscritto);
                 return true;
             }
             default:
@@ -428,12 +325,7 @@ public class Dettagli extends Activity {
 
             public void onClick(View arg0) {
 
-                ModificaIscritto.iscritto = iscritto;
-                ModificaIscritto.palestra = palestra;
-                ModificaIscritto.posizione = posizione;
-
-                Intent modifica = new Intent(getBaseContext(), ModificaIscritto.class);
-                startActivity(modifica);
+                getModificaIscritto(posizione, iscritto, palestra);
 
                 finish();
             }

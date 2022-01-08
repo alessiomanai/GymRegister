@@ -23,8 +23,8 @@ import java.util.ArrayList;
 
 public class ListatoreDettaglioPresenze extends ArrayAdapter<Presenza> {
 
-    private Activity context;
-    private ArrayList<Presenza> presenze;
+    private final Activity context;
+    private final ArrayList<Presenza> presenze;
 
     public ListatoreDettaglioPresenze(Activity context, ArrayList<Presenza> nome) {
 
@@ -41,7 +41,6 @@ public class ListatoreDettaglioPresenze extends ArrayAdapter<Presenza> {
     public View getView(final int position, View view, ViewGroup parent) {
 
         LayoutInflater inflater = context.getLayoutInflater();
-        final int posizioneClick = position;
 
         final View rowView = inflater.inflate(R.layout.listatorepresenzeutente, null, true);    //infila il file xml nell' intent
 
@@ -72,8 +71,8 @@ public class ListatoreDettaglioPresenze extends ArrayAdapter<Presenza> {
                         database.eliminaPresenzaVecchia(database, presenze.get(position).getIscritto(),
                                 presenze.get(position).getData());
 
-                        PresenzeUtente.elencoPresenze.remove(position);
-                        PresenzeUtente.list1.setAdapter(PresenzeUtente.adapter);
+                        presenze.remove(position);
+                        notifyDataSetChanged();
 
                         Toast.makeText(builder.getContext(), R.string.presRemove, Toast.LENGTH_SHORT).show();
 

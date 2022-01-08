@@ -22,13 +22,14 @@ import android.widget.Toast;
 
 import com.alessiomanai.gymregister.classi.Corso;
 import com.alessiomanai.gymregister.classi.Iscritto;
+import com.alessiomanai.gymregister.utils.activity.ExtrasConstants;
 
 
 public class Note extends Activity {
 
-    static Corso corso;
-    static Iscritto iscritto;
-    static boolean noteIscritto;
+    private Corso corso;
+    private Iscritto iscritto;
+    private boolean noteIscritto;
     String nomeid;
     TextView nomeT;
     EditText testo;
@@ -39,6 +40,10 @@ public class Note extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note);
+
+        noteIscritto = (boolean) getIntent().getExtras().get(ExtrasConstants.NOTE_ISCRITTO);
+        iscritto = (Iscritto) getIntent().getExtras().get(ExtrasConstants.ISCRITTO);
+        corso = (Corso) getIntent().getExtras().get(ExtrasConstants.CORSO);
 
         final String file;
         ImageButton salva;

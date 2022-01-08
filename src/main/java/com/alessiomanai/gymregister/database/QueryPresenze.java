@@ -187,8 +187,7 @@ public class QueryPresenze extends Query {
 
         Cursor informazioni = this.presenzeOdierneCursor(context, corso);
 
-        if (informazioni.getCount() == 0) {
-            Log.v("Risultati ", "nessuna presenza ");
+        if (informazioni == null || informazioni.getCount() == 0) {
             return elenco;
         }
 

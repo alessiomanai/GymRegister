@@ -3,9 +3,10 @@ package com.alessiomanai.gymregister.classi;
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
-public class Iscritto {
+public class Iscritto implements Serializable {
 
     private String id;    //nome
     private int idDatabase;

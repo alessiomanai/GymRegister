@@ -1,6 +1,8 @@
 package com.alessiomanai.gymregister.classi;
 
-public class Corso {
+import java.io.Serializable;
+
+public class Corso implements Serializable {
 
     private int id;
     private String nome;    //nome palestra

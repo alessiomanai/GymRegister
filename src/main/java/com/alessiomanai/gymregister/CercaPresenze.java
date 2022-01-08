@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class CercaPresenze extends Activity {
 
-    static public ArrayList<Presenza> elencoPresenze;
+    private ArrayList<Presenza> elencoPresenze;
     ArrayList<Presenza> risultati = new ArrayList<>();
     EditText search;
     ImageButton cerca;
@@ -22,8 +22,8 @@ public class CercaPresenze extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cerca_presenze);
 
-        search = (EditText) findViewById(R.id.search2);
-        cerca = (ImageButton) findViewById(R.id.buttoncerca2);
+        search = findViewById(R.id.search2);
+        cerca = findViewById(R.id.buttoncerca2);
 
         cerca.setOnClickListener(new View.OnClickListener() {
             @Override

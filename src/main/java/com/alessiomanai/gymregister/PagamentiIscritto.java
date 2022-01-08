@@ -1,13 +1,10 @@
 package com.alessiomanai.gymregister;
 
-import android.app.Activity;
 import android.database.sqlite.SQLiteConstraintException;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,14 +12,14 @@ import com.alessiomanai.gymregister.classi.Corso;
 import com.alessiomanai.gymregister.classi.Iscritto;
 import com.alessiomanai.gymregister.database.QueryImporti;
 import com.alessiomanai.gymregister.database.QueryPagamento;
+import com.alessiomanai.gymregister.utils.activity.ExtrasConstants;
+import com.alessiomanai.gymregister.utils.activity.GymRegisterBaseActivity;
 
-import java.util.ArrayList;
+public class PagamentiIscritto extends GymRegisterBaseActivity {
 
-public class PagamentiIscritto extends Activity {
-
-    static int posizione;
-    static Corso corso;
-    static Iscritto iscritto;
+    private int posizione;
+    private Corso corso;
+    private Iscritto iscritto;
     private EditText feeIscrizione, feeSettembre, feeOttobre, feeNovembre, feeDicembre,
             feeGennaio, feeFebbraio, feeMarzo, feeAprile, feeMaggio, feeGiugno, feeLuglio, feeAgosto;
 
@@ -30,6 +27,10 @@ public class PagamentiIscritto extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pagamenti_iscritto);
+
+        corso = (Corso) getIntent().getExtras().get(ExtrasConstants.CORSO);
+        posizione = (int) getIntent().getExtras().get(ExtrasConstants.POSITION);
+        iscritto = (Iscritto) getIntent().getExtras().get(ExtrasConstants.ISCRITTO);
 
         TextView nomePagante = findViewById(R.id.nomePagante);
         nomePagante.setText(iscritto.getId());
@@ -90,12 +91,12 @@ public class PagamentiIscritto extends Activity {
 
                 if (iscrizione.isChecked() == false) {    //se non è spuntato lo rende spuntabile
                     iscrizione.setChecked(true);
-                    GestioneIscritti.iscritti.get(posizione).setIscrizione("pagato");
+                    iscritto.setIscrizione("pagato");
                     notificaPagamento(R.string.iscrizione);
                     feeIscrizione.setVisibility(View.VISIBLE);
                 } else {
                     iscrizione.setChecked(false);    //altrimenti si può modificare
-                    GestioneIscritti.iscritti.get(posizione).setIscrizione("nonpagato");
+                    iscritto.setIscrizione("nonpagato");
                     feeIscrizione.setVisibility(View.GONE);
 
                 }
@@ -121,12 +122,12 @@ public class PagamentiIscritto extends Activity {
 
                 if (settembre.isChecked() == false) {
                     settembre.setChecked(true);
-                    GestioneIscritti.iscritti.get(posizione).setSettembre("pagato");
+                    iscritto.setSettembre("pagato");
                     notificaPagamento(R.string.sept);
                     feeSettembre.setVisibility(View.VISIBLE);
                 } else {
                     settembre.setChecked(false);
-                    GestioneIscritti.iscritti.get(posizione).setSettembre("nonpagato");
+                    iscritto.setSettembre("nonpagato");
                     feeSettembre.setVisibility(View.GONE);
 
                 }
@@ -153,13 +154,13 @@ public class PagamentiIscritto extends Activity {
 
                 if (ottobre.isChecked() == false) {
                     ottobre.setChecked(true);
-                    GestioneIscritti.iscritti.get(posizione).setOttobre("pagato");
+                    iscritto.setOttobre("pagato");
                     notificaPagamento(R.string.oct);
                     feeOttobre.setVisibility(View.VISIBLE);
 
                 } else {
                     ottobre.setChecked(false);
-                    GestioneIscritti.iscritti.get(posizione).setOttobre("nonpagato");
+                    iscritto.setOttobre("nonpagato");
                     feeOttobre.setVisibility(View.GONE);
 
                 }
@@ -185,13 +186,13 @@ public class PagamentiIscritto extends Activity {
 
                 if (novembre.isChecked() == false) {
                     novembre.setChecked(true);
-                    GestioneIscritti.iscritti.get(posizione).setNovembre("pagato");
+                    iscritto.setNovembre("pagato");
                     notificaPagamento(R.string.nov);
                     feeNovembre.setVisibility(View.VISIBLE);
 
                 } else {
                     novembre.setChecked(false);
-                    GestioneIscritti.iscritti.get(posizione).setNovembre("nonpagato");
+                    iscritto.setNovembre("nonpagato");
                     feeNovembre.setVisibility(View.GONE);
 
                 }
@@ -215,13 +216,13 @@ public class PagamentiIscritto extends Activity {
 
                 if (dicembre.isChecked() == false) {
                     dicembre.setChecked(true);
-                    GestioneIscritti.iscritti.get(posizione).setDicembre("pagato");
+                    iscritto.setDicembre("pagato");
                     notificaPagamento(R.string.dec);
                     feeDicembre.setVisibility(View.VISIBLE);
 
                 } else {
                     dicembre.setChecked(false);
-                    GestioneIscritti.iscritti.get(posizione).setDicembre("nonpagato");
+                    iscritto.setDicembre("nonpagato");
                     feeDicembre.setVisibility(View.GONE);
 
                 }
@@ -247,13 +248,13 @@ public class PagamentiIscritto extends Activity {
 
                 if (gennaio.isChecked() == false) {
                     gennaio.setChecked(true);
-                    GestioneIscritti.iscritti.get(posizione).setGennaio("pagato");
+                    iscritto.setGennaio("pagato");
                     notificaPagamento(R.string.jan);
                     feeGennaio.setVisibility(View.VISIBLE);
 
                 } else {
                     gennaio.setChecked(false);
-                    GestioneIscritti.iscritti.get(posizione).setGennaio("nonpagato");
+                    iscritto.setGennaio("nonpagato");
                     feeGennaio.setVisibility(View.GONE);
 
                 }
@@ -278,13 +279,13 @@ public class PagamentiIscritto extends Activity {
 
                 if (febbraio.isChecked() == false) {
                     febbraio.setChecked(true);
-                    GestioneIscritti.iscritti.get(posizione).setFebbraio("pagato");
+                    iscritto.setFebbraio("pagato");
                     notificaPagamento(R.string.feb);
                     feeFebbraio.setVisibility(View.VISIBLE);
 
                 } else {
                     febbraio.setChecked(false);
-                    GestioneIscritti.iscritti.get(posizione).setFebbraio("nonpagato");
+                    iscritto.setFebbraio("nonpagato");
                     feeFebbraio.setVisibility(View.GONE);
 
                 }
@@ -310,13 +311,13 @@ public class PagamentiIscritto extends Activity {
 
                 if (marzo.isChecked() == false) {
                     marzo.setChecked(true);
-                    GestioneIscritti.iscritti.get(posizione).setMarzo("pagato");
+                    iscritto.setMarzo("pagato");
                     notificaPagamento(R.string.mar);
                     feeMarzo.setVisibility(View.VISIBLE);
 
                 } else {
                     marzo.setChecked(false);
-                    GestioneIscritti.iscritti.get(posizione).setMarzo("nonpagato");
+                    iscritto.setMarzo("nonpagato");
                     feeMarzo.setVisibility(View.GONE);
 
                 }
@@ -341,13 +342,13 @@ public class PagamentiIscritto extends Activity {
 
                 if (aprile.isChecked() == false) {
                     aprile.setChecked(true);
-                    GestioneIscritti.iscritti.get(posizione).setAprile("pagato");
+                    iscritto.setAprile("pagato");
                     notificaPagamento(R.string.apr);
                     feeAprile.setVisibility(View.VISIBLE);
 
                 } else {
                     aprile.setChecked(false);
-                    GestioneIscritti.iscritti.get(posizione).setAprile("nonpagato");
+                    iscritto.setAprile("nonpagato");
                     feeAprile.setVisibility(View.GONE);
 
                 }
@@ -372,13 +373,13 @@ public class PagamentiIscritto extends Activity {
 
                 if (maggio.isChecked() == false) {
                     maggio.setChecked(true);
-                    GestioneIscritti.iscritti.get(posizione).setMaggio("pagato");
+                    iscritto.setMaggio("pagato");
                     notificaPagamento(R.string.mag);
                     feeMaggio.setVisibility(View.VISIBLE);
 
                 } else {
                     maggio.setChecked(false);
-                    GestioneIscritti.iscritti.get(posizione).setMaggio("nonpagato");
+                    iscritto.setMaggio("nonpagato");
                     feeMaggio.setVisibility(View.GONE);
 
                 }
@@ -403,13 +404,13 @@ public class PagamentiIscritto extends Activity {
 
                 if (giugno.isChecked() == false) {
                     giugno.setChecked(true);
-                    GestioneIscritti.iscritti.get(posizione).setGiugno("pagato");
+                    iscritto.setGiugno("pagato");
                     notificaPagamento(R.string.jun);
                     feeGiugno.setVisibility(View.VISIBLE);
 
                 } else {
                     giugno.setChecked(false);
-                    GestioneIscritti.iscritti.get(posizione).setGiugno("nonpagato");
+                    iscritto.setGiugno("nonpagato");
                     feeGiugno.setVisibility(View.GONE);
                 }
             }
@@ -433,13 +434,13 @@ public class PagamentiIscritto extends Activity {
 
                 if (luglio.isChecked() == false) {
                     luglio.setChecked(true);
-                    GestioneIscritti.iscritti.get(posizione).setLuglio("pagato");
+                    iscritto.setLuglio("pagato");
                     notificaPagamento(R.string.jul);
                     feeLuglio.setVisibility(View.VISIBLE);
 
                 } else {
                     luglio.setChecked(false);
-                    GestioneIscritti.iscritti.get(posizione).setLuglio("nonpagato");
+                    iscritto.setLuglio("nonpagato");
                     feeLuglio.setVisibility(View.GONE);
                 }
             }
@@ -463,13 +464,13 @@ public class PagamentiIscritto extends Activity {
 
                 if (agosto.isChecked() == false) {
                     agosto.setChecked(true);
-                    GestioneIscritti.iscritti.get(posizione).setAgosto("pagato");
+                    iscritto.setAgosto("pagato");
                     notificaPagamento(R.string.ago);
                     feeAgosto.setVisibility(View.VISIBLE);
 
                 } else {
                     agosto.setChecked(false);
-                    GestioneIscritti.iscritti.get(posizione).setAgosto("nonpagato");
+                    iscritto.setAgosto("nonpagato");
                     feeAgosto.setVisibility(View.GONE);
                 }
             }
@@ -482,9 +483,7 @@ public class PagamentiIscritto extends Activity {
 
         salvaModifiche();
 
-        Dettagli.iscritto.setPagamenti(GestioneIscritti.iscritti.get(posizione).getPagamenti());
-
-        Dettagli.caricaRiepilogoPagamenti(this);
+        getDettagliActivity(posizione, iscritto, corso);
 
         finish();
     }

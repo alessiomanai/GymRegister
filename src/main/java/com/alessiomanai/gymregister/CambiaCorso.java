@@ -14,12 +14,13 @@ import com.alessiomanai.gymregister.classi.Corso;
 import com.alessiomanai.gymregister.classi.Iscritto;
 import com.alessiomanai.gymregister.database.QueryCorso;
 import com.alessiomanai.gymregister.database.QueryIscritto;
+import com.alessiomanai.gymregister.utils.activity.ExtrasConstants;
 
 import java.util.ArrayList;
 
 public class CambiaCorso extends Activity {
 
-    static Iscritto iscritto;
+    private Iscritto iscritto;
     private ArrayList<Corso> corsi = new ArrayList<>();
     private TextView istruzioni;
     private String testo;
@@ -27,9 +28,9 @@ public class CambiaCorso extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_cambia_corso);
 
+        iscritto = (Iscritto) getIntent().getExtras().get(ExtrasConstants.ISCRITTO);
         istruzioni = findViewById(R.id.istruzioniCambio);
 
         testo = getString(R.string.istruzioniCambio) + " " + iscritto.getId();

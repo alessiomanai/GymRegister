@@ -19,6 +19,7 @@ import com.alessiomanai.gymregister.PresenzeUtente;
 import com.alessiomanai.gymregister.R;
 import com.alessiomanai.gymregister.classi.Presenza;
 import com.alessiomanai.gymregister.database.QueryPresenze;
+import com.alessiomanai.gymregister.utils.activity.ExtrasConstants;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -119,18 +120,13 @@ public class ListatorePresenze extends ArrayAdapter<Presenza> {
         bottone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                PresenzeUtente.iscritto = presenze.get(position).getIscritto();
-
                 //metodo per far partire activity da listview
                 Intent intent = new Intent(v.getContext(), PresenzeUtente.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra(ExtrasConstants.ISCRITTO, presenze.get(position).getIscritto());
                 v.getContext().startActivity(intent);
 
             }
         });
-
-
         return rowView;
-
     }
 }

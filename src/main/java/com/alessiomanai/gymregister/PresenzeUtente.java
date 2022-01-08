@@ -18,9 +18,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alessiomanai.gymregister.classi.Corso;
 import com.alessiomanai.gymregister.classi.Iscritto;
 import com.alessiomanai.gymregister.classi.Presenza;
 import com.alessiomanai.gymregister.database.QueryPresenze;
+import com.alessiomanai.gymregister.utils.activity.ExtrasConstants;
 import com.alessiomanai.gymregister.utils.ListatoreDettaglioPresenze;
 
 import java.text.ParseException;
@@ -31,13 +33,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 public class PresenzeUtente extends Activity implements AdapterView.OnItemSelectedListener {
 
-    static public Iscritto iscritto;
-    static public ArrayList<Presenza> elencoPresenze = new ArrayList<>();
-    static public ListView list1;
-    static public ListatoreDettaglioPresenze adapter;
+    private Iscritto iscritto;
+    private ArrayList<Presenza> elencoPresenze = new ArrayList<>();
+    private ListView list1;
+    private ListatoreDettaglioPresenze adapter;
     ArrayList<Presenza> presenzeSelezionate = new ArrayList<>();
     ImageButton ordinaAsc, ordinaDesc, aggiungiPresenza;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
@@ -46,6 +49,8 @@ public class PresenzeUtente extends Activity implements AdapterView.OnItemSelect
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_presenze_utente);
+
+        iscritto = (Iscritto) getIntent().getExtras().get(ExtrasConstants.ISCRITTO);
 
         ordinaAsc = findViewById(R.id.asc);
         ordinaDesc = findViewById(R.id.desc);
@@ -249,13 +254,11 @@ public class PresenzeUtente extends Activity implements AdapterView.OnItemSelect
                     data = day + "/" + mese + "/" + year;
                 }
 
-                System.out.println(data);
-
                 try {
 
                     QueryPresenze database = new QueryPresenze(getApplicationContext());
 
-                    database.aggiungiPresenzaPrecedente(database, iscritto, GestioneIscritti.palestra, data);
+                    database.aggiungiPresenzaPrecedente(database, iscritto, iscritto.getPalestra(), data);
 
                     Presenza nuovaPresenza = new Presenza();
                     nuovaPresenza.setData(data);

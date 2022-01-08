@@ -1,8 +1,6 @@
 package com.alessiomanai.gymregister;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
@@ -17,15 +15,17 @@ import com.alessiomanai.gymregister.classi.Corso;
 import com.alessiomanai.gymregister.classi.Iscritto;
 import com.alessiomanai.gymregister.database.QueryCertificati;
 import com.alessiomanai.gymregister.database.QueryIscritto;
+import com.alessiomanai.gymregister.utils.activity.ExtrasConstants;
+import com.alessiomanai.gymregister.utils.activity.GymRegisterBaseActivity;
 
 import java.util.Calendar;
 
 
-public class ModificaIscritto extends Activity {
+public class ModificaIscritto extends GymRegisterBaseActivity {
 
-    static Iscritto iscritto;
-    static Corso palestra;
-    static int posizione;    //posizione dell'iscritto all'interno della listview
+    private Iscritto iscritto;
+    private Corso palestra;
+    private int posizione;    //posizione dell'iscritto all'interno della listview
     String nome, indirizzo, telefono, datadinascita, citta, stringCertificatoMedico;
     EditText nomed, indirizzod, telefonod, datadinascitad, cittad, certificatoMedico;
     private DatePickerDialog.OnDateSetListener mDateSetListener, certificatoDateSetListener;
@@ -35,6 +35,10 @@ public class ModificaIscritto extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modifica_iscritto);
+
+        palestra = (Corso) getIntent().getExtras().get(ExtrasConstants.CORSO);
+        posizione = (int) getIntent().getExtras().get(ExtrasConstants.POSITION);
+        iscritto = (Iscritto) getIntent().getExtras().get(ExtrasConstants.ISCRITTO);
 
         //elimino l'ultimo spazio dalle stringhe acquisite
         nome = iscritto.getId();
@@ -46,11 +50,11 @@ public class ModificaIscritto extends Activity {
 
 
         //collego gli oggetti alla gui
-        nomed = (EditText) findViewById(R.id.nec5);
-        indirizzod = (EditText) findViewById(R.id.address5);
-        telefonod = (EditText) findViewById(R.id.telefonoedit5);
-        datadinascitad = (EditText) findViewById(R.id.detnasc5);
-        cittad = (EditText) findViewById(R.id.detcit5);
+        nomed = findViewById(R.id.nec5);
+        indirizzod = findViewById(R.id.address5);
+        telefonod = findViewById(R.id.telefonoedit5);
+        datadinascitad = findViewById(R.id.detnasc5);
+        cittad = findViewById(R.id.detcit5);
         certificatoMedico = findViewById(R.id.modificaCertificato);
 
         //inserisco le stringhe da modificare nell edittext
@@ -142,9 +146,7 @@ public class ModificaIscritto extends Activity {
 
                     conferma();
 
-                    Intent asd = new Intent(getBaseContext(), GestioneIscritti.class);
-
-                    startActivity(asd);        //avvia la finestra corrispondente
+                    getGestioneIscritti(palestra);
 
                     finish();
 
@@ -165,10 +167,7 @@ public class ModificaIscritto extends Activity {
     @Override
     public void onBackPressed() {
 
-        Intent gestioneiscritti = new Intent(getBaseContext(), GestioneIscritti.class);
-
-        //avvia la finestra corrispondente
-        startActivity(gestioneiscritti);
+        getGestioneIscritti(palestra);
 
         finish();
     }    //fine tasto back

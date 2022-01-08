@@ -1,7 +1,9 @@
 package com.alessiomanai.gymregister.classi;
 
 
-public class Pagamento {
+import java.io.Serializable;
+
+public class Pagamento implements Serializable {
 
     private String iscrizione;
     private String settembre;

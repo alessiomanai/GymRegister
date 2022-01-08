@@ -34,6 +34,8 @@ import com.alessiomanai.gymregister.database.QueryPagamento;
 import com.alessiomanai.gymregister.database.Tabelle;
 import com.alessiomanai.gymregister.utils.BackupManager;
 import com.alessiomanai.gymregister.utils.DocumentCreator;
+import com.alessiomanai.gymregister.utils.activity.ExtrasConstants;
+import com.alessiomanai.gymregister.utils.activity.GymRegisterBaseActivity;
 import com.alessiomanai.gymregister.utils.ListatoreIscritti;
 
 import java.io.BufferedReader;
@@ -50,14 +52,14 @@ import java.util.Collections;
 import java.util.Comparator;
 
 
-public class GestioneIscritti extends Activity {
+public class GestioneIscritti extends GymRegisterBaseActivity {
 
-    private static final int REQUEST_WRITE_STORAGE = 112;
-    public static ArrayList<Iscritto> iscritti = new ArrayList<>();
-    public static Corso palestra;
+    private final int REQUEST_WRITE_STORAGE = 112;
+    private ArrayList<Iscritto> iscritti = new ArrayList<>();
+    private Corso palestra;
     String text = "";
     private View donotpay;
-    private static final int WRITE_REQUEST_CODE = 122;
+    private final int WRITE_REQUEST_CODE = 122;
     private String toExportMemory;
 
     /***
@@ -67,6 +69,8 @@ public class GestioneIscritti extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gestione_iscritti);
+
+        palestra = (Corso) getIntent().getExtras().get(ExtrasConstants.CORSO);
 
         donotpay = findViewById(R.id.notpayView);
         donotpay.setVisibility(View.GONE);
@@ -170,16 +174,7 @@ public class GestioneIscritti extends Activity {
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long idonet) {    //a seconda della posizione (rilevata automaticamente) apro un profilo
 
-                //invia i dati alla activity
-
-                Dettagli.posizione = position;    //passa i dati relativi alla posizione
-                Dettagli.iscritto = iscritti.get(position);
-                Dettagli.palestra = palestra;    //dettagli palestra
-
-                //avvia i dettagli utente
-                Intent dettagli = new Intent(getBaseContext(), Dettagli.class);
-                startActivity(dettagli);
-
+                getDettagliActivity(position, iscritti.get(position), palestra);
                 finish();
             }
         });        //fine lista clickabile
@@ -213,16 +208,9 @@ public class GestioneIscritti extends Activity {
         ImageButton aggiungi = findViewById(R.id.bottonadd);
         aggiungi.setOnClickListener(new View.OnClickListener() {
             @Override
-
-
             public void onClick(View arg0) {
 
-                Aggiungi.palestra = palestra;
-
-                Intent crea = new Intent(getBaseContext(), Aggiungi.class);
-                //avvia la finestra corrispondente
-                startActivity(crea);
-
+                getAggiungiIscritto(palestra);
                 finish();
             }
         });
@@ -231,16 +219,9 @@ public class GestioneIscritti extends Activity {
         ImageButton note = findViewById(R.id.bottonord);
         note.setOnClickListener(new View.OnClickListener() {
             @Override
-
             public void onClick(View arg0) {
 
-                Note.corso = palestra;
-                Note.noteIscritto = false;
-
-                Intent note = new Intent(getBaseContext(), Note.class);
-
-                //avvia la finestra corrispondente
-                startActivity(note);
+                getNote(palestra);
 
             }
         });
@@ -259,27 +240,14 @@ public class GestioneIscritti extends Activity {
         ImageButton export = findViewById(R.id.bottonexpodt);
         export.setOnClickListener(new View.OnClickListener() {
             @Override
-
             public void onClick(View arg0) {
-
-                Presenze.corso = palestra;
-
-                Intent presenzew = new Intent(getBaseContext(),
-                        Presenze.class);
-
-                //avvia la finestra corrispondente
-                startActivity(presenzew);
-
+                getPresenzeCorso(palestra);
             }
         });
 
     }    //fine gestione bottoni
 
 
-    void foo2() {    //funzione di debug
-
-        Toast.makeText(this, "Funzione al momento non disponibile", Toast.LENGTH_SHORT).show();
-    }
 
 
     /**
@@ -287,12 +255,8 @@ public class GestioneIscritti extends Activity {
      */
     @Override
     public void onBackPressed() {
-
-        //libera la memoria
-        iscritti.clear();    //svuota la lista
-
         finish();
-    }    //fine tasto back
+    }
 
 
     /**
@@ -452,15 +416,6 @@ public class GestioneIscritti extends Activity {
         });
         //visualizza la finestra
         builder.show();
-
-    }
-
-    /**
-     * toast di conferma eliminazione
-     */
-    void eliminato() {
-
-        Toast.makeText(this, R.string.datidel, Toast.LENGTH_SHORT).show();
 
     }
 
@@ -665,7 +620,6 @@ public class GestioneIscritti extends Activity {
                 ArrayList<Iscritto> risultati = new ArrayList<Iscritto>();
 
                 String chiave;
-
                 chiave = value.toString();
 
                 QueryIscritto database = new QueryIscritto(alert.getContext());
@@ -673,11 +627,7 @@ public class GestioneIscritti extends Activity {
 
                 if (risultati.size() != 0) {
 
-                    Risultati.risultati = risultati;
-
-                    Intent risultatiIntent = new Intent(getBaseContext(), Risultati.class);
-                    //avvia la finestra corrispondente
-                    startActivity(risultatiIntent);
+                    getRisultatiRicerca(palestra, risultati);
 
                     finish();
                 } else

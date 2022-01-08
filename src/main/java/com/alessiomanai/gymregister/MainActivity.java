@@ -3,7 +3,7 @@ package com.alessiomanai.gymregister;
 /**
  * Gym Register
  *
- * Copyright (C) 2014-2020  Alessio Manai
+ * Copyright (C) 2014-2022  Alessio Manai
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,7 +49,7 @@ public class MainActivity extends Activity {
 
         setContentView(R.layout.activity_main);
 
-        icona = (ImageView) findViewById(R.id.gymregister);
+        icona = findViewById(R.id.gymregister);
 
         //dopo tre secondi chiude la schermata
         time = new CountDownTimer(2000, 1000) {

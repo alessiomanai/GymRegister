@@ -1,9 +1,7 @@
 package com.alessiomanai.gymregister;
 
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
@@ -19,12 +17,14 @@ import com.alessiomanai.gymregister.classi.Iscritto;
 import com.alessiomanai.gymregister.database.QueryCertificati;
 import com.alessiomanai.gymregister.database.QueryIscritto;
 import com.alessiomanai.gymregister.database.QueryPagamento;
+import com.alessiomanai.gymregister.utils.activity.ExtrasConstants;
+import com.alessiomanai.gymregister.utils.activity.GymRegisterBaseActivity;
 
 import java.util.Calendar;
 
-public class Aggiungi extends Activity {
+public class Aggiungi extends GymRegisterBaseActivity {
 
-    static Corso palestra;
+    Corso palestra;
     EditText nomeecognome;
     EditText address;
     EditText telef, citf;
@@ -37,6 +37,8 @@ public class Aggiungi extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_aggiungi);
+
+        palestra = (Corso) getIntent().getExtras().get(ExtrasConstants.CORSO);
 
         //collego le edit text
         nomeecognome = findViewById(R.id.nec);
@@ -150,13 +152,7 @@ public class Aggiungi extends Activity {
                     //Toast
                     Toast.makeText(Aggiungi.this, R.string.addurs, Toast.LENGTH_LONG).show();
 
-                    //torna all'activity precedente
-                    Intent gestioneiscritti = new Intent(getBaseContext(), GestioneIscritti.class);
-
-                    //avvia la finestra corrispondente
-                    startActivity(gestioneiscritti);
-
-                    finish();
+                    getGestioneIscritti(palestra);
 
                 }
             }
@@ -168,12 +164,7 @@ public class Aggiungi extends Activity {
     //se viene premuto il tasto indietro torna alla precedente activity senza
     @Override
     public void onBackPressed() {
-
-        Intent gestioneiscritti = new Intent(getBaseContext(), GestioneIscritti.class);
-
-        //avvia la finestra corrispondente
-        startActivity(gestioneiscritti);
-
+        getGestioneIscritti(palestra);
         finish();
     }
 

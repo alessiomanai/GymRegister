@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,17 +29,13 @@ import com.alessiomanai.gymregister.classi.Iscritto;
 import com.alessiomanai.gymregister.classi.Presenza;
 import com.alessiomanai.gymregister.database.QueryIscritto;
 import com.alessiomanai.gymregister.database.QueryPresenze;
-import com.alessiomanai.gymregister.utils.BackupManager;
 import com.alessiomanai.gymregister.utils.DocumentCreator;
-import com.alessiomanai.gymregister.utils.ListatoreIscritti;
+import com.alessiomanai.gymregister.utils.activity.ExtrasConstants;
 import com.alessiomanai.gymregister.utils.ListatorePresenze;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
@@ -50,7 +45,7 @@ import java.util.Locale;
 
 public class Presenze extends Activity {
 
-    static Corso corso;
+    private Corso corso;
     EditText ricerca;
     ImageButton bottone;
     boolean risultatiDefault = true;
@@ -62,6 +57,8 @@ public class Presenze extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_presenze);
+
+        corso = (Corso) getIntent().getExtras().get(ExtrasConstants.CORSO);
 
         mostraData();
 

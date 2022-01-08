@@ -26,8 +26,8 @@ public class AggiungiPalestra extends Activity {
         setContentView(R.layout.activity_aggiungi_palestra);
 
         //collego il codice alla gui
-        nomepalestra = (EditText) findViewById(R.id.nec1);
-        conferma = (ImageButton) findViewById(R.id.confermabut1);
+        nomepalestra = findViewById(R.id.nec1);
+        conferma = findViewById(R.id.confermabut1);
 
         final QueryCorso database = new QueryCorso(this);
 

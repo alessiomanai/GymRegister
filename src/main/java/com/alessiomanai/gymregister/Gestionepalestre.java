@@ -2,6 +2,7 @@ package com.alessiomanai.gymregister;
 
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 import com.alessiomanai.gymregister.classi.Corso;
 import com.alessiomanai.gymregister.database.QueryCorso;
 import com.alessiomanai.gymregister.utils.BackupManager;
+import com.alessiomanai.gymregister.utils.activity.ExtrasConstants;
 
 import java.util.ArrayList;
 
@@ -93,9 +95,10 @@ public class Gestionepalestre extends Activity {
                 public void onItemClick(AdapterView<?> parent, View view,
                                         int position, long id) {    //a seconda della posizione (rilevata automaticamente) apro una palestra
 
-                    GestioneIscritti.palestra = palestre.get(position);
-
-                    avvia();
+                    Intent gestioneiscritti = new Intent(getBaseContext(), GestioneIscritti.class);
+                    gestioneiscritti.putExtra(ExtrasConstants.CORSO, palestre.get(position));
+                    //avvia la finestra corrispondente
+                    startActivity(gestioneiscritti);
 
                 }
             });        //fine lista clickabile
@@ -135,17 +138,6 @@ public class Gestionepalestre extends Activity {
     }
 
     /***
-     * avvia l'intent degli iscritti
-     */
-    void avvia() {
-
-        Intent gestioneiscritti = new Intent(getBaseContext(), GestioneIscritti.class);
-
-        //avvia la finestra corrispondente
-        startActivity(gestioneiscritti);
-    }
-
-    /***
      * pulsante del menù
      */
     @Override
@@ -157,18 +149,17 @@ public class Gestionepalestre extends Activity {
         return true;
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
-        switch (item.getItemId()) {
-            case R.id.infos:
-                Intent info = new Intent(getBaseContext(), InfoApp.class);
-                //avvia la finestra corrispondente
-                startActivity(info);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.infos) {
+            Intent info = new Intent(getBaseContext(), InfoApp.class);
+            //avvia la finestra corrispondente
+            startActivity(info);
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
 
