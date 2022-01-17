@@ -1,0 +1,216 @@
+class com.alessiomanai.gymregister.classi.Corso{
+- int id
+- java.lang.String nome
+- java.lang.String noteCorso
++ void Corso ()
++ void Corso (String )
++ void Corso (int id, String )
++ java.lang.String getNome ()
++ java.lang.String toString ()
++ void setNome (String )
++ java.lang.String getFileUsers ()
++ java.lang.String getFileIndirizzi ()
++ java.lang.String getFileNumeriTelefono ()
++ java.lang.String getFiledatanascita ()
++ java.lang.String getFilecitta ()
++ java.lang.String getFileiscrizione ()
++ java.lang.String getFileSettembre ()
++ java.lang.String getFileOttobre ()
++ java.lang.String getFileNovembre ()
++ java.lang.String getFileDicembre ()
++ java.lang.String getFileGennaio ()
++ java.lang.String getFileFebbraio ()
++ java.lang.String getFileMarzo ()
++ java.lang.String getFileAprile ()
++ java.lang.String getFileMaggio ()
++ java.lang.String getFileGiugno ()
++ java.lang.String getFileLuglio ()
++ java.lang.String getBackupOf (String )
++ int getId ()
++ void setId (int )
+- java.lang.String generateNoteFile ()
++ java.lang.String getNoteCorso ()
+- void setNoteCorso (String )
++ void setNoteFromDatabase (String )
+}
+interface java.io.Serializable {
+}
+java.io.Serializable <|.. com.alessiomanai.gymregister.classi.Corso
+class com.alessiomanai.gymregister.classi.Importi{
+- java.lang.String iscrizione
+- java.lang.String settembre
+- java.lang.String ottobre
+- java.lang.String novembre
+- java.lang.String dicembre
+- java.lang.String gennaio
+- java.lang.String febbraio
+- java.lang.String marzo
+- java.lang.String aprile
+- java.lang.String maggio
+- java.lang.String giugno
+- java.lang.String luglio
+- java.lang.String agosto
+- java.lang.String note
++ void Importi ()
+}
+class com.alessiomanai.gymregister.classi.Pagamento{
+- java.lang.String iscrizione
+- java.lang.String settembre
+- java.lang.String ottobre
+- java.lang.String novembre
+- java.lang.String dicembre
+- java.lang.String gennaio
+- java.lang.String febbraio
+- java.lang.String marzo
+- java.lang.String aprile
+- java.lang.String maggio
+- java.lang.String giugno
+- java.lang.String luglio
+- java.lang.String agosto
+- java.lang.String note
++ void Pagamento ()
++ java.lang.String getIscrizione ()
++ void setIscrizione (String )
++ java.lang.String getSettembre ()
++ void setSettembre (String )
++ java.lang.String getOttobre ()
++ void setOttobre (String )
++ java.lang.String getNovembre ()
++ void setNovembre (String )
++ java.lang.String getDicembre ()
++ void setDicembre (String )
++ java.lang.String getGennaio ()
++ void setGennaio (String )
++ java.lang.String getFebbraio ()
++ void setFebbraio (String )
++ java.lang.String getMarzo ()
++ void setMarzo (String )
++ java.lang.String getAprile ()
++ void setAprile (String )
++ java.lang.String getMaggio ()
++ void setMaggio (String )
++ java.lang.String getGiugno ()
++ void setGiugno (String )
++ java.lang.String getLuglio ()
++ void setLuglio (String )
++ java.lang.String getAgosto ()
++ void setAgosto (String )
+}
+com.alessiomanai.gymregister.classi.Pagamento <|-- com.alessiomanai.gymregister.classi.Importi
+class com.alessiomanai.gymregister.classi.Iscritto{
+- java.lang.String id
+- int idDatabase
+- java.lang.String telefono
+- java.lang.String indirizzo
+- java.lang.String citta
+- java.lang.String dataDiNascita
+- java.lang.String urlFoto
+- java.lang.String note
+- android.graphics.drawable.Drawable foto
+- java.lang.String notePath
+- com.alessiomanai.gymregister.classi.Pagamento pagamenti
+- com.alessiomanai.gymregister.classi.Importi importi
+- java.lang.String corso
+- com.alessiomanai.gymregister.classi.Corso palestra
+- java.lang.String certificatoMedico
++ void Iscritto ()
++ void Iscritto (String )
++ void Iscritto (String id, String telefono, String indirizzo, String citta, String )
++ void Iscritto (String id, String telefono, String indirizzo, String citta, String dataDiNascita, String iscrizione, String settembre, String ottobre, String novembre, String dicembre, String gennaio, String febbraio, String marzo, String aprile, String maggio, String giugno, String )
++ void Iscritto (int idDatabase, String id, String telefono, String indirizzo, String citta, String dataDiNascita, String iscrizione, int idCorso, String settembre, String ottobre, String novembre, String dicembre, String gennaio, String febbraio, String marzo, String aprile, String maggio, String giugno, String )
++ java.lang.String getId ()
++ void setId (String )
++ java.lang.String getTelefono ()
++ void setTelefono (String )
++ java.lang.String getIndirizzo ()
++ void setIndirizzo (String )
++ java.lang.String getCitta ()
++ void setCitta (String )
++ java.lang.String getDataDiNascita ()
++ void setDataDiNascita (String )
++ java.lang.String getUrlFoto ()
++ void setUrlFoto (String )
++ java.lang.String getIscrizione ()
++ void setIscrizione (String )
++ java.lang.String getSettembre ()
++ void setSettembre (String )
++ java.lang.String getOttobre ()
++ void setOttobre (String )
++ java.lang.String getNovembre ()
++ void setNovembre (String )
++ java.lang.String getDicembre ()
++ void setDicembre (String )
++ java.lang.String getGennaio ()
++ void setGennaio (String )
++ java.lang.String getFebbraio ()
++ void setFebbraio (String )
++ java.lang.String getMarzo ()
++ void setMarzo (String )
++ java.lang.String getAprile ()
++ void setAprile (String )
++ java.lang.String getMaggio ()
++ void setMaggio (String )
++ java.lang.String getGiugno ()
++ void setGiugno (String )
++ java.lang.String getLuglio ()
++ void setLuglio (String )
++ java.lang.String getAgosto ()
++ void setAgosto (String )
++ android.graphics.drawable.Drawable getFoto ()
++ void setFoto (Drawable )
++ java.lang.String getNote ()
+- void setNote (String )
+- java.lang.String generateNoteFile ()
++ java.lang.String toString ()
++ java.lang.String getCorso ()
++ void setCorso (String )
++ void calendarToString (Calendar )
++ int getIdDatabase ()
++ void setIdDatabase (int )
++ com.alessiomanai.gymregister.classi.Corso getPalestra ()
++ void setPalestra (Corso )
++ int getIdCorso ()
++ void setIdCorso (int )
++ com.alessiomanai.gymregister.classi.Pagamento getPagamenti ()
++ void setPagamenti (Pagamento )
++ com.alessiomanai.gymregister.classi.Importi getImporti ()
++ void setImporti (Importi )
++ java.lang.String getCertificatoMedico ()
++ void setCertificatoMedico (String )
+}
+class com.alessiomanai.gymregister.classi.Presenza{
+- com.alessiomanai.gymregister.classi.Iscritto iscritto
+- com.alessiomanai.gymregister.classi.Corso corso
+- java.lang.String data
++ void Presenza ()
++ void Presenza (Iscritto iscritto, Corso )
++ void Presenza (Iscritto iscritto, Corso corso, String )
++ java.lang.String getNomeIscritto ()
++ int getIdIscritto ()
++ int getIdCorso ()
++ com.alessiomanai.gymregister.classi.Iscritto getIscritto ()
++ void setIscritto (Iscritto )
++ com.alessiomanai.gymregister.classi.Corso getCorso ()
++ void setCorso (Corso )
++ java.lang.String getData ()
++ void setData (String )
++ void setIdIscritto (int )
++ void setIdCorso (int )
+}
+class com.alessiomanai.gymregister.classi.PagamentoCustom{
+- java.lang.String nome
+- int pagato
+- com.alessiomanai.gymregister.classi.Iscritto iscritto
+- com.alessiomanai.gymregister.classi.Corso corso
++ void PagamentoCustom ()
++ void PagamentoCustom (String )
++ void PagamentoCustom (String nome, int pagato, Iscritto )
++ java.lang.String getNome ()
++ void setNome (String )
++ int getPagato ()
++ void setPagato (int )
++ com.alessiomanai.gymregister.classi.Iscritto getIscritto ()
++ void setIscritto (Iscritto )
++ com.alessiomanai.gymregister.classi.Corso getCorso ()
+- void setCorso ()
+}

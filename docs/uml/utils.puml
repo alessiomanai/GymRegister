@@ -1,0 +1,136 @@
+class com.alessiomanai.gymregister.utils.activity.ExtrasConstants{
++ java.lang.String CORSO
++ java.lang.String POSITION
++ java.lang.String ISCRITTO
++ java.lang.String NOTE_ISCRITTO
+}
+class com.alessiomanai.gymregister.utils.activity.GymRegisterBaseActivity{
+
+# void getDettagliActivity (int position, List<Iscritto> iscritti, Corso )
+# void getDettagliActivity (int position, Iscritto iscritto, Corso )
+# void getAggiungiIscritto (Corso )
+# void getGestioneIscritti (Corso )
+# void getPagamentiIscritto (int posizione, Iscritto iscritto, Corso )
+# void getModificaIscritto (int posizione, Iscritto iscritto, Corso )
+# void getPresenzeIscritto (Iscritto )
+# void getCambiaCorso (Iscritto )
+# void getNote (Iscritto )
+# void getNote (Corso )
+# void getPresenzeCorso (Corso )
+# void getRisultatiRicerca (Corso corso, ArrayList<Iscritto> )
+# java.lang.String caricaRiepilogoPagamenti (Iscritto iscritto, Context )
+}
+
+android.app.Activity <|-- com.alessiomanai.gymregister.utils.activity.GymRegisterBaseActivity
+class com.alessiomanai.gymregister.utils.Load{
+ int NUMEROCAMPI
+
++ java.util.ArrayList<com.alessiomanai.gymregister.classi.Iscritto> usersFromFile (String )
+}
+class com.alessiomanai.gymregister.utils.Save{
+
++ void Save ()
+ boolean users ()
++ void salvafile (ArrayList<Iscritto> iscritti, String filenomi, String fileaddr, String filetelph, String filedatanascita, String filecitta, String )
++ void salvaBackup (ArrayList<Iscritto> iscritti, String filenomi, String fileaddr, String filetelph, String filedatanascita, String filecitta, String )
+}
+class com.alessiomanai.gymregister.utils.Search{
++ java.util.ArrayList<com.alessiomanai.gymregister.classi.Iscritto> ricerca (String key, ArrayList<Iscritto> )
+}
+class com.alessiomanai.gymregister.utils.FileDialog{
+- java.lang.String PARENT_DIR
+- java.lang.String TAG
+- android.app.Activity activity
+- java.lang.String[] fileList
+- java.io.File currentPath
+- com.alessiomanai.gymregister.utils.ListenerList<com.alessiomanai.gymregister.utils.FileDialog.FileSelectedListener> fileListenerList
+- com.alessiomanai.gymregister.utils.ListenerList<com.alessiomanai.gymregister.utils.FileDialog.DirectorySelectedListener> dirListenerList
+- boolean selectDirectoryOption
+- java.lang.String fileEndsWith
++ void FileDialog (Activity activity, File )
++ void FileDialog (Activity activity, File initialPath, String )
++ android.app.Dialog createFileDialog ()
++ void addFileListener (FileSelectedListener )
++ void removeFileListener (FileSelectedListener )
++ void setSelectDirectoryOption (boolean )
++ void addDirectoryListener (DirectorySelectedListener )
++ void removeDirectoryListener (DirectorySelectedListener )
++ void showDialog ()
+- void fireFileSelectedEvent (File )
+- void fireDirectorySelectedEvent (File )
+- void loadFileList (File )
+- java.io.File getChosenFile (String )
+- void setFileEndsWith (String )
+}
+class com.alessiomanai.gymregister.utils.FotoManager{
+}
+class com.alessiomanai.gymregister.utils.ListenerList{
+- java.util.List<L> listenerList
++ void add (L )
++ void fireEvent (FireHandler<L> )
++ void remove (L )
++ java.util.List<L> getListenerList ()
+}
+class com.alessiomanai.gymregister.utils.BackupManager{
+- java.lang.String databaseName
+- java.lang.String databaseBackup
++ void BackupManager ()
++ boolean doBackup (Context )
++ boolean doRestore (Context )
+}
+class com.alessiomanai.gymregister.utils.DocumentCreator{
+- java.lang.String document
+- android.content.Context context
+- java.io.File outputFile
++ void DocumentCreator (Context context, File )
+- java.lang.String newDocument ()
++ void endDocument ()
++ void setTitle (String )
++ void setChapter (String )
++ void setH4Chapter (String )
++ void newLine (String )
++ void addLine (String )
++ void lastLine (String )
++ android.content.Context getContext ()
++ java.lang.String getDocument ()
++ void getPDF ()
+}
+class com.alessiomanai.gymregister.utils.ListatoreIscritti{
+- android.app.Activity context
+- java.util.ArrayList<com.alessiomanai.gymregister.classi.Iscritto> iscritti
++ int IGNORE_ITEM_VIEW_TYPE
++ int NO_SELECTION
++ void ListatoreIscritti (Activity context, ArrayList<Iscritto> )
++ android.view.View getView (int position, View view, ViewGroup )
+- void loadImageFromStorage (String path, View )
+}
+
+android.widget.ArrayAdapter <|-- com.alessiomanai.gymregister.utils.ListatoreIscritti
+class com.alessiomanai.gymregister.utils.ListatorePresenze{
+- android.app.Activity context
+- java.util.ArrayList<com.alessiomanai.gymregister.classi.Presenza> presenze
++ int IGNORE_ITEM_VIEW_TYPE
++ int NO_SELECTION
++ void ListatorePresenze (Activity context, ArrayList<Presenza> )
++ android.view.View getView (int position, View view, ViewGroup )
+}
+class com.alessiomanai.gymregister.utils.VerticalScrollview{
++ android.util.Property<android.view.View,java.lang.Float> X
++ android.util.Property<android.view.View,java.lang.Float> Y
++ android.util.Property<android.view.View,java.lang.Float> Z
++ void VerticalScrollview (Context )
++ void VerticalScrollview (Context context, AttributeSet )
++ void VerticalScrollview (Context context, AttributeSet attrs, int )
++ boolean onInterceptTouchEvent (MotionEvent )
++ boolean onTouchEvent (MotionEvent )
+}
+
+android.widget.ScrollView <|-- com.alessiomanai.gymregister.utils.VerticalScrollview
+class com.alessiomanai.gymregister.utils.ListatoreDettaglioPresenze{
+- android.app.Activity context
+- java.util.ArrayList<com.alessiomanai.gymregister.classi.Presenza> presenze
++ int IGNORE_ITEM_VIEW_TYPE
++ int NO_SELECTION
++ void ListatoreDettaglioPresenze (Activity context, ArrayList<Presenza> )
++ android.view.View getView (int position, View view, ViewGroup )
+}

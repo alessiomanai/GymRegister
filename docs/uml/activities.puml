@@ -1,0 +1,310 @@
+class com.alessiomanai.gymregister.Note{
+- com.alessiomanai.gymregister.classi.Corso corso
+- com.alessiomanai.gymregister.classi.Iscritto iscritto
+- boolean noteIscritto
+ java.lang.String nomeid
+ android.widget.TextView nomeT
+ android.widget.EditText testo
+ int MY_PERMISSIONS_REQUEST_READ_CONTACTS
+
+# void onCreate (Bundle )
+ void carica (String )
+ void salva (String )
++ void onRequestPermissionsResult (int requestCode, String[] permissions, int[] )
+}
+class com.alessiomanai.gymregister.InfoApp{
+
+# void onCreate (Bundle )
+}
+class com.alessiomanai.gymregister.Aggiungi{
+ com.alessiomanai.gymregister.classi.Corso palestra
+ android.widget.EditText nomeecognome
+ android.widget.EditText address
+ android.widget.EditText telef
+ android.widget.EditText citf
+ android.view.View dantf
+ android.view.View certificatoMedico
+ android.widget.EditText datadinascita
+ android.widget.EditText editCertificatoMedico
+ java.lang.String nec
+ java.lang.String addres
+ java.lang.String tel
+ java.lang.String citta
+ java.lang.String datanasc
+ java.lang.String stringCertificatoMedico
+- android.app.DatePickerDialog.OnDateSetListener mDateSetListener
+- android.app.DatePickerDialog.OnDateSetListener certificatoDateSetListener
+
+# void onCreate (Bundle )
++ void onBackPressed ()
+ void salva (Iscritto iscritto, Corso corso, String )
+- boolean isEmpty (EditText )
+}
+class com.alessiomanai.gymregister.Dettagli{
+- java.lang.String FTYPE
+- int DIALOG_LOAD_FILE
+- android.widget.TextView riepilogoPagamentiT
+- int posizione
+- com.alessiomanai.gymregister.classi.Corso palestra
+- com.alessiomanai.gymregister.classi.Iscritto iscritto
+ int MY_PERMISSIONS_REQUEST_READ_CONTACTS
+ android.widget.ImageButton modifica
+ android.widget.ImageButton elimina
+ android.widget.ImageButton pagamenti
+ android.widget.ImageButton presenze
+ android.widget.ImageButton note
+ android.widget.ImageButton cambia
+ android.widget.ImageView fotoProfilo
+- java.lang.String[] mFileList
+- java.io.File mPath
+- java.lang.String mChosenFile
+
+# void onCreate (Bundle )
++ void onBackPressed ()
+ void confermaeli ()
++ boolean onCreateOptionsMenu (Menu )
++ boolean onOptionsItemSelected (MenuItem )
+ void modifica ()
+ void salvaModifiche ()
+ void cambiaFotoProfilo ()
+- java.lang.String saveToInternalStorage (Bitmap )
+- void aggiornaFoto (Bitmap )
+- void loadImageFromStorage (String )
+- void loadFileList ()
+# android.app.Dialog onCreateDialog (int )
+ void richiestaPermessiLettura ()
++ void onRequestPermissionsResult (int requestCode, String[] permissions, int[] )
+ void dialogPermessi ()
+}
+class com.alessiomanai.gymregister.Presenze{
+- com.alessiomanai.gymregister.classi.Corso corso
+ android.widget.EditText ricerca
+ android.widget.ImageButton bottone
+ boolean risultatiDefault
+- java.lang.String toExportMemory
+- int WRITE_REQUEST_CODE
+- int REQUEST_WRITE_STORAGE
+
+# void onCreate (Bundle )
++ void mostraData ()
++ void caricaPresenze ()
++ void mostraGuida ()
++ void cercaUtente (String )
++ void onBackPressed ()
++ boolean onCreateOptionsMenu (Menu )
+ void esportaPdfQ (String )
+ void esportaPresenzePDF ()
+# void onActivityResult (int requestCode, int resultCode, Intent )
+- void writeInFile (Uri uri, String )
++ void onRequestPermissionsResult (int requestCode, String[] permissions, int[] )
+ void ricarica ()
+}
+class com.alessiomanai.gymregister.Risultati{
+- java.util.ArrayList<com.alessiomanai.gymregister.classi.Iscritto> risultati
+ android.widget.EditText search
+ android.widget.ImageButton cerca
+ com.alessiomanai.gymregister.classi.Corso palestra
+
+# void onCreate (Bundle )
+ void avviaricerca ()
++ void onBackPressed ()
+}
+class com.alessiomanai.gymregister.CambiaCorso{
+- com.alessiomanai.gymregister.classi.Iscritto iscritto
+- java.util.ArrayList<com.alessiomanai.gymregister.classi.Corso> corsi
+- android.widget.TextView istruzioni
+- java.lang.String testo
+
+# void onCreate (Bundle )
++ void onBackPressed ()
+# void onRestoreInstanceState (Bundle )
+# void onSaveInstanceState (Bundle )
+}
+class com.alessiomanai.gymregister.MainActivity{
+ android.widget.ImageView icona
+ android.content.Intent palestre
+ android.os.CountDownTimer time
+
+# void onCreate (Bundle )
+}
+class com.alessiomanai.gymregister.CercaPresenze{
+- java.util.ArrayList<com.alessiomanai.gymregister.classi.Presenza> elencoPresenze
+ java.util.ArrayList<com.alessiomanai.gymregister.classi.Presenza> risultati
+ android.widget.EditText search
+ android.widget.ImageButton cerca
+
+# void onCreate (Bundle )
+}
+class com.alessiomanai.gymregister.RinominaCorso{
+- java.util.ArrayList<com.alessiomanai.gymregister.classi.Corso> palestre
+
+# void onCreate (Bundle )
++ void onBackPressed ()
+- boolean isEmpty (EditText )
+- boolean isEmpty (String )
+}
+class com.alessiomanai.gymregister.Trasferimento{
+- java.util.ArrayList<java.lang.String> palestre
+- com.alessiomanai.gymregister.classi.Corso palestra
+ java.util.ArrayList<com.alessiomanai.gymregister.classi.Corso> elencoCorsi
+- java.util.ArrayList<com.alessiomanai.gymregister.classi.Iscritto> iscritti
+ java.lang.String elencopalestre
+ int MY_PERMISSIONS_REQUEST_READ_CONTACTS
+
+# void onCreate (Bundle )
+ void palestra (String )
++ java.util.ArrayList<com.alessiomanai.gymregister.classi.Iscritto> caricadafileIscritti (String )
+ void avvia ()
++ boolean onCreateOptionsMenu (Menu )
++ boolean onOptionsItemSelected (MenuItem )
+ void addpalEx ()
+ void bottoni ()
+ void caricaPalestre ()
++ void salvaFileIscritti ()
+ void scritturafile (String )
+ void trasferisciPalestre ()
+ void trasferisciIscritti (ArrayList<Iscritto> )
+ void ricaricaPalestre ()
++ void onRequestPermissionsResult (int requestCode, String[] permissions, int[] )
+}
+class com.alessiomanai.gymregister.PresenzeUtente{
+- com.alessiomanai.gymregister.classi.Iscritto iscritto
+- java.util.ArrayList<com.alessiomanai.gymregister.classi.Presenza> elencoPresenze
+- android.widget.ListView list1
+- com.alessiomanai.gymregister.utils.ListatoreDettaglioPresenze adapter
+ java.util.ArrayList<com.alessiomanai.gymregister.classi.Presenza> presenzeSelezionate
+ android.widget.ImageButton ordinaAsc
+ android.widget.ImageButton ordinaDesc
+ android.widget.ImageButton aggiungiPresenza
+- android.app.DatePickerDialog.OnDateSetListener mDateSetListener
+
+# void onCreate (Bundle )
++ void onItemSelected (AdapterView<?> parent, View view, int pos, long )
++ void onNothingSelected (AdapterView<?> )
+ void mostranumero (ArrayList<Presenza> )
+}
+interface android.widget.AdapterView.OnItemSelectedListener {
++ void onItemSelected (AdapterView<?> adapterView, View view, int i, long )
++ void onNothingSelected (AdapterView<?> )
+}
+android.widget.AdapterView.OnItemSelectedListener <|.. com.alessiomanai.gymregister.PresenzeUtente
+class com.alessiomanai.gymregister.EliminaPalestre{
+- java.util.ArrayList<com.alessiomanai.gymregister.classi.Corso> palestre
+
+# void onCreate (Bundle )
+ void conferma ()
++ void onBackPressed ()
+ void cancellaCorsoDatabase (int )
+}
+class com.alessiomanai.gymregister.AggiungiPalestra{
+ android.widget.EditText nomepalestra
+ android.widget.ImageButton conferma
+ java.lang.String s
+
+# void onCreate (Bundle )
++ void onBackPressed ()
+- boolean isEmpty (EditText )
+}
+class com.alessiomanai.gymregister.GestioneIscritti{
+- int REQUEST_WRITE_STORAGE
+- java.util.ArrayList<com.alessiomanai.gymregister.classi.Iscritto> iscritti
+- com.alessiomanai.gymregister.classi.Corso palestra
+ java.lang.String text
+- android.view.View donotpay
+- int WRITE_REQUEST_CODE
+- java.lang.String toExportMemory
+
+# void onCreate (Bundle )
+# void onRestoreInstanceState (Bundle )
+# void onSaveInstanceState (Bundle )
+ void caricaelenco ()
++ java.util.ArrayList<com.alessiomanai.gymregister.classi.Iscritto> caricaDatabase ()
++ java.util.ArrayList<com.alessiomanai.gymregister.classi.Iscritto> caricaCertificati (ArrayList<Iscritto> )
+ void gestionebottoni ()
++ void onBackPressed ()
++ boolean onCreateOptionsMenu (Menu )
+ void pagamentiArretrati ()
+ void restoreDialog ()
+ void esportaPdfQ (String )
+ void esportaPDF ()
+ void messaggioBackupNonPresente ()
+ void ricarica ()
+ void mostranumero ()
+ void ricerca ()
++ void onRequestPermissionsResult (int requestCode, String[] permissions, int[] )
+# void onActivityResult (int requestCode, int resultCode, Intent )
+- void writeInFile (Uri uri, String )
+}
+class com.alessiomanai.gymregister.Gestionepalestre{
+- java.util.ArrayList<com.alessiomanai.gymregister.classi.Corso> palestre
+ int MY_PERMISSIONS_REQUEST_READ_CONTACTS
+
+# void onCreate (Bundle )
+ java.util.ArrayList<com.alessiomanai.gymregister.classi.Corso> caricaDatabase ()
++ boolean onCreateOptionsMenu (Menu )
++ boolean onOptionsItemSelected (MenuItem )
+ void bottoni ()
+ void backupData ()
+ void restoreDialogGym ()
++ void onRequestPermissionsResult (int requestCode, String[] permissions, int[] )
+}
+class com.alessiomanai.gymregister.ModificaIscritto{
+- com.alessiomanai.gymregister.classi.Iscritto iscritto
+- com.alessiomanai.gymregister.classi.Corso palestra
+- int posizione
+ java.lang.String nome
+ java.lang.String indirizzo
+ java.lang.String telefono
+ java.lang.String datadinascita
+ java.lang.String citta
+ java.lang.String stringCertificatoMedico
+ android.widget.EditText nomed
+ android.widget.EditText indirizzod
+ android.widget.EditText telefonod
+ android.widget.EditText datadinascitad
+ android.widget.EditText cittad
+ android.widget.EditText certificatoMedico
+- android.app.DatePickerDialog.OnDateSetListener mDateSetListener
+- android.app.DatePickerDialog.OnDateSetListener certificatoDateSetListener
+
+# void onCreate (Bundle )
+ void conferma ()
++ void onBackPressed ()
+ void salva ()
+- boolean isEmpty (EditText )
+}
+class com.alessiomanai.gymregister.ListatorePalestre{
+- android.app.Activity context
+- java.util.ArrayList<com.alessiomanai.gymregister.classi.Corso> corso
++ int IGNORE_ITEM_VIEW_TYPE
++ int NO_SELECTION
++ void ListatorePalestre (Activity context, ArrayList<Corso> )
++ android.view.View getView (int position, View view, ViewGroup )
+}
+class com.alessiomanai.gymregister.PagamentiIscritto{
+- int posizione
+- com.alessiomanai.gymregister.classi.Corso corso
+- com.alessiomanai.gymregister.classi.Iscritto iscritto
+- android.widget.EditText feeIscrizione
+- android.widget.EditText feeSettembre
+- android.widget.EditText feeOttobre
+- android.widget.EditText feeNovembre
+- android.widget.EditText feeDicembre
+- android.widget.EditText feeGennaio
+- android.widget.EditText feeFebbraio
+- android.widget.EditText feeMarzo
+- android.widget.EditText feeAprile
+- android.widget.EditText feeMaggio
+- android.widget.EditText feeGiugno
+- android.widget.EditText feeLuglio
+- android.widget.EditText feeAgosto
+
+# void onCreate (Bundle )
++ void onBackPressed ()
+ void notificaPagamento (int )
+ void salvaModifiche ()
+ void caricaDatabaseImporti ()
+ void setOnEditText ()
+ void salvaDatabaseImporti ()
+# void onPause ()
+}
