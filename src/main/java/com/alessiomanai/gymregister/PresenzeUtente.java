@@ -75,8 +75,8 @@ public class PresenzeUtente extends Activity implements AdapterView.OnItemSelect
         spinner.setAdapter(adapterSpinner);
 
         try {
-            QueryPresenze database = new QueryPresenze(this);
-            elencoPresenze = database.presenzeIscritto(database, iscritto);
+            QueryPresenze database = (QueryPresenze) QueryPresenze.getInstance(this);
+            elencoPresenze = database.presenzeIscritto(iscritto);
         } catch (NullPointerException ne){
             ne.printStackTrace();
             Toast.makeText(this,
@@ -256,9 +256,9 @@ public class PresenzeUtente extends Activity implements AdapterView.OnItemSelect
 
                 try {
 
-                    QueryPresenze database = new QueryPresenze(getApplicationContext());
+                    QueryPresenze database = (QueryPresenze) QueryPresenze.getInstance(getApplicationContext());
 
-                    database.aggiungiPresenzaPrecedente(database, iscritto, iscritto.getPalestra(), data);
+                    database.aggiungiPresenzaPrecedente(iscritto, iscritto.getPalestra(), data);
 
                     Presenza nuovaPresenza = new Presenza();
                     nuovaPresenza.setData(data);

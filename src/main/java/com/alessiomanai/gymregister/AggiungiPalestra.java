@@ -29,7 +29,7 @@ public class AggiungiPalestra extends Activity {
         nomepalestra = findViewById(R.id.nec1);
         conferma = findViewById(R.id.confermabut1);
 
-        final QueryCorso database = new QueryCorso(this);
+        final QueryCorso database = (QueryCorso) QueryCorso.getInstance(this);
 
         /**alla pressione del bottone salva i dati*/
         conferma.setOnClickListener(new View.OnClickListener() {
@@ -53,7 +53,7 @@ public class AggiungiPalestra extends Activity {
                     s = s.replace("#", "_");
 
                     Corso nuovoCorso = new Corso(s);
-                    database.nuovo(database, nuovoCorso);
+                    database.nuovo(nuovoCorso);
 
 
                     //Toast

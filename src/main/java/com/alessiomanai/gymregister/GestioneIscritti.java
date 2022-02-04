@@ -183,18 +183,18 @@ public class GestioneIscritti extends GymRegisterBaseActivity {
 
     public ArrayList<Iscritto> caricaDatabase() {
 
-        QueryIscritto database = new QueryIscritto(this);
+        QueryIscritto database = (QueryIscritto) QueryIscritto.getInstance(this);
 
-        return database.caricaIscritti(database, palestra);
+        return database.caricaIscritti(palestra);
 
     }
 
     public ArrayList<Iscritto> caricaCertificati(ArrayList<Iscritto> iscritti) {
 
-        QueryCertificati database = new QueryCertificati(this);
+        QueryCertificati database = (QueryCertificati) QueryCertificati.getInstance(this);
 
         for (int i = 0; i < iscritti.size(); i++) {
-            iscritti.get(i).setCertificatoMedico(database.getCertificatoMedico(database, iscritti.get(i)));
+            iscritti.get(i).setCertificatoMedico(database.getCertificatoMedico(iscritti.get(i)));
         }
 
         return iscritti;
@@ -342,8 +342,8 @@ public class GestioneIscritti extends GymRegisterBaseActivity {
 
             }
 
-            QueryPagamento database = new QueryPagamento(this);
-            ArrayList<String> lista = database.utentiNotPay(database, mese, m, palestra);
+            QueryPagamento database = (QueryPagamento) QueryPagamento.getInstance(this);
+            ArrayList<String> lista = database.utentiNotPay(mese, m, palestra);
 
             if (lista.size() > 0) {
 
@@ -622,8 +622,8 @@ public class GestioneIscritti extends GymRegisterBaseActivity {
                 String chiave;
                 chiave = value.toString();
 
-                QueryIscritto database = new QueryIscritto(alert.getContext());
-                risultati = database.cercaIscritto(database, palestra, chiave);
+                QueryIscritto database = (QueryIscritto) QueryIscritto.getInstance(alert.getContext());
+                risultati = database.cercaIscritto(palestra, chiave);
 
                 if (risultati.size() != 0) {
 

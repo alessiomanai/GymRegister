@@ -153,7 +153,7 @@ public class Aggiungi extends GymRegisterBaseActivity {
                     Toast.makeText(Aggiungi.this, R.string.addurs, Toast.LENGTH_LONG).show();
 
                     getGestioneIscritti(palestra);
-
+                    finish();
                 }
             }
         });
@@ -170,16 +170,16 @@ public class Aggiungi extends GymRegisterBaseActivity {
 
     void salva(Iscritto iscritto, Corso corso, String certificatoMedico) {
 
-        QueryIscritto database = new QueryIscritto(this);
+        QueryIscritto database = (QueryIscritto) QueryIscritto.getInstance(this);
 
-        database.nuovo(database, iscritto, corso);
-        iscritto.setIdDatabase(database.selectLastIDIscritto(database));
+        database.nuovo(iscritto, corso);
+        iscritto.setIdDatabase(database.selectLastIDIscritto());
 
-        QueryPagamento pagamento = new QueryPagamento(this);
-        pagamento.inizializza(pagamento, iscritto, corso);
+        QueryPagamento pagamento = (QueryPagamento) QueryPagamento.getInstance(this);
+        pagamento.inizializza(iscritto, corso);
 
-        QueryCertificati certificati = new QueryCertificati(this);
-        certificati.nuovo(certificati, iscritto, certificatoMedico);
+        QueryCertificati certificati = (QueryCertificati) QueryCertificati.getInstance(this);
+        certificati.nuovo(iscritto, certificatoMedico);
 
     }
 

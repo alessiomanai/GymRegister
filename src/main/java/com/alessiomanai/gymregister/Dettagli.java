@@ -131,7 +131,7 @@ public class Dettagli extends GymRegisterBaseActivity {
 
         richiestaPermessiLettura();
 
-        final QueryIscritto database = new QueryIscritto(this);
+        final QueryIscritto database = (QueryIscritto) QueryIscritto.getInstance(this);
 
         fotoProfilo = findViewById(R.id.fotoProfilo);
         elimina = findViewById(R.id.buttoneli1);
@@ -141,7 +141,7 @@ public class Dettagli extends GymRegisterBaseActivity {
         cambia = findViewById(R.id.buttonCambiaPalestra);
 
         try {   //sicuramente al primo avvio crasha perché non contiene foto
-            iscritto.setUrlFoto(database.getUrlPhoto(database, iscritto));
+            iscritto.setUrlFoto(database.getUrlPhoto(iscritto));
             loadImageFromStorage(iscritto.getUrlFoto());
         } catch (NullPointerException e) {
             e.printStackTrace();
@@ -219,7 +219,7 @@ public class Dettagli extends GymRegisterBaseActivity {
                     public void onClick(DialogInterface dialog, int which) {
 
                         // Confermato!
-                        database.elimina(database, iscritto);
+                        database.elimina(iscritto);
 
                         confermaeli();    //conferma l'avvenuto eliminazione con un messaggio
 
@@ -339,11 +339,11 @@ public class Dettagli extends GymRegisterBaseActivity {
 
     void salvaModifiche() {
 
-        QueryPagamento pagamento = new QueryPagamento(this);
-        pagamento.update(pagamento, iscritto);
+        QueryPagamento pagamento = (QueryPagamento) QueryPagamento.getInstance(this);
+        pagamento.update(iscritto);
 
-        QueryIscritto fotoUpdate = new QueryIscritto(getApplicationContext());
-        if (fotoUpdate.aggiornaFotoProfilo(fotoUpdate, iscritto)) {
+        QueryIscritto fotoUpdate = (QueryIscritto) QueryIscritto.getInstance(getApplicationContext());
+        if (fotoUpdate.aggiornaFotoProfilo(iscritto)) {
             //Toast.makeText(getApplicationContext(), "Foto aggiornata", Toast.LENGTH_SHORT).show();
             Log.e("Foto", "aggiornata");
         }

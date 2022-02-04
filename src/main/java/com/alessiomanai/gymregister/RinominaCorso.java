@@ -26,8 +26,8 @@ public class RinominaCorso extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rinomina_corso);
 
-        QueryCorso database = new QueryCorso(this);
-        palestre = database.getElencoCorsi(database);
+        QueryCorso database = (QueryCorso) QueryCorso.getInstance(this);
+        palestre = database.getElencoCorsi();
 
         if (palestre.size() > 0) {    //se ci sono palestre in memoria mostra la lista di selezione
 
@@ -69,8 +69,8 @@ public class RinominaCorso extends Activity {
 
                             } else {
 
-                                QueryCorso database = new QueryCorso(getApplicationContext());
-                                database.rinominaCorso(database, palestre.get(position), nuovoNome);
+                                QueryCorso database = (QueryCorso) QueryCorso.getInstance(getApplicationContext());
+                                database.rinominaCorso(palestre.get(position), nuovoNome);
 
                                 palestre.get(position).setNome(nuovoNome);
                                 list1.setAdapter(adapter);

@@ -178,16 +178,16 @@ public class ModificaIscritto extends GymRegisterBaseActivity {
      */
     void salva() {
 
-        QueryIscritto database = new QueryIscritto(this);
+        QueryIscritto database = (QueryIscritto) QueryIscritto.getInstance(this);
 
-        database.aggiorna(database, iscritto);
+        database.aggiorna(iscritto);
 
-        QueryCertificati certificati = new QueryCertificati(this);
+        QueryCertificati certificati = (QueryCertificati) QueryCertificati.getInstance(this);
 
-        if (certificati.certificatoExists(certificati, iscritto)) {
-            certificati.update(certificati, iscritto, iscritto.getCertificatoMedico());
+        if (certificati.certificatoExists(iscritto)) {
+            certificati.update(iscritto, iscritto.getCertificatoMedico());
         } else {
-            certificati.nuovo(certificati, iscritto, iscritto.getCertificatoMedico());
+            certificati.nuovo(iscritto, iscritto.getCertificatoMedico());
         }
 
     }

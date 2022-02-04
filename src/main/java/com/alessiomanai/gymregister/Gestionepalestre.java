@@ -133,8 +133,8 @@ public class Gestionepalestre extends Activity {
      */
     ArrayList<Corso> caricaDatabase() {
 
-        QueryCorso database = new QueryCorso(this);
-        return database.getElencoCorsi(database);
+        QueryCorso database = (QueryCorso) QueryCorso.getInstance(this);
+        return database.getElencoCorsi();
     }
 
     /***

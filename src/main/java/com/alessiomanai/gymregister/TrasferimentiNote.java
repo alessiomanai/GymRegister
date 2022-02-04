@@ -128,16 +128,16 @@ public class TrasferimentiNote extends Activity {
 
     ArrayList<Corso> caricaDatabase() {
 
-        QueryCorso database = new QueryCorso(this);
-        return database.getElencoCorsi(database);
+        QueryCorso database = (QueryCorso) QueryCorso.getInstance(this);
+        return database.getElencoCorsi();
     }
 
 
     public ArrayList<Iscritto> caricaIscritti(Corso palestra) {
 
-        QueryIscritto database = new QueryIscritto(this);
+        QueryIscritto database = (QueryIscritto) QueryIscritto.getInstance(this);
 
-        return database.caricaIscritti(database, palestra);
+        return database.caricaIscritti(palestra);
 
     }
 

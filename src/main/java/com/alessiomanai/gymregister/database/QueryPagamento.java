@@ -17,13 +17,23 @@ import java.util.ArrayList;
  */
 public class QueryPagamento extends Query {
 
-    public QueryPagamento(Context context) {
+    private static QueryPagamento instance;
+
+    public static QueryPagamento getInstance(Context context) {
+        if (instance == null) {
+            instance = new QueryPagamento(context);
+        }
+
+        return instance;
+    }
+
+    protected QueryPagamento(Context context) {
         super(context);
     }
 
-    public void inizializza(Query context, Iscritto iscritto, Corso corso) {
+    public void inizializza(Iscritto iscritto, Corso corso) {
 
-        SQLiteDatabase db = context.getReadableDatabase();
+        SQLiteDatabase db = instance.getReadableDatabase();
         Cursor c = db.rawQuery("SELECT id FROM Iscritto ORDER BY id DESC LIMIT 1;", null);
 
         c.moveToFirst();
@@ -32,7 +42,7 @@ public class QueryPagamento extends Query {
 
         iscritto.setIdDatabase(i);
 
-        SQLiteDatabase database = context.getWritableDatabase();
+        SQLiteDatabase database = instance.getWritableDatabase();
 
         database.execSQL("INSERT INTO Pagamento" +
                 "(iscritto, corso" +
@@ -46,9 +56,9 @@ public class QueryPagamento extends Query {
     /**
      * aggiorna i dati pagamento di un utente
      */
-    public void update(Query context, Iscritto iscritto) {
+    public void update(Iscritto iscritto) {
 
-        SQLiteDatabase database = context.getWritableDatabase();
+        SQLiteDatabase database = instance.getWritableDatabase();
 
         database.execSQL("UPDATE " + Tabelle.InfoTabelle.tabelle[3] +
                 " SET iscrizione='" + iscritto.getIscrizione() + "'," +
@@ -71,20 +81,20 @@ public class QueryPagamento extends Query {
 
     }
 
-    public Cursor getPagamenti(Query context) {
+    public Cursor getPagamenti() {
 
-        SQLiteDatabase database = context.getReadableDatabase();
+        SQLiteDatabase database = instance.getReadableDatabase();
         Cursor informazioni = database.query(Tabelle.InfoTabelle.tabelle[3], Tabelle.InfoTabelle.pagamento, null,
                 null, null, null, null);
 
         return informazioni;
     }
 
-    public ArrayList<String> utentiNotPay(Query context, String mese, String month, Corso corso) {
+    public ArrayList<String> utentiNotPay(String mese, String month, Corso corso) {
 
         ArrayList<String> nomi = new ArrayList<>();
 
-        SQLiteDatabase db = context.getReadableDatabase();
+        SQLiteDatabase db = instance.getReadableDatabase();
 
         Cursor c = db.rawQuery("SELECT nome FROM Iscritto, Pagamento, Presenze " +
                 "WHERE Pagamento.iscritto = Iscritto.id AND " +

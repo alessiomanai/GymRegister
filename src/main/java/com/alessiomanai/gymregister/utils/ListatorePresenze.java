@@ -79,9 +79,9 @@ public class ListatorePresenze extends ArrayAdapter<Presenza> {
 
                 if (presenze.get(posizioneClick).getData().equals(data)) {
 
-                    QueryPresenze database = new QueryPresenze(v.getContext());
+                    QueryPresenze database = (QueryPresenze) QueryPresenze.getInstance(v.getContext());
 
-                    database.eliminaPresenzaOdierna(database, presenze.get(posizioneClick).getIscritto());
+                    database.eliminaPresenzaOdierna(presenze.get(posizioneClick).getIscritto());
 
                     presenze.get(posizioneClick).setData("0");
 
@@ -93,10 +93,10 @@ public class ListatorePresenze extends ArrayAdapter<Presenza> {
 
                 } else {
 
-                    QueryPresenze database = new QueryPresenze(v.getContext());
+                    QueryPresenze database = (QueryPresenze) QueryPresenze.getInstance(v.getContext());
 
                     try {
-                        database.aggiungi(database, presenze.get(posizioneClick).getIscritto(),
+                        database.aggiungi(presenze.get(posizioneClick).getIscritto(),
                                 presenze.get(posizioneClick).getCorso());
 
                     } catch (SQLiteConstraintException exception) {

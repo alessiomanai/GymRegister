@@ -702,13 +702,13 @@ public class Trasferimento extends Activity {
 
     void trasferisciPalestre() {
 
-        QueryCorso database = new QueryCorso(this);
+        QueryCorso database = (QueryCorso) QueryCorso.getInstance(this);
 
         for (int i = 0; i < palestre.size(); i++) {
 
             elencoCorsi.add(new Corso(palestre.get(i)));
 
-            database.nuovo(database, elencoCorsi.get(i));
+            database.nuovo(elencoCorsi.get(i));
 
         }
 
@@ -716,24 +716,24 @@ public class Trasferimento extends Activity {
 
     void trasferisciIscritti(ArrayList<Iscritto> iscritti) {
 
-        QueryIscritto database = new QueryIscritto(this);
-        QueryPagamento pagamento = new QueryPagamento(this);
+        QueryIscritto database = (QueryIscritto) QueryIscritto.getInstance(this);
+        QueryPagamento pagamento = (QueryPagamento) QueryPagamento.getInstance(this);
 
         for (int i = 0; i < iscritti.size(); i++) {
-            database.nuovo(database, iscritti.get(i), iscritti.get(i).getPalestra());
+            database.nuovo(iscritti.get(i), iscritti.get(i).getPalestra());
 
-            iscritti.get(i).setIdDatabase(database.selectLastIDIscritto(database));
+            iscritti.get(i).setIdDatabase(database.selectLastIDIscritto());
 
-            pagamento.inizializza(pagamento, iscritti.get(i), iscritti.get(i).getPalestra());
-            pagamento.update(pagamento, iscritti.get(i));
+            pagamento.inizializza(iscritti.get(i), iscritti.get(i).getPalestra());
+            pagamento.update(iscritti.get(i));
 
         }
     }
 
     void ricaricaPalestre() {
 
-        QueryCorso database = new QueryCorso(this);
-        elencoCorsi = database.getElencoCorsi(database);
+        QueryCorso database = (QueryCorso) QueryCorso.getInstance(this);
+        elencoCorsi = database.getElencoCorsi();
     }
 
     @Override

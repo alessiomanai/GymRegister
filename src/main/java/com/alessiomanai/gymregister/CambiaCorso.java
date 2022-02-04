@@ -36,8 +36,8 @@ public class CambiaCorso extends Activity {
         testo = getString(R.string.istruzioniCambio) + " " + iscritto.getId();
         istruzioni.setText(testo);
 
-        QueryCorso database = new QueryCorso(this);
-        corsi = database.getElencoCorsi(database);
+        QueryCorso database = (QueryCorso) QueryCorso.getInstance(this);
+        corsi = database.getElencoCorsi();
 
         if (corsi.size() > 0) {    //se ci sono palestre in memoria mostra la lista di selezione
 
@@ -65,9 +65,9 @@ public class CambiaCorso extends Activity {
                         public void onClick(DialogInterface dialog, int which) {
                             // Confermato!
 
-                            QueryIscritto database = new QueryIscritto(getApplicationContext());
+                            QueryIscritto database = (QueryIscritto) QueryIscritto.getInstance(getApplicationContext());
 
-                            if (database.cambiaCorsoUtente(database, iscritto, corsi.get(position))) {   //cambia il corso all'utente selezionato
+                            if (database.cambiaCorsoUtente(iscritto, corsi.get(position))) {   //cambia il corso all'utente selezionato
 
                                 Toast.makeText(CambiaCorso.this, R.string.opdone, Toast.LENGTH_SHORT).show();
                             }

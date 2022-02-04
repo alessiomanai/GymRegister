@@ -500,16 +500,16 @@ public class PagamentiIscritto extends GymRegisterBaseActivity {
      */
     void salvaModifiche() {
 
-        QueryPagamento pagamento = new QueryPagamento(this);
-        pagamento.update(pagamento, iscritto);
+        QueryPagamento pagamento = (QueryPagamento) QueryPagamento.getInstance(this);
+        pagamento.update(iscritto);
 
         salvaDatabaseImporti();
     }
 
     void caricaDatabaseImporti() {
-        QueryImporti importi = new QueryImporti(this);
+        QueryImporti importi = (QueryImporti) QueryImporti.getInstance(this);
 
-        iscritto.setImporti(importi.caricaImporti(importi, iscritto, corso));
+        iscritto.setImporti(importi.caricaImporti(iscritto, corso));
 
         setOnEditText();
 
@@ -549,14 +549,14 @@ public class PagamentiIscritto extends GymRegisterBaseActivity {
         iscritto.getImporti().setLuglio(feeLuglio.getText().toString());
         iscritto.getImporti().setAgosto(feeAgosto.getText().toString());
 
-        QueryImporti database = new QueryImporti(this);
+        QueryImporti database = (QueryImporti) QueryImporti.getInstance(this);
         try {
-            database.inserisciImporti(database, iscritto, corso);
+            database.inserisciImporti(iscritto, corso);
 
         } catch (SQLiteConstraintException exception) {
             exception.printStackTrace();
 
-            database.updateImporti(database, iscritto, corso);
+            database.updateImporti(iscritto, corso);
         }
     }
 

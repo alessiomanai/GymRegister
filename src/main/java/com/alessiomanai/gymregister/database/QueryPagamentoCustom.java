@@ -15,14 +15,24 @@ public class QueryPagamentoCustom extends QueryPagamento {
 
     private String nomeTabella = "PagamentiCustom";
 
-    public QueryPagamentoCustom(Context context) {
+    private static QueryPagamentoCustom instance;
+
+    public static QueryPagamentoCustom getInstance(Context context) {
+        if (instance == null) {
+            instance = new QueryPagamentoCustom(context);
+        }
+
+        return instance;
+    }
+
+    protected QueryPagamentoCustom(Context context) {
         super(context);
 
     }
 
-    public void creaNuovoPagamento(Query context, Corso corso, String nuovoPagamento) {
+    public void creaNuovoPagamento(Corso corso, String nuovoPagamento) {
 
-        SQLiteDatabase database = context.getWritableDatabase();
+        SQLiteDatabase database = instance.getWritableDatabase();
 
         database.execSQL("CREATE TABLE PagamentiCustom(corso INTEGER, pagamento TEXT NOT NULL, " +
                 "FOREIGN KEY(corso) REFERENCES Corso(id) ON UPDATE CASCADE ON DELETE NO ACTION," +
@@ -41,9 +51,9 @@ public class QueryPagamentoCustom extends QueryPagamento {
 
     }
 
-    public void aggiornaPagamento(Query context, String pagamento, Iscritto iscritto, int tipo) {
+    public void aggiornaPagamento(String pagamento, Iscritto iscritto, int tipo) {
 
-        SQLiteDatabase database = context.getWritableDatabase();
+        SQLiteDatabase database = instance.getWritableDatabase();
 
         database.execSQL("INSERT INTO " + pagamento + " (iscritto, corso, pagato) VALUES " +
                 "(" + iscritto.getIdDatabase() + ", " + iscritto.getIdCorso() + ", " +
@@ -54,11 +64,11 @@ public class QueryPagamentoCustom extends QueryPagamento {
     /**
      * carica tutti i caricamenti custom esistenti
      */
-    public ArrayList<String> carica(Query context, Corso id) {
+    public ArrayList<String> carica(Corso id) {
 
         ArrayList<String> pagamentiCustom = new ArrayList<>();
 
-        SQLiteDatabase database = context.getReadableDatabase();
+        SQLiteDatabase database = instance.getReadableDatabase();
 
         Cursor risultati = database.rawQuery("SELECT pagamento FROM PagamentiCustom " +
                 "WHERE corso=" + id.getId(), null);
@@ -83,11 +93,11 @@ public class QueryPagamentoCustom extends QueryPagamento {
 
     }
 
-    public int caricaPagamentiIscritto(Query context, String pagamento, Iscritto iscritto) {
+    public int caricaPagamentiIscritto(String pagamento, Iscritto iscritto) {
 
         int pagato;
 
-        SQLiteDatabase database = context.getReadableDatabase();
+        SQLiteDatabase database = instance.getReadableDatabase();
 
         Cursor risultati = database.rawQuery("SELECT pagato FROM " + pagamento + " " +
                 "WHERE corso=" + iscritto.getPalestra().getId() +

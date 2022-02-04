@@ -66,9 +66,9 @@ public class ListatoreDettaglioPresenze extends ArrayAdapter<Presenza> {
                         // Confermato!
 
 
-                        QueryPresenze database = new QueryPresenze(builder.getContext());
+                        QueryPresenze database = (QueryPresenze) QueryPresenze.getInstance(builder.getContext());
 
-                        database.eliminaPresenzaVecchia(database, presenze.get(position).getIscritto(),
+                        database.eliminaPresenzaVecchia(presenze.get(position).getIscritto(),
                                 presenze.get(position).getData());
 
                         presenze.remove(position);

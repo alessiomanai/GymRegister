@@ -12,22 +12,32 @@ import java.util.ArrayList;
 
 /**
  * Created by alessio on 02/09/16.
- *
+ * <p>
  * Query di gestione corso
  */
 
 public class QueryCorso extends Query {
 
-    public QueryCorso(Context context) {
+    private static QueryCorso instance;
+
+    public static QueryCorso getInstance(Context context) {
+        if (instance == null) {
+            instance = new QueryCorso(context);
+        }
+
+        return instance;
+    }
+
+    protected QueryCorso(Context context) {
         super(context);
     }
 
     /**
      * inserisce un nuovo corso all'interno del database
      */
-    public void nuovo(Query context, Corso nuovoCorso) {
+    public void nuovo(Corso nuovoCorso) {
 
-        SQLiteDatabase database = context.getWritableDatabase();
+        SQLiteDatabase database = instance.getWritableDatabase();
 
         SQLiteStatement stmt = database.compileStatement("INSERT INTO " + Tabelle.InfoTabelle.tabelle[1] +
                 "(" + Tabelle.InfoTabelle.corso[1] + ") VALUES (?)");
@@ -41,20 +51,20 @@ public class QueryCorso extends Query {
      * Cursor è un tipo di dato che riceve tutte le informazioni dal database
      * successivamente vanno scorse tramite e i metodi forniti dalla libreria java
      */
-    public Cursor getCorso(Query context) {
+    public Cursor getCorso() {
 
-        SQLiteDatabase database = context.getReadableDatabase();
+        SQLiteDatabase database = instance.getReadableDatabase();
         Cursor informazioni = database.query(Tabelle.InfoTabelle.tabelle[1], Tabelle.InfoTabelle.corso, null,
                 null, null, null, null);
 
         return informazioni;
     }
 
-    public ArrayList<Corso> getElencoCorsi(Query context) {
+    public ArrayList<Corso> getElencoCorsi() {
 
         ArrayList<Corso> palestre = new ArrayList<>();
 
-        Cursor risultati = this.getCorso(context);
+        Cursor risultati = this.getCorso();
 
         while (risultati.moveToNext()) {
 
@@ -67,9 +77,9 @@ public class QueryCorso extends Query {
         return palestre;
     }
 
-    public boolean eliminaCorso(Query context, Corso corso) {
+    public boolean eliminaCorso(Corso corso) {
 
-        SQLiteDatabase database = context.getWritableDatabase();
+        SQLiteDatabase database = instance.getWritableDatabase();
 
         database.execSQL("DELETE FROM Corso " +
                 "WHERE nome='" + corso.getNome() + "' AND id=" + corso.getId() + ";");
@@ -78,9 +88,9 @@ public class QueryCorso extends Query {
 
     }
 
-    public boolean rinominaCorso(Query context, Corso corso, String nuovoNome) {
+    public boolean rinominaCorso(Corso corso, String nuovoNome) {
 
-        SQLiteDatabase database = context.getWritableDatabase();
+        SQLiteDatabase database = instance.getWritableDatabase();
 
         try {
             SQLiteStatement stmt = database.compileStatement("UPDATE Corso " +

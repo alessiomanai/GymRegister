@@ -10,13 +10,23 @@ import com.alessiomanai.gymregister.classi.Iscritto;
 
 public class QueryCertificati extends Query {
 
-    public QueryCertificati(Context context) {
+    private static QueryCertificati instance;
+
+    protected QueryCertificati(Context context) {
         super(context);
     }
 
-    public void nuovo(Query context, Iscritto iscritto, String data) {
+    public static QueryCertificati getInstance(Context context) {
+        if (instance == null) {
+            instance = new QueryCertificati(context);
+        }
 
-        SQLiteDatabase database = context.getWritableDatabase();
+        return instance;
+    }
+
+    public void nuovo(Iscritto iscritto, String data) {
+
+        SQLiteDatabase database = instance.getWritableDatabase();
 
         SQLiteStatement stmt = database.compileStatement("INSERT INTO " + Tabelle.InfoTabelle.tabelle[5] +
                 " (iscritto, data) VALUES (" + iscritto.getIdDatabase() +
@@ -28,11 +38,11 @@ public class QueryCertificati extends Query {
 
     }
 
-    public String getCertificatoMedico(Query context, Iscritto iscritto) {
+    public String getCertificatoMedico(Iscritto iscritto) {
 
         try {
 
-            SQLiteDatabase database = context.getReadableDatabase();
+            SQLiteDatabase database = instance.getReadableDatabase();
 
             Cursor risultati = database.rawQuery("SELECT data FROM Certificato WHERE iscritto =" + iscritto.getIdDatabase(), null);
 
@@ -51,19 +61,19 @@ public class QueryCertificati extends Query {
         return null;
     }
 
-    public boolean certificatoExists(Query context, Iscritto iscritto) {
+    public boolean certificatoExists(Iscritto iscritto) {
 
         String result;
 
-        result = this.getCertificatoMedico(context, iscritto);
+        result = this.getCertificatoMedico(iscritto);
 
         return (result != null);
 
     }
 
-    public void update(Query context, Iscritto iscritto, String data) {
+    public void update(Iscritto iscritto, String data) {
 
-        SQLiteDatabase database = context.getWritableDatabase();
+        SQLiteDatabase database = instance.getWritableDatabase();
 
         SQLiteStatement stmt = database.compileStatement("UPDATE " + Tabelle.InfoTabelle.tabelle[5] +
                 " SET data = ? where iscritto =" + iscritto.getIdDatabase() +

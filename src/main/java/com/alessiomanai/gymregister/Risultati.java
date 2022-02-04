@@ -77,8 +77,8 @@ public class Risultati extends GymRegisterBaseActivity {
 
         chiave = search.getText().toString();
 
-        QueryIscritto database = new QueryIscritto(this);
-        risultati = database.cercaIscritto(database, palestra, chiave);
+        QueryIscritto database = (QueryIscritto) QueryIscritto.getInstance(this);
+        risultati = database.cercaIscritto(palestra, chiave);
 
         if (risultati.size() != 0) {
 

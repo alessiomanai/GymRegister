@@ -112,8 +112,8 @@ public class Presenze extends Activity {
 
         try {
 
-            QueryIscritto database = new QueryIscritto(this);
-            elencoIscritti = database.caricaIscritti(database, corso);
+            QueryIscritto database = (QueryIscritto) QueryIscritto.getInstance(this);
+            elencoIscritti = database.caricaIscritti(corso);
 
         } catch (NullPointerException e) {
             e.printStackTrace();
@@ -121,8 +121,8 @@ public class Presenze extends Activity {
 
         ArrayList<Presenza> listaPresenze = new ArrayList<>();
 
-        QueryPresenze db = new QueryPresenze(this);
-        presenzeOdierne = db.presenzeOdierne(db, corso);
+        QueryPresenze db = (QueryPresenze) QueryPresenze.getInstance(this);
+        presenzeOdierne = db.presenzeOdierne(corso);
 
 
         for (i = 0; i < elencoIscritti.size(); i++) {
@@ -180,13 +180,13 @@ public class Presenze extends Activity {
 
         ArrayList<Iscritto> risultati = new ArrayList<Iscritto>();
 
-        QueryIscritto database = new QueryIscritto(getApplicationContext());
-        risultati = database.cercaIscritto(database, corso, chiave);
+        QueryIscritto database = (QueryIscritto) QueryIscritto.getInstance(getApplicationContext());
+        risultati = database.cercaIscritto(corso, chiave);
 
         ArrayList<Presenza> presenzeOdierne = new ArrayList<>();
 
-        QueryPresenze db = new QueryPresenze(this);
-        presenzeOdierne = db.presenzeOdierne(db, corso);
+        QueryPresenze db = (QueryPresenze) QueryPresenze.getInstance(this);
+        presenzeOdierne = db.presenzeOdierne(corso);
 
         ArrayList<Presenza> listaPresenze = new ArrayList<>();
 
@@ -333,21 +333,21 @@ public class Presenze extends Activity {
 
         try {
 
-            QueryIscritto database = new QueryIscritto(this);
-            elencoIscritti = database.caricaIscritti(database, corso);
+            QueryIscritto database = (QueryIscritto) QueryIscritto.getInstance(this);
+            elencoIscritti = database.caricaIscritti(corso);
 
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
 
-        for (int i = 0; i < elencoIscritti.size(); i++){
+        for (int i = 0; i < elencoIscritti.size(); i++) {
 
             document.setH4Chapter(elencoIscritti.get(i).getId());
 
-            QueryPresenze database = new QueryPresenze(this);
-            ArrayList<Presenza> presenze = database.presenzeCorsoMese(database, elencoIscritti.get(i), corso, data);
+            QueryPresenze database = (QueryPresenze) QueryPresenze.getInstance(this);
+            ArrayList<Presenza> presenze = database.presenzeCorsoMese(elencoIscritti.get(i), corso, data);
 
-            for(int j = 0; j < presenze.size(); j++){
+            for (int j = 0; j < presenze.size(); j++) {
                 document.addLine(presenze.get(j).getData());
             }
         }

@@ -16,20 +16,29 @@ import java.util.Locale;
 
 /**
  * Created by alessio on 02/09/16.
- *
  */
 public class QueryPresenze extends Query {
 
-    public QueryPresenze(Context context) {
+    protected QueryPresenze(Context context) {
         super(context);
+    }
+
+    private static QueryPresenze instance;
+
+    public static QueryPresenze getInstance(Context context) {
+        if (instance == null) {
+            instance = new QueryPresenze(context);
+        }
+
+        return instance;
     }
 
     /**
      * restituisce tutta la tabella delle presenze
      */
-    public Cursor getPresenze(Query context) {
+    public Cursor getPresenze() {
 
-        SQLiteDatabase database = context.getReadableDatabase();
+        SQLiteDatabase database = instance.getReadableDatabase();
         Cursor informazioni = database.query(Tabelle.InfoTabelle.tabelle[2], Tabelle.InfoTabelle.presenze, null,
                 null, null, null, null);
 
@@ -37,10 +46,10 @@ public class QueryPresenze extends Query {
 
     }
 
-    public ArrayList<Presenza> presenzeIscritto(Query context, Iscritto iscritto) {
+    public ArrayList<Presenza> presenzeIscritto(Iscritto iscritto) {
 
         ArrayList<Presenza> elenco = new ArrayList<>();
-        SQLiteDatabase database = context.getReadableDatabase();
+        SQLiteDatabase database = instance.getReadableDatabase();
 
         Cursor informazioni = database.rawQuery(
                 "SELECT iscritto, giornoPresenza FROM Presenze WHERE iscritto=" + iscritto.getIdDatabase() +
@@ -70,10 +79,10 @@ public class QueryPresenze extends Query {
         return elenco;
     }
 
-    public ArrayList<Presenza> presenzeIscrittoOrdineDecrescente(Query context, Iscritto iscritto) {
+    public ArrayList<Presenza> presenzeIscrittoOrdineDecrescente(Iscritto iscritto) {
 
         ArrayList<Presenza> elenco = new ArrayList<>();
-        SQLiteDatabase database = context.getReadableDatabase();
+        SQLiteDatabase database = instance.getReadableDatabase();
 
         Cursor informazioni = database.rawQuery(
                 "SELECT iscritto, giornoPresenza FROM Presenze WHERE iscritto=" + iscritto.getIdDatabase() +
@@ -103,10 +112,10 @@ public class QueryPresenze extends Query {
         return elenco;
     }
 
-    public ArrayList<Presenza> presenzeCorso(Query context, Corso corso) {
+    public ArrayList<Presenza> presenzeCorso(Corso corso) {
 
         ArrayList<Presenza> elenco = new ArrayList<>();
-        SQLiteDatabase database = context.getReadableDatabase();
+        SQLiteDatabase database = instance.getReadableDatabase();
         Cursor informazioni = database.rawQuery(
                 "SELECT iscritto, corso, giornoPresenza FROM Presenze WHERE corso=" + corso.getId()
                 , null);
@@ -136,9 +145,9 @@ public class QueryPresenze extends Query {
 
     }
 
-    public void aggiungi(Query context, Iscritto iscritto, Corso corso) {
+    public void aggiungi(Iscritto iscritto, Corso corso) {
 
-        SQLiteDatabase database = context.getWritableDatabase();
+        SQLiteDatabase database = instance.getWritableDatabase();
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", new Locale("Rome"));
         String data = sdf.format(new Date());
@@ -153,9 +162,9 @@ public class QueryPresenze extends Query {
 
     }
 
-    public boolean eliminaPresenzaOdierna(Query context, Iscritto iscritto) {
+    public boolean eliminaPresenzaOdierna(Iscritto iscritto) {
 
-        SQLiteDatabase database = context.getWritableDatabase();
+        SQLiteDatabase database = instance.getWritableDatabase();
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", new Locale("Rome"));
         String data = sdf.format(new Date());
@@ -168,9 +177,9 @@ public class QueryPresenze extends Query {
 
     }
 
-    public Cursor presenzeOdierneCursor(Query context, Corso corso) {
+    public Cursor presenzeOdierneCursor(Corso corso) {
 
-        SQLiteDatabase database = context.getReadableDatabase();
+        SQLiteDatabase database = instance.getReadableDatabase();
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", new Locale("Rome"));
         String data = sdf.format(new Date());
@@ -181,11 +190,11 @@ public class QueryPresenze extends Query {
         return informazioni;
     }
 
-    public ArrayList<Presenza> presenzeOdierne(Query context, Corso corso) {
+    public ArrayList<Presenza> presenzeOdierne(Corso corso) {
 
         ArrayList<Presenza> elenco = new ArrayList<>();
 
-        Cursor informazioni = this.presenzeOdierneCursor(context, corso);
+        Cursor informazioni = this.presenzeOdierneCursor(corso);
 
         if (informazioni == null || informazioni.getCount() == 0) {
             return elenco;
@@ -211,9 +220,9 @@ public class QueryPresenze extends Query {
 
     }
 
-    public boolean eliminaPresenzaVecchia(Query context, Iscritto iscritto, String data) {
+    public boolean eliminaPresenzaVecchia(Iscritto iscritto, String data) {
 
-        SQLiteDatabase database = context.getWritableDatabase();
+        SQLiteDatabase database = instance.getWritableDatabase();
 
         database.execSQL("DELETE FROM " + Tabelle.InfoTabelle.tabelle[2] + " " +
                 "WHERE (iscritto=" + iscritto.getIdDatabase() + " AND giornoPresenza='" + data + "') " +
@@ -223,9 +232,9 @@ public class QueryPresenze extends Query {
 
     }
 
-    public void aggiungiPresenzaPrecedente(Query context, Iscritto iscritto, Corso corso, String data) {
+    public void aggiungiPresenzaPrecedente(Iscritto iscritto, Corso corso, String data) {
 
-        SQLiteDatabase database = context.getWritableDatabase();
+        SQLiteDatabase database = instance.getWritableDatabase();
 
         database.execSQL("INSERT INTO " + Tabelle.InfoTabelle.tabelle[2] +
                 "(" + Tabelle.InfoTabelle.presenze[0] + ", " +
@@ -237,10 +246,10 @@ public class QueryPresenze extends Query {
 
     }
 
-    public ArrayList<Presenza> presenzeCorsoMese(Query context, Iscritto iscritto, Corso corso, String mese) {
+    public ArrayList<Presenza> presenzeCorsoMese(Iscritto iscritto, Corso corso, String mese) {
 
         ArrayList<Presenza> elenco = new ArrayList<>();
-        SQLiteDatabase database = context.getReadableDatabase();
+        SQLiteDatabase database = instance.getReadableDatabase();
         Cursor informazioni = database.rawQuery(
                 "SELECT iscritto, corso, giornoPresenza FROM Presenze WHERE corso=" + corso.getId() +
                         " AND giornoPresenza LIKE '%" + mese + "%' AND iscritto = " + iscritto.getIdDatabase()

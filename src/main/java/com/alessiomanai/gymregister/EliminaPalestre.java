@@ -25,8 +25,8 @@ public class EliminaPalestre extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_elimina_palestre);
 
-        QueryCorso database = new QueryCorso(this);
-        palestre = database.getElencoCorsi(database);
+        QueryCorso database = (QueryCorso) QueryCorso.getInstance(this);
+        palestre = database.getElencoCorsi();
 
         if (palestre.size() > 0) {    //se ci sono palestre in memoria mostra la lista di selezione
 
@@ -115,9 +115,9 @@ public class EliminaPalestre extends Activity {
 
     void cancellaCorsoDatabase(int posizione) {
 
-        QueryCorso database = new QueryCorso(this);
+        QueryCorso database = (QueryCorso) QueryCorso.getInstance(this);
 
-        database.eliminaCorso(database, palestre.get(posizione));
+        database.eliminaCorso(palestre.get(posizione));
 
         conferma();
     }

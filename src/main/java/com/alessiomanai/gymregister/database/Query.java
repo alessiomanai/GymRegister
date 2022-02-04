@@ -14,12 +14,21 @@ public class Query extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 7;  //13/08/2020
     private SQLiteDatabase db;
+    protected static Query instance;
 
-    public Query(Context context) {
+    protected Query(Context context) {
         super(context, Tabelle.InfoTabelle.DATABASE_NAME, null, DATABASE_VERSION);
         Log.v("Database", "creato");
         db = getWritableDatabase();
 
+    }
+
+    public static Query getInstance(Context context) {
+        if (instance == null) {
+            instance = new Query(context);
+        }
+
+        return instance;
     }
 
     @Override

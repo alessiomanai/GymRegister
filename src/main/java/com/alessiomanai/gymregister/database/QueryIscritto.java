@@ -13,15 +13,23 @@ import java.util.ArrayList;
 
 /**
  * Created by alessio on 02/09/16.
- *
  */
 public class QueryIscritto extends Query {
 
     private String[] iscritto = new String[]{"id", "nome", "dataDiNascita", "telefono", "indirizzo",
             "citta", "corso", "fotoProfilo", "notePath"};
-    
 
-    public QueryIscritto(Context context) {
+    private static QueryIscritto instance;
+
+    public static QueryIscritto getInstance(Context context) {
+        if (instance == null) {
+            instance = new QueryIscritto(context);
+        }
+
+        return instance;
+    }
+
+    protected QueryIscritto(Context context) {
         super(context);
     }
 
@@ -29,9 +37,9 @@ public class QueryIscritto extends Query {
      * aggiunge un iscritto alla palestra
      * creazione utente con prepared statement anti sqlinjection
      */
-    public void nuovo(Query context, Iscritto iscritto, Corso corso) {
+    public void nuovo(Iscritto iscritto, Corso corso) {
 
-        SQLiteDatabase database = context.getWritableDatabase();
+        SQLiteDatabase database = instance.getWritableDatabase();
 
         SQLiteStatement stmt = database.compileStatement("INSERT INTO " + Tabelle.InfoTabelle.tabelle[0] +
                 "(nome, dataDiNascita, telefono, indirizzo, " +
@@ -51,11 +59,11 @@ public class QueryIscritto extends Query {
     /**
      * carica la lista di iscritti
      */
-    public ArrayList<Iscritto> caricaIscritti(Query context, Corso id) {
+    public ArrayList<Iscritto> caricaIscritti(Corso id) {
 
         ArrayList<Iscritto> iscritti = new ArrayList<>();
 
-        SQLiteDatabase database = context.getReadableDatabase();
+        SQLiteDatabase database = instance.getReadableDatabase();
 
         //estraggo i dati degli iscritti e dei pagamenti
         Cursor risultati = database.rawQuery(
@@ -111,9 +119,9 @@ public class QueryIscritto extends Query {
         return iscritti;
     }
 
-    public boolean aggiorna(Query context, Iscritto iscritto) {
+    public boolean aggiorna(Iscritto iscritto) {
 
-        SQLiteDatabase database = context.getWritableDatabase();
+        SQLiteDatabase database = instance.getWritableDatabase();
 
         SQLiteStatement stmt = database.compileStatement("UPDATE " + Tabelle.InfoTabelle.tabelle[0] +
                 " SET nome=?," +
@@ -133,9 +141,9 @@ public class QueryIscritto extends Query {
 
     }
 
-    public void elimina(Query context, Iscritto iscritto) {
+    public void elimina(Iscritto iscritto) {
 
-        SQLiteDatabase database = context.getWritableDatabase();
+        SQLiteDatabase database = instance.getWritableDatabase();
 
         database.execSQL("DELETE FROM Iscritto " +
                 "WHERE id=" +
@@ -146,9 +154,9 @@ public class QueryIscritto extends Query {
 
     }
 
-    public int selectLastIDIscritto(Query context) {
+    public int selectLastIDIscritto() {
 
-        SQLiteDatabase database = context.getReadableDatabase();
+        SQLiteDatabase database = instance.getReadableDatabase();
 
         //estraggo i dati degli iscritti e dei pagamenti
         Cursor risultati = database.rawQuery("SELECT id FROM Iscritto ORDER BY id DESC LIMIT 1", null);
@@ -160,9 +168,9 @@ public class QueryIscritto extends Query {
 
     }
 
-    public int selectLastIDCorso(Query context) {
+    public int selectLastIDCorso() {
 
-        SQLiteDatabase database = context.getReadableDatabase();
+        SQLiteDatabase database = instance.getReadableDatabase();
 
         //estraggo i dati degli iscritti e dei pagamenti
         Cursor risultati = database.rawQuery("SELECT corso FROM Iscritto ORDER BY id DESC LIMIT 1", null);
@@ -177,11 +185,11 @@ public class QueryIscritto extends Query {
     /**
      * cerca nella lista di iscritti
      */
-    public ArrayList<Iscritto> cercaIscritto(Query context, Corso id, String chiave) {
+    public ArrayList<Iscritto> cercaIscritto(Corso id, String chiave) {
 
         ArrayList<Iscritto> iscritti = new ArrayList<>();
 
-        SQLiteDatabase database = context.getReadableDatabase();
+        SQLiteDatabase database = instance.getReadableDatabase();
 
         //estraggo i dati degli iscritti e dei pagamenti
         Cursor risultati = database.rawQuery(
@@ -237,9 +245,9 @@ public class QueryIscritto extends Query {
         return iscritti;
     }
 
-    public boolean salvaNoteFile(Query context, Iscritto iscritto) {
+    public boolean salvaNoteFile(Iscritto iscritto) {
 
-        SQLiteDatabase database = context.getWritableDatabase();
+        SQLiteDatabase database = instance.getWritableDatabase();
 
         database.execSQL("UPDATE " + Tabelle.InfoTabelle.tabelle[0] +
                 " SET notePath='" + iscritto.getNote() + "' " +
@@ -248,9 +256,9 @@ public class QueryIscritto extends Query {
         return true;
     }
 
-    public boolean aggiornaFotoProfilo(Query context, Iscritto iscritto) {
+    public boolean aggiornaFotoProfilo(Iscritto iscritto) {
 
-        SQLiteDatabase database = context.getWritableDatabase();
+        SQLiteDatabase database = instance.getWritableDatabase();
 
         database.execSQL("UPDATE " + Tabelle.InfoTabelle.tabelle[0] +
                 " SET fotoProfilo='" + iscritto.getUrlFoto() + "' " +
@@ -259,9 +267,9 @@ public class QueryIscritto extends Query {
         return true;
     }
 
-    public String getUrlPhoto(Query context, Iscritto iscritto) {
+    public String getUrlPhoto(Iscritto iscritto) {
 
-        SQLiteDatabase database = context.getReadableDatabase();
+        SQLiteDatabase database = instance.getReadableDatabase();
 
         Cursor risultati = database.rawQuery("SELECT fotoProfilo FROM Iscritto WHERE id =" + iscritto.getIdDatabase(), null);
         risultati.moveToFirst();
@@ -270,9 +278,9 @@ public class QueryIscritto extends Query {
 
     }
 
-    public boolean cambiaCorsoUtente(Query context, Iscritto iscritto, Corso nuovoCorso) {
+    public boolean cambiaCorsoUtente(Iscritto iscritto, Corso nuovoCorso) {
 
-        SQLiteDatabase database = context.getWritableDatabase();
+        SQLiteDatabase database = instance.getWritableDatabase();
 
         database.execSQL("UPDATE " + Tabelle.InfoTabelle.tabelle[0] +
                 " SET corso='" + nuovoCorso.getId() + "' " +

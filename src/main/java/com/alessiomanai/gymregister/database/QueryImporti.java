@@ -14,13 +14,23 @@ import com.alessiomanai.gymregister.classi.Iscritto;
 
 public class QueryImporti extends Query {
 
-    public QueryImporti(Context context) {
+    private static QueryImporti instance;
+
+    public static QueryImporti getInstance(Context context) {
+        if (instance == null) {
+            instance = new QueryImporti(context);
+        }
+
+        return instance;
+    }
+
+    protected QueryImporti(Context context) {
         super(context);
     }
 
-    public void inserisciImporti(Query context, Iscritto iscritto, Corso corso) {
+    public void inserisciImporti(Iscritto iscritto, Corso corso) {
 
-        SQLiteDatabase database = context.getWritableDatabase();
+        SQLiteDatabase database = instance.getWritableDatabase();
 
         SQLiteStatement stmt = database.compileStatement("INSERT INTO Importi (" +
                 "iscritto, corso, iscrizione," +
@@ -47,9 +57,9 @@ public class QueryImporti extends Query {
 
     }
 
-    public void updateImporti(Query context, Iscritto iscritto, Corso corso) {
+    public void updateImporti(Iscritto iscritto, Corso corso) {
 
-        SQLiteDatabase database = context.getWritableDatabase();
+        SQLiteDatabase database = instance.getWritableDatabase();
 
         SQLiteStatement stmt = database.compileStatement("UPDATE Importi " +
                 " SET iscrizione=?," +
@@ -85,11 +95,11 @@ public class QueryImporti extends Query {
 
     }
 
-    public Importi caricaImporti(Query context, Iscritto iscritto, Corso corso) {
+    public Importi caricaImporti(Iscritto iscritto, Corso corso) {
 
         Importi pagamenti = new Importi();
 
-        SQLiteDatabase database = context.getReadableDatabase();
+        SQLiteDatabase database = instance.getReadableDatabase();
 
         try {
             //estraggo i dati degli iscritti e dei pagamenti
@@ -130,7 +140,7 @@ public class QueryImporti extends Query {
 
             e.printStackTrace();
 
-            SQLiteDatabase db = context.getWritableDatabase();
+            SQLiteDatabase db = instance.getWritableDatabase();
 
             db.execSQL("CREATE TABLE Importi (" +
                     Tabelle.InfoTabelle.pagamento[0] + " INTEGER , " + //iscritto
