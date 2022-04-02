@@ -189,7 +189,7 @@ public class Dettagli extends GymRegisterBaseActivity {
             public void onClick(View arg0) {
 
                 getPagamentiIscritto(posizione, iscritto, palestra);
-
+                finish();
             }
         });
 
@@ -339,10 +339,7 @@ public class Dettagli extends GymRegisterBaseActivity {
 
     void salvaModifiche() {
 
-        QueryPagamento pagamento = (QueryPagamento) QueryPagamento.getInstance(this);
-        pagamento.update(iscritto);
-
-        QueryIscritto fotoUpdate = (QueryIscritto) QueryIscritto.getInstance(getApplicationContext());
+        QueryIscritto fotoUpdate = QueryIscritto.getInstance(getApplicationContext());
         if (fotoUpdate.aggiornaFotoProfilo(iscritto)) {
             //Toast.makeText(getApplicationContext(), "Foto aggiornata", Toast.LENGTH_SHORT).show();
             Log.e("Foto", "aggiornata");

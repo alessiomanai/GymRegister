@@ -1,5 +1,6 @@
 package com.alessiomanai.gymregister;
 
+import android.database.SQLException;
 import android.database.sqlite.SQLiteConstraintException;
 import android.os.Bundle;
 import android.view.View;
@@ -500,14 +501,20 @@ public class PagamentiIscritto extends GymRegisterBaseActivity {
      */
     void salvaModifiche() {
 
-        QueryPagamento pagamento = (QueryPagamento) QueryPagamento.getInstance(this);
-        pagamento.update(iscritto);
+        QueryPagamento pagamento = QueryPagamento.getInstance(this);
+
+        try {
+            pagamento.inizializza(iscritto, corso);
+        } catch (SQLException e){
+            e.printStackTrace();
+            pagamento.update(iscritto);
+        }
 
         salvaDatabaseImporti();
     }
 
     void caricaDatabaseImporti() {
-        QueryImporti importi = (QueryImporti) QueryImporti.getInstance(this);
+        QueryImporti importi = QueryImporti.getInstance(this);
 
         iscritto.setImporti(importi.caricaImporti(iscritto, corso));
 
@@ -549,14 +556,14 @@ public class PagamentiIscritto extends GymRegisterBaseActivity {
         iscritto.getImporti().setLuglio(feeLuglio.getText().toString());
         iscritto.getImporti().setAgosto(feeAgosto.getText().toString());
 
-        QueryImporti database = (QueryImporti) QueryImporti.getInstance(this);
+        QueryImporti database = QueryImporti.getInstance(this);
         try {
             database.inserisciImporti(iscritto, corso);
 
         } catch (SQLiteConstraintException exception) {
             exception.printStackTrace();
 
-            database.updateImporti(iscritto, corso);
+            database.updateImporti(iscritto);
         }
     }
 

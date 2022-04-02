@@ -65,7 +65,7 @@ public class CambiaCorso extends Activity {
                         public void onClick(DialogInterface dialog, int which) {
                             // Confermato!
 
-                            QueryIscritto database = (QueryIscritto) QueryIscritto.getInstance(getApplicationContext());
+                            QueryIscritto database = QueryIscritto.getInstance(getApplicationContext());
 
                             if (database.cambiaCorsoUtente(iscritto, corsi.get(position))) {   //cambia il corso all'utente selezionato
 

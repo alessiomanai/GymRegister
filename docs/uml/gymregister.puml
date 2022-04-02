@@ -1,0 +1,741 @@
+@startuml
+class com.alessiomanai.gymregister.Dettagli {
+- {static} String FTYPE
+- {static} int DIALOG_LOAD_FILE
+- TextView riepilogoPagamentiT
+- int posizione
+- Corso palestra
+- Iscritto iscritto
+~ int MY_PERMISSIONS_REQUEST_READ_CONTACTS
+~ ImageButton modifica
+~ ImageButton elimina
+~ ImageView fotoProfilo
+- String[] mFileList
+- File mPath
+- String mChosenFile
+# void onCreate(Bundle)
++ void onBackPressed()
+~ void confermaeli()
++ boolean onCreateOptionsMenu(Menu)
++ boolean onOptionsItemSelected(MenuItem)
+~ void modifica()
+~ void salvaModifiche()
+~ void cambiaFotoProfilo()
+- String saveToInternalStorage(Bitmap)
+- void aggiornaFoto(Bitmap)
+- void loadImageFromStorage(String)
+- void loadFileList()
+# Dialog onCreateDialog(int)
+~ void richiestaPermessiLettura()
++ void onRequestPermissionsResult(int,String[],int[])
+~ void dialogPermessi()
+}
+class com.alessiomanai.gymregister.utils.VerticalScrollview {
++ boolean onInterceptTouchEvent(MotionEvent)
++ boolean onTouchEvent(MotionEvent)
+}
+class com.alessiomanai.gymregister.ExampleUnitTest {
++ void addition_isCorrect()
+}
+class com.alessiomanai.gymregister.database.QueryPagamento {
+- {static} QueryPagamento instance
++ {static} QueryPagamento getInstance(Context)
++ void inizializza(Iscritto,Corso)
++ void update(Iscritto)
++ Cursor getPagamenti()
++ ArrayList<String> utentiNotPay(String,String,Corso)
+}
+class com.alessiomanai.gymregister.utils.ListatoreDettaglioPresenze {
+- Activity context
+- ArrayList<Presenza> presenze
++ View getView(int,View,ViewGroup)
+}
+class com.alessiomanai.gymregister.PresenzeUtente {
+- Iscritto iscritto
+- ArrayList<Presenza> elencoPresenze
+- ListView list1
+- ListatoreDettaglioPresenze adapter
+~ ArrayList<Presenza> presenzeSelezionate
+~ ImageButton ordinaAsc
+- DatePickerDialog.OnDateSetListener mDateSetListener
+# void onCreate(Bundle)
++ void onItemSelected(AdapterView<?>,View,int,long)
++ void onNothingSelected(AdapterView<?>)
+~ void mostranumero(ArrayList<Presenza>)
+}
+class com.alessiomanai.gymregister.Aggiungi {
+~ Corso palestra
+~ EditText nomeecognome
+~ EditText address
+~ EditText telef
+~ View dantf
+~ EditText datadinascita
+~ String nec
+- DatePickerDialog.OnDateSetListener mDateSetListener
+# void onCreate(Bundle)
++ void onBackPressed()
+~ void salva(Iscritto,Corso,String)
+- boolean isEmpty(EditText)
+}
+class com.alessiomanai.gymregister.Note {
+- Corso corso
+- Iscritto iscritto
+- boolean noteIscritto
+~ String nomeid
+~ TextView nomeT
+~ EditText testo
+~ int MY_PERMISSIONS_REQUEST_READ_CONTACTS
+# void onCreate(Bundle)
+~ void carica(String)
+~ void salva(String)
++ void onRequestPermissionsResult(int,String[],int[])
+}
+class com.alessiomanai.gymregister.classi.PagamentoCustom {
+- String nome
+- int pagato
+- Iscritto iscritto
+- Corso corso
++ String getNome()
++ void setNome(String)
++ int getPagato()
++ void setPagato(int)
++ Iscritto getIscritto()
++ void setIscritto(Iscritto)
++ Corso getCorso()
+- void setCorso()
+}
+class com.alessiomanai.gymregister.database.QueryPresenze {
+- {static} QueryPresenze instance
++ {static} QueryPresenze getInstance(Context)
++ Cursor getPresenze()
++ ArrayList<Presenza> presenzeIscritto(Iscritto)
++ ArrayList<Presenza> presenzeIscrittoOrdineDecrescente(Iscritto)
++ ArrayList<Presenza> presenzeCorso(Corso)
++ void aggiungi(Iscritto,Corso)
++ boolean eliminaPresenzaOdierna(Iscritto)
++ Cursor presenzeOdierneCursor(Corso)
++ ArrayList<Presenza> presenzeOdierne(Corso)
++ boolean eliminaPresenzaVecchia(Iscritto,String)
++ void aggiungiPresenzaPrecedente(Iscritto,Corso,String)
++ ArrayList<Presenza> presenzeCorsoMese(Iscritto,Corso,String)
+}
+class com.alessiomanai.gymregister.RinominaCorso {
+- ArrayList<Corso> palestre
+# void onCreate(Bundle)
++ void onBackPressed()
+- boolean isEmpty(EditText)
+- boolean isEmpty(String)
+}
+class com.alessiomanai.gymregister.database.Query {
+- {static} int DATABASE_VERSION
+- SQLiteDatabase db
+# {static} Query instance
++ {static} Query getInstance(Context)
++ void onCreate(SQLiteDatabase)
++ void onUpgrade(SQLiteDatabase,int,int)
+- String creaTabellaIscritto()
+- String creaTabellaCorso()
+- String creaTabellaPresenze()
+- String creaTabellaPagamento()
+- String creaTabellaImporti()
+- String creaTabellaCertificati()
+- String aggiuntaAgostoPagamenti()
+- String aggiuntaAgostoImporti()
+}
+class com.alessiomanai.gymregister.utils.FotoManager {
+}
+class com.alessiomanai.gymregister.utils.FileDialog {
+- {static} String PARENT_DIR
+- String TAG
+- Activity activity
+- String[] fileList
+- File currentPath
+- ListenerList<FileSelectedListener> fileListenerList
+- ListenerList<DirectorySelectedListener> dirListenerList
+- boolean selectDirectoryOption
+- String fileEndsWith
++ Dialog createFileDialog()
++ void addFileListener(FileSelectedListener)
++ void removeFileListener(FileSelectedListener)
++ void setSelectDirectoryOption(boolean)
++ void addDirectoryListener(DirectorySelectedListener)
++ void removeDirectoryListener(DirectorySelectedListener)
++ void showDialog()
+- void fireFileSelectedEvent(File)
+- void fireDirectorySelectedEvent(File)
+- void loadFileList(File)
+- File getChosenFile(String)
+- void setFileEndsWith(String)
+}
+interface com.alessiomanai.gymregister.utils.FileDialog.FileSelectedListener {
+~ void fileSelected(File)
+}
+interface com.alessiomanai.gymregister.utils.FileDialog.DirectorySelectedListener {
+~ void directorySelected(File)
+}
+class com.alessiomanai.gymregister.BuildConfig {
++ {static} boolean DEBUG
++ {static} String APPLICATION_ID
++ {static} String BUILD_TYPE
++ {static} int VERSION_CODE
++ {static} String VERSION_NAME
+}
+class com.alessiomanai.gymregister.utils.ListatorePresenze {
+- Activity context
+- ArrayList<Presenza> presenze
++ View getView(int,View,ViewGroup)
+}
+class com.alessiomanai.gymregister.AggiungiPalestra {
+~ EditText nomepalestra
+~ ImageButton conferma
+~ String s
+# void onCreate(Bundle)
++ void onBackPressed()
+- boolean isEmpty(EditText)
+}
+class com.alessiomanai.gymregister.database.QueryImporti {
+- {static} QueryImporti instance
++ {static} QueryImporti getInstance(Context)
++ void inserisciImporti(Iscritto,Corso)
++ void updateImporti(Iscritto,Corso)
++ Importi caricaImporti(Iscritto,Corso)
+}
+class com.alessiomanai.gymregister.utils.activity.ExtrasConstants {
++ {static} String CORSO
++ {static} String POSITION
++ {static} String ISCRITTO
++ {static} String NOTE_ISCRITTO
+}
+class com.alessiomanai.gymregister.utils.DocumentCreator {
+- String document
+- Context context
+- File outputFile
+- String newDocument()
++ void endDocument()
++ void setTitle(String)
++ void setChapter(String)
++ void setH4Chapter(String)
++ void newLine(String)
++ void addLine(String)
++ void lastLine(String)
++ Context getContext()
++ String getDocument()
++ void getPDF()
+}
+class com.alessiomanai.gymregister.utils.BackupManager {
+- String databaseName
+- String databaseBackup
++ boolean doBackup(Context)
++ boolean doRestore(Context)
+}
+class com.alessiomanai.gymregister.classi.Corso {
+- int id
+- String nome
+- String noteCorso
++ String getNome()
++ String toString()
++ void setNome(String)
++ String getFileUsers()
++ String getFileIndirizzi()
++ String getFileNumeriTelefono()
++ String getFiledatanascita()
++ String getFilecitta()
++ String getFileiscrizione()
++ String getFileSettembre()
++ String getFileOttobre()
++ String getFileNovembre()
++ String getFileDicembre()
++ String getFileGennaio()
++ String getFileFebbraio()
++ String getFileMarzo()
++ String getFileAprile()
++ String getFileMaggio()
++ String getFileGiugno()
++ String getFileLuglio()
++ String getBackupOf(String)
++ int getId()
++ void setId(int)
+- String generateNoteFile()
++ String getNoteCorso()
+- void setNoteCorso(String)
++ void setNoteFromDatabase(String)
+}
+class com.alessiomanai.gymregister.utils.Load {
+~ int NUMEROCAMPI
++ ArrayList<Iscritto> usersFromFile(String)
+}
+class com.alessiomanai.gymregister.database.Tabelle {
+}
+abstract class com.alessiomanai.gymregister.database.Tabelle.InfoTabelle {
++ {static} String DATABASE_NAME
++ {static} String[] tabelle
++ {static} String[] iscritto
++ {static} String[] corso
++ {static} String[] presenze
++ {static} String[] pagamento
++ {static} String[] importi
++ {static} String[] certificati
+}
+class com.alessiomanai.gymregister.TrasferimentiNote {
+~ ArrayList<Corso> corsi
+~ ArrayList<Iscritto> iscritti
+~ String testoDaCopiare
+# void onCreate(Bundle)
++ String carica(String)
++ void salva(String,String)
++ String getFileName(String,String,String)
+~ ArrayList<Corso> caricaDatabase()
++ ArrayList<Iscritto> caricaIscritti(Corso)
+}
+class com.alessiomanai.gymregister.classi.Pagamento {
+- String iscrizione
+- String settembre
+- String ottobre
+- String novembre
+- String dicembre
+- String gennaio
+- String febbraio
+- String marzo
+- String aprile
+- String maggio
+- String giugno
+- String luglio
+- String agosto
+- String note
++ String getIscrizione()
++ void setIscrizione(String)
++ String getSettembre()
++ void setSettembre(String)
++ String getOttobre()
++ void setOttobre(String)
++ String getNovembre()
++ void setNovembre(String)
++ String getDicembre()
++ void setDicembre(String)
++ String getGennaio()
++ void setGennaio(String)
++ String getFebbraio()
++ void setFebbraio(String)
++ String getMarzo()
++ void setMarzo(String)
++ String getAprile()
++ void setAprile(String)
++ String getMaggio()
++ void setMaggio(String)
++ String getGiugno()
++ void setGiugno(String)
++ String getLuglio()
++ void setLuglio(String)
++ String getAgosto()
++ void setAgosto(String)
+}
+class com.alessiomanai.gymregister.PagamentiIscritto {
+- int posizione
+- Corso corso
+- Iscritto iscritto
+- EditText feeIscrizione
+# void onCreate(Bundle)
++ void onBackPressed()
+~ void notificaPagamento(int)
+~ void salvaModifiche()
+~ void caricaDatabaseImporti()
+~ void setOnEditText()
+~ void salvaDatabaseImporti()
+# void onPause()
+}
+class com.alessiomanai.gymregister.database.QueryCertificati {
+- {static} QueryCertificati instance
++ {static} QueryCertificati getInstance(Context)
++ void nuovo(Iscritto,String)
++ String getCertificatoMedico(Iscritto)
++ boolean certificatoExists(Iscritto)
++ void update(Iscritto,String)
+}
+class com.alessiomanai.gymregister.InfoApp {
+# void onCreate(Bundle)
+}
+class com.alessiomanai.gymregister.Presenze {
+- Corso corso
+~ EditText ricerca
+~ ImageButton bottone
+~ boolean risultatiDefault
+- String toExportMemory
+- int WRITE_REQUEST_CODE
+- int REQUEST_WRITE_STORAGE
+# void onCreate(Bundle)
++ void mostraData()
++ void caricaPresenze()
++ void mostraGuida()
++ void cercaUtente(String)
++ void onBackPressed()
++ boolean onCreateOptionsMenu(Menu)
+~ void esportaPdfQ(String)
+~ void esportaPresenzePDF()
+# void onActivityResult(int,int,Intent)
+- void writeInFile(Uri,String)
++ void onRequestPermissionsResult(int,String[],int[])
+~ void ricarica()
+}
+class com.alessiomanai.gymregister.classi.Importi {
+}
+class com.alessiomanai.gymregister.EliminaPalestre {
+- ArrayList<Corso> palestre
+# void onCreate(Bundle)
+~ void conferma()
++ void onBackPressed()
+~ void cancellaCorsoDatabase(int)
+}
+class com.alessiomanai.gymregister.database.QueryPagamentoCustom {
+- String nomeTabella
+- {static} QueryPagamentoCustom instance
++ {static} QueryPagamentoCustom getInstance(Context)
++ void creaNuovoPagamento(Corso,String)
++ void aggiornaPagamento(String,Iscritto,int)
++ ArrayList<String> carica(Corso)
++ int caricaPagamentiIscritto(String,Iscritto)
+}
+class com.alessiomanai.gymregister.utils.Search {
++ {static} ArrayList<Iscritto> ricerca(String,ArrayList<Iscritto>)
+}
+class com.alessiomanai.gymregister.ModificaIscritto {
+- Iscritto iscritto
+- Corso palestra
+- int posizione
+~ String nome
+~ EditText nomed
+- DatePickerDialog.OnDateSetListener mDateSetListener
+# void onCreate(Bundle)
+~ void conferma()
++ void onBackPressed()
+~ void salva()
+- boolean isEmpty(EditText)
+}
+class com.alessiomanai.gymregister.classi.Iscritto {
+- String id
+- int idDatabase
+- String telefono
+- String indirizzo
+- String citta
+- String dataDiNascita
+- String urlFoto
+- String note
+- Drawable foto
+- String notePath
+- Pagamento pagamenti
+- Importi importi
+- String corso
+- Corso palestra
+- String certificatoMedico
++ String getId()
++ void setId(String)
++ String getTelefono()
++ void setTelefono(String)
++ String getIndirizzo()
++ void setIndirizzo(String)
++ String getCitta()
++ void setCitta(String)
++ String getDataDiNascita()
++ void setDataDiNascita(String)
++ String getUrlFoto()
++ void setUrlFoto(String)
++ String getIscrizione()
++ void setIscrizione(String)
++ String getSettembre()
++ void setSettembre(String)
++ String getOttobre()
++ void setOttobre(String)
++ String getNovembre()
++ void setNovembre(String)
++ String getDicembre()
++ void setDicembre(String)
++ String getGennaio()
++ void setGennaio(String)
++ String getFebbraio()
++ void setFebbraio(String)
++ String getMarzo()
++ void setMarzo(String)
++ String getAprile()
++ void setAprile(String)
++ String getMaggio()
++ void setMaggio(String)
++ String getGiugno()
++ void setGiugno(String)
++ String getLuglio()
++ void setLuglio(String)
++ String getAgosto()
++ void setAgosto(String)
++ Drawable getFoto()
++ void setFoto(Drawable)
++ String getNote()
+- void setNote(String)
+- String generateNoteFile()
++ String toString()
++ String getCorso()
++ void setCorso(String)
++ void calendarToString(Calendar)
++ int getIdDatabase()
++ void setIdDatabase(int)
++ Corso getPalestra()
++ void setPalestra(Corso)
++ int getIdCorso()
++ void setIdCorso(int)
++ Pagamento getPagamenti()
++ void setPagamenti(Pagamento)
++ Importi getImporti()
++ void setImporti(Importi)
++ String getCertificatoMedico()
++ void setCertificatoMedico(String)
+}
+class com.alessiomanai.gymregister.utils.Save {
+~ boolean users()
++ void salvafile(ArrayList<Iscritto>,String,String,String,String,String,String)
++ void salvaBackup(ArrayList<Iscritto>,String,String,String,String,String,String)
+}
+class com.alessiomanai.gymregister.classi.Presenza {
+- Iscritto iscritto
+- Corso corso
+- String data
++ String getNomeIscritto()
++ int getIdIscritto()
++ int getIdCorso()
++ Iscritto getIscritto()
++ void setIscritto(Iscritto)
++ Corso getCorso()
++ void setCorso(Corso)
++ String getData()
++ void setData(String)
++ void setIdIscritto(int)
++ void setIdCorso(int)
+}
+class com.alessiomanai.gymregister.database.QueryCorso {
+- {static} QueryCorso instance
++ {static} QueryCorso getInstance(Context)
++ void nuovo(Corso)
++ Cursor getCorso()
++ ArrayList<Corso> getElencoCorsi()
++ boolean eliminaCorso(Corso)
++ boolean rinominaCorso(Corso,String)
+}
+class com.alessiomanai.gymregister.utils.ListenerList {
+- List<L> listenerList
++ void add(L)
++ void fireEvent(FireHandler<L>)
++ void remove(L)
++ List<L> getListenerList()
+}
+interface com.alessiomanai.gymregister.utils.ListenerList.FireHandler {
+~ void fireEvent(L)
+}
+class com.alessiomanai.gymregister.Trasferimento {
+- ArrayList<String> palestre
+- Corso palestra
+~ ArrayList<Corso> elencoCorsi
+- ArrayList<Iscritto> iscritti
+~ {static} String elencopalestre
+~ int MY_PERMISSIONS_REQUEST_READ_CONTACTS
+# void onCreate(Bundle)
+~ void palestra(String)
++ ArrayList<Iscritto> caricadafileIscritti(String)
+~ void avvia()
++ boolean onCreateOptionsMenu(Menu)
++ boolean onOptionsItemSelected(MenuItem)
+~ void addpalEx()
+~ void bottoni()
+~ void caricaPalestre()
++ void salvaFileIscritti()
+~ void scritturafile(String)
+~ void trasferisciPalestre()
+~ void trasferisciIscritti(ArrayList<Iscritto>)
+~ void ricaricaPalestre()
++ void onRequestPermissionsResult(int,String[],int[])
+}
+class com.alessiomanai.gymregister.Gestionepalestre {
+- ArrayList<Corso> palestre
+~ int MY_PERMISSIONS_REQUEST_READ_CONTACTS
+# void onCreate(Bundle)
+~ ArrayList<Corso> caricaDatabase()
++ boolean onCreateOptionsMenu(Menu)
++ boolean onOptionsItemSelected(MenuItem)
+~ void bottoni()
+~ void backupData()
+~ void restoreDialogGym()
++ void onRequestPermissionsResult(int,String[],int[])
+}
+class com.alessiomanai.gymregister.ListatorePalestre {
+- Activity context
+- ArrayList<Corso> corso
++ View getView(int,View,ViewGroup)
+}
+class com.alessiomanai.gymregister.Risultati {
+- ArrayList<Iscritto> risultati
+~ EditText search
+~ ImageButton cerca
+~ Corso palestra
+# void onCreate(Bundle)
+~ void avviaricerca()
++ void onBackPressed()
+}
+class com.alessiomanai.gymregister.BuildConfig {
++ {static} boolean DEBUG
++ {static} String APPLICATION_ID
++ {static} String BUILD_TYPE
++ {static} int VERSION_CODE
++ {static} String VERSION_NAME
+}
+class com.alessiomanai.gymregister.CercaPresenze {
+- ArrayList<Presenza> elencoPresenze
+~ ArrayList<Presenza> risultati
+~ EditText search
+~ ImageButton cerca
+# void onCreate(Bundle)
+}
+class com.alessiomanai.gymregister.CambiaCorso {
+- Iscritto iscritto
+- ArrayList<Corso> corsi
+- TextView istruzioni
+- String testo
+# void onCreate(Bundle)
++ void onBackPressed()
+# void onRestoreInstanceState(Bundle)
+# void onSaveInstanceState(Bundle)
+}
+class com.alessiomanai.gymregister.utils.activity.GymRegisterBaseActivity {
+# void getDettagliActivity(int,List<Iscritto>,Corso)
+# void getDettagliActivity(int,Iscritto,Corso)
+# void getAggiungiIscritto(Corso)
+# void getGestioneIscritti(Corso)
+# void getPagamentiIscritto(int,Iscritto,Corso)
+# void getModificaIscritto(int,Iscritto,Corso)
+# void getPresenzeIscritto(Iscritto)
+# void getCambiaCorso(Iscritto)
+# void getNote(Iscritto)
+# void getNote(Corso)
+# void getPresenzeCorso(Corso)
+# void getRisultatiRicerca(Corso,ArrayList<Iscritto>)
+# String caricaRiepilogoPagamenti(Iscritto,Context)
+}
+class android.print.PdfConverter {
+- {static} String TAG
+- {static} PdfConverter sInstance
+- Context mContext
+- String mHtmlString
+- File mPdfFile
+- PrintAttributes mPdfPrintAttrs
+- boolean mIsCurrentlyConverting
+- WebView mWebView
++ {static} PdfConverter getInstance()
++ void run()
++ PrintAttributes getPdfPrintAttrs()
++ void setPdfPrintAttrs(PrintAttributes)
++ void convert(Context,String,File)
+- ParcelFileDescriptor getOutputFileDescriptor()
+- PrintAttributes getDefaultPrintAttrs()
+- void runOnUiThread(Runnable)
+- void destroy()
+}
+class com.alessiomanai.gymregister.utils.ListatoreIscritti {
+- Activity context
+- ArrayList<Iscritto> iscritti
++ View getView(int,View,ViewGroup)
+- void loadImageFromStorage(String,View)
+}
+class com.alessiomanai.gymregister.MainActivity {
+~ ImageView icona
+~ Intent palestre
+~ CountDownTimer time
+# void onCreate(Bundle)
+}
+class com.alessiomanai.gymregister.database.QueryIscritto {
+- String[] iscritto
+- {static} QueryIscritto instance
++ {static} QueryIscritto getInstance(Context)
++ void nuovo(Iscritto,Corso)
++ ArrayList<Iscritto> caricaIscritti(Corso)
++ boolean aggiorna(Iscritto)
++ void elimina(Iscritto)
++ int selectLastIDIscritto()
++ int selectLastIDCorso()
++ ArrayList<Iscritto> cercaIscritto(Corso,String)
++ boolean salvaNoteFile(Iscritto)
++ boolean aggiornaFotoProfilo(Iscritto)
++ String getUrlPhoto(Iscritto)
++ boolean cambiaCorsoUtente(Iscritto,Corso)
+}
+class com.alessiomanai.gymregister.GestioneIscritti {
+- int REQUEST_WRITE_STORAGE
+- ArrayList<Iscritto> iscritti
+- Corso palestra
+~ String text
+- View donotpay
+- int WRITE_REQUEST_CODE
+- String toExportMemory
+# void onCreate(Bundle)
+# void onRestoreInstanceState(Bundle)
+# void onSaveInstanceState(Bundle)
+~ void caricaelenco()
++ ArrayList<Iscritto> caricaDatabase()
++ ArrayList<Iscritto> caricaCertificati(ArrayList<Iscritto>)
+~ void gestionebottoni()
++ void onBackPressed()
++ boolean onCreateOptionsMenu(Menu)
+~ void pagamentiArretrati()
+~ void restoreDialog()
+~ void esportaPdfQ(String)
+~ void esportaPDF()
+~ void messaggioBackupNonPresente()
+~ void ricarica()
+~ void mostranumero()
+~ void ricerca()
++ void onRequestPermissionsResult(int,String[],int[])
+# void onActivityResult(int,int,Intent)
+- void writeInFile(Uri,String)
+}
+
+
+com.alessiomanai.gymregister.utils.activity.GymRegisterBaseActivity <|-- com.alessiomanai.gymregister.Dettagli
+android.widget.ScrollView <|-- com.alessiomanai.gymregister.utils.VerticalScrollview
+com.alessiomanai.gymregister.database.Query <|-- com.alessiomanai.gymregister.database.QueryPagamento
+android.widget.ArrayAdapter <|-- com.alessiomanai.gymregister.utils.ListatoreDettaglioPresenze
+com.alessiomanai.gymregister.OnItemSelectedListener <|.. com.alessiomanai.gymregister.PresenzeUtente
+android.app.Activity <|-- com.alessiomanai.gymregister.PresenzeUtente
+com.alessiomanai.gymregister.utils.activity.GymRegisterBaseActivity <|-- com.alessiomanai.gymregister.Aggiungi
+android.app.Activity <|-- com.alessiomanai.gymregister.Note
+com.alessiomanai.gymregister.database.Query <|-- com.alessiomanai.gymregister.database.QueryPresenze
+android.app.Activity <|-- com.alessiomanai.gymregister.RinominaCorso
+android.database.sqlite.SQLiteOpenHelper <|-- com.alessiomanai.gymregister.database.Query
+com.alessiomanai.gymregister.utils.FileDialog +.. com.alessiomanai.gymregister.utils.FileDialog.FileSelectedListener
+com.alessiomanai.gymregister.utils.FileDialog +.. com.alessiomanai.gymregister.utils.FileDialog.DirectorySelectedListener
+android.widget.ArrayAdapter <|-- com.alessiomanai.gymregister.utils.ListatorePresenze
+android.app.Activity <|-- com.alessiomanai.gymregister.AggiungiPalestra
+com.alessiomanai.gymregister.database.Query <|-- com.alessiomanai.gymregister.database.QueryImporti
+java.io.Serializable <|.. com.alessiomanai.gymregister.classi.Corso
+android.app.Activity <|-- com.alessiomanai.gymregister.utils.Load
+com.alessiomanai.gymregister.database.Tabelle +.. com.alessiomanai.gymregister.database.Tabelle.InfoTabelle
+com.alessiomanai.gymregister.database.BaseColumns <|.. com.alessiomanai.gymregister.database.Tabelle.InfoTabelle
+android.app.Activity <|-- com.alessiomanai.gymregister.TrasferimentiNote
+java.io.Serializable <|.. com.alessiomanai.gymregister.classi.Pagamento
+com.alessiomanai.gymregister.utils.activity.GymRegisterBaseActivity <|-- com.alessiomanai.gymregister.PagamentiIscritto
+com.alessiomanai.gymregister.database.Query <|-- com.alessiomanai.gymregister.database.QueryCertificati
+android.app.Activity <|-- com.alessiomanai.gymregister.InfoApp
+android.app.Activity <|-- com.alessiomanai.gymregister.Presenze
+com.alessiomanai.gymregister.classi.Pagamento <|-- com.alessiomanai.gymregister.classi.Importi
+android.app.Activity <|-- com.alessiomanai.gymregister.EliminaPalestre
+com.alessiomanai.gymregister.database.QueryPagamento <|-- com.alessiomanai.gymregister.database.QueryPagamentoCustom
+com.alessiomanai.gymregister.utils.activity.GymRegisterBaseActivity <|-- com.alessiomanai.gymregister.ModificaIscritto
+java.io.Serializable <|.. com.alessiomanai.gymregister.classi.Iscritto
+android.app.Activity <|-- com.alessiomanai.gymregister.utils.Save
+com.alessiomanai.gymregister.database.Query <|-- com.alessiomanai.gymregister.database.QueryCorso
+com.alessiomanai.gymregister.utils.ListenerList +.. com.alessiomanai.gymregister.utils.ListenerList.FireHandler
+android.app.Activity <|-- com.alessiomanai.gymregister.Trasferimento
+android.app.Activity <|-- com.alessiomanai.gymregister.Gestionepalestre
+android.widget.ArrayAdapter <|-- com.alessiomanai.gymregister.ListatorePalestre
+com.alessiomanai.gymregister.utils.activity.GymRegisterBaseActivity <|-- com.alessiomanai.gymregister.Risultati
+android.app.Activity <|-- com.alessiomanai.gymregister.CercaPresenze
+android.app.Activity <|-- com.alessiomanai.gymregister.CambiaCorso
+android.app.Activity <|-- com.alessiomanai.gymregister.utils.activity.GymRegisterBaseActivity
+android.print.Runnable <|.. android.print.PdfConverter
+android.widget.ArrayAdapter <|-- com.alessiomanai.gymregister.utils.ListatoreIscritti
+android.app.Activity <|-- com.alessiomanai.gymregister.MainActivity
+com.alessiomanai.gymregister.database.Query <|-- com.alessiomanai.gymregister.database.QueryIscritto
+com.alessiomanai.gymregister.utils.activity.GymRegisterBaseActivity <|-- com.alessiomanai.gymregister.GestioneIscritti
+@enduml

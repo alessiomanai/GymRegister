@@ -57,7 +57,7 @@ public class QueryImporti extends Query {
 
     }
 
-    public void updateImporti(Iscritto iscritto, Corso corso) {
+    public void updateImporti(Iscritto iscritto) {
 
         SQLiteDatabase database = instance.getWritableDatabase();
 

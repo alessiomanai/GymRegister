@@ -175,10 +175,10 @@ public class Aggiungi extends GymRegisterBaseActivity {
         database.nuovo(iscritto, corso);
         iscritto.setIdDatabase(database.selectLastIDIscritto());
 
-        QueryPagamento pagamento = (QueryPagamento) QueryPagamento.getInstance(this);
+        QueryPagamento pagamento = QueryPagamento.getInstance(this);
         pagamento.inizializza(iscritto, corso);
 
-        QueryCertificati certificati = (QueryCertificati) QueryCertificati.getInstance(this);
+        QueryCertificati certificati = QueryCertificati.getInstance(this);
         certificati.nuovo(iscritto, certificatoMedico);
 
     }
