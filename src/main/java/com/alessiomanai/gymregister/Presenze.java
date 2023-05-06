@@ -22,16 +22,17 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.alessiomanai.gymregister.classi.Corso;
 import com.alessiomanai.gymregister.classi.Iscritto;
 import com.alessiomanai.gymregister.classi.Presenza;
 import com.alessiomanai.gymregister.database.QueryIscritto;
 import com.alessiomanai.gymregister.database.QueryPresenze;
+import com.alessiomanai.gymregister.utils.AppPermissionsUtils;
 import com.alessiomanai.gymregister.utils.DocumentCreator;
 import com.alessiomanai.gymregister.utils.activity.ExtrasConstants;
 import com.alessiomanai.gymregister.utils.ListatorePresenze;
+import com.alessiomanai.gymregister.utils.GymRegisterConstants;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -165,7 +166,7 @@ public class Presenze extends Activity {
 
                 SharedPreferences pref = getSharedPreferences("RegistroPresenze", Activity.MODE_PRIVATE);
                 SharedPreferences.Editor editor = pref.edit(); //edita il valore di Boot
-                editor.putInt("Presenze", 1);    //associa all' hash di Application il valore MP3PLAYER
+                editor.putInt("Presenze", 1);    //associa all' hash di Application il valore
                 editor.apply();    //convalida le modifiche
 
                 dialog.dismiss();
@@ -180,12 +181,12 @@ public class Presenze extends Activity {
 
         ArrayList<Iscritto> risultati = new ArrayList<Iscritto>();
 
-        QueryIscritto database = (QueryIscritto) QueryIscritto.getInstance(getApplicationContext());
+        QueryIscritto database = QueryIscritto.getInstance(getApplicationContext());
         risultati = database.cercaIscritto(corso, chiave);
 
         ArrayList<Presenza> presenzeOdierne = new ArrayList<>();
 
-        QueryPresenze db = (QueryPresenze) QueryPresenze.getInstance(this);
+        QueryPresenze db = QueryPresenze.getInstance(this);
         presenzeOdierne = db.presenzeOdierne(corso);
 
         ArrayList<Presenza> listaPresenze = new ArrayList<>();
@@ -290,7 +291,7 @@ public class Presenze extends Activity {
 
             sdCard = Environment.getDataDirectory();
 
-            dir = new File(sdCard.getAbsolutePath() + "/gymregister/");
+            dir = new File(sdCard.getAbsolutePath() + GymRegisterConstants.APP_DIRECTORY);
             dir.mkdirs();
             file = new File(dir, filez);
 
@@ -299,11 +300,7 @@ public class Presenze extends Activity {
         } else {
 
             //scrivi su sd se ne hai il permesso
-
-            boolean hasPermission = (ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
-
-            if (!hasPermission) {
+            if (!AppPermissionsUtils.hasPermissions(this)) {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         REQUEST_WRITE_STORAGE);
@@ -315,7 +312,7 @@ public class Presenze extends Activity {
             }
 
             sdCard = Environment.getExternalStorageDirectory();    //ottiene il percorso della memoria esteran
-            dir = new File(sdCard.getAbsolutePath() + "/gymregister/");    //seleziona la cartella
+            dir = new File(sdCard.getAbsolutePath() + GymRegisterConstants.APP_DIRECTORY);    //seleziona la cartella
             dir.mkdirs();    //crea la cartella
             file = new File(dir, filez);
 

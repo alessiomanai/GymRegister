@@ -505,7 +505,7 @@ public class PagamentiIscritto extends GymRegisterBaseActivity {
 
         try {
             pagamento.inizializza(iscritto, corso);
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             pagamento.update(iscritto);
         }

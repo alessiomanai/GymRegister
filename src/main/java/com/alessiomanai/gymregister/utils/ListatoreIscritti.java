@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ListatoreIscritti extends ArrayAdapter<Iscritto> {
 
@@ -45,10 +46,8 @@ public class ListatoreIscritti extends ArrayAdapter<Iscritto> {
         try {
             txtTitle.setText(iscritti.get(position).toString());
 
-            try {
+            if (Objects.nonNull(iscritti.get(position).getUrlFoto())) {
                 loadImageFromStorage(iscritti.get(position).getUrlFoto(), rowView);
-            } catch (NullPointerException e) {
-                e.printStackTrace();
             }
 
         } catch (RuntimeException re) {

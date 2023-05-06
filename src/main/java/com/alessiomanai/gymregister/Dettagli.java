@@ -2,7 +2,6 @@ package com.alessiomanai.gymregister;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
@@ -10,11 +9,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,10 +28,11 @@ import android.widget.Toast;
 import com.alessiomanai.gymregister.classi.Corso;
 import com.alessiomanai.gymregister.classi.Iscritto;
 import com.alessiomanai.gymregister.database.QueryIscritto;
-import com.alessiomanai.gymregister.database.QueryPagamento;
+import com.alessiomanai.gymregister.utils.AppPermissionsUtils;
 import com.alessiomanai.gymregister.utils.activity.ExtrasConstants;
 import com.alessiomanai.gymregister.utils.FileDialog;
 import com.alessiomanai.gymregister.utils.activity.GymRegisterBaseActivity;
+import com.alessiomanai.gymregister.utils.GymRegisterConstants;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,6 +40,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.Objects;
 
 import static android.content.ContentValues.TAG;
 
@@ -129,9 +131,11 @@ public class Dettagli extends GymRegisterBaseActivity {
 
         modifica();     //carica il menù di modifica
 
-        richiestaPermessiLettura();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            richiestaPermessiLettura();
+        }
 
-        final QueryIscritto database = (QueryIscritto) QueryIscritto.getInstance(this);
+        final QueryIscritto database = QueryIscritto.getInstance(this);
 
         fotoProfilo = findViewById(R.id.fotoProfilo);
         elimina = findViewById(R.id.buttoneli1);
@@ -140,12 +144,9 @@ public class Dettagli extends GymRegisterBaseActivity {
         note = findViewById(R.id.buttonNote);
         cambia = findViewById(R.id.buttonCambiaPalestra);
 
-        try {   //sicuramente al primo avvio crasha perché non contiene foto
+        if (Objects.nonNull(database.getUrlPhoto(iscritto))) {
             iscritto.setUrlFoto(database.getUrlPhoto(iscritto));
             loadImageFromStorage(iscritto.getUrlFoto());
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-
         }
 
         fotoProfilo.setOnClickListener(new View.OnClickListener() {
@@ -153,15 +154,9 @@ public class Dettagli extends GymRegisterBaseActivity {
             public void onClick(View arg0) {
 
                 try {
-
                     cambiaFotoProfilo();
-
                 } catch (NullPointerException e) {
-
-                    e.printStackTrace();
-
                     richiestaPermessiLettura();
-
                     dialogPermessi();
                 }
             }
@@ -326,7 +321,6 @@ public class Dettagli extends GymRegisterBaseActivity {
             public void onClick(View arg0) {
 
                 getModificaIscritto(posizione, iscritto, palestra);
-
                 finish();
             }
         });
@@ -387,7 +381,7 @@ public class Dettagli extends GymRegisterBaseActivity {
 
         ContextWrapper cw = new ContextWrapper(getApplicationContext());
         // path to /data/data/yourapp/app_data/imageDir
-        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+        File directory = cw.getDir(GymRegisterConstants.IMG_DIRECTORY, Context.MODE_PRIVATE);
         // Create imageDir
         File mypath = new File(directory, nomeFoto);
 
@@ -408,8 +402,6 @@ public class Dettagli extends GymRegisterBaseActivity {
                 e.printStackTrace();
             }
         }
-
-        Log.e("patH", mypath.getPath());
 
         return mypath.getPath(); //corretto
     }
@@ -473,45 +465,12 @@ public class Dettagli extends GymRegisterBaseActivity {
     }
 
 
-    /**
-     * Crea la finestra di dialogo per la visualizzazione dellle cartelle
-     */
-
-    protected Dialog onCreateDialog(int id) {
-        Dialog dialog = null;
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        switch (id) {
-            case DIALOG_LOAD_FILE:
-                builder.setTitle("Choose your file");
-                if (mFileList == null) {
-                    Log.e(TAG, "Showing file picker before loading the file list");
-                    dialog = builder.create();
-                    return dialog;
-                }
-                builder.setItems(mFileList, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        mChosenFile = mFileList[which];
-                        //you can do stuff with the file here too
-                    }
-                });
-                break;
-        }
-        dialog = builder.show();
-        return dialog;
-    }
-
     /**richiesta permessi lettura memoria interna */
 
     void richiestaPermessiLettura() {
 
-        //richiedere permessi scrittura
-        int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(),
-                Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
         // Here, thisActivity is the current activity
-        if (permissionCheck
-                != PackageManager.PERMISSION_GRANTED) {
+        if (!AppPermissionsUtils.hasPermissions(this)) {
 
             // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(Dettagli.this,
@@ -529,9 +488,6 @@ public class Dettagli extends GymRegisterBaseActivity {
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         MY_PERMISSIONS_REQUEST_READ_CONTACTS);
 
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
             }
         }
     }
@@ -562,7 +518,9 @@ public class Dettagli extends GymRegisterBaseActivity {
         }
     }
 
-    /**finestra di dialogo per la richiesta dei permessi, utente di merda che non ti fidi*/
+    /**
+     * finestra di dialogo per la richiesta dei permessi
+     */
 
     void dialogPermessi() {
 

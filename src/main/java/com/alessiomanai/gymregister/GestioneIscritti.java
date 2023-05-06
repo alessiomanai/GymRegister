@@ -24,7 +24,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.alessiomanai.gymregister.classi.Corso;
 import com.alessiomanai.gymregister.classi.Iscritto;
@@ -32,11 +31,13 @@ import com.alessiomanai.gymregister.database.QueryCertificati;
 import com.alessiomanai.gymregister.database.QueryIscritto;
 import com.alessiomanai.gymregister.database.QueryPagamento;
 import com.alessiomanai.gymregister.database.Tabelle;
+import com.alessiomanai.gymregister.utils.AppPermissionsUtils;
 import com.alessiomanai.gymregister.utils.BackupManager;
 import com.alessiomanai.gymregister.utils.DocumentCreator;
 import com.alessiomanai.gymregister.utils.activity.ExtrasConstants;
 import com.alessiomanai.gymregister.utils.activity.GymRegisterBaseActivity;
 import com.alessiomanai.gymregister.utils.ListatoreIscritti;
+import com.alessiomanai.gymregister.utils.GymRegisterConstants;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -367,8 +368,6 @@ public class GestioneIscritti extends GymRegisterBaseActivity {
                         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                // Confermato!
-
 
                                 dialog.dismiss();
 
@@ -455,7 +454,7 @@ public class GestioneIscritti extends GymRegisterBaseActivity {
 
             sdCard = Environment.getDataDirectory();
 
-            dir = new File(sdCard.getAbsolutePath() + "/gymregister/");
+            dir = new File(sdCard.getAbsolutePath() + GymRegisterConstants.APP_DIRECTORY);
             dir.mkdirs();
             file = new File(dir, filez);
 
@@ -464,11 +463,7 @@ public class GestioneIscritti extends GymRegisterBaseActivity {
         } else {
 
             //scrivi su sd se ne hai il permesso
-
-            boolean hasPermission = (ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
-
-            if (!hasPermission) {
+            if (!AppPermissionsUtils.hasPermissions(this)) {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         REQUEST_WRITE_STORAGE);
@@ -479,7 +474,7 @@ public class GestioneIscritti extends GymRegisterBaseActivity {
             }
 
             sdCard = Environment.getExternalStorageDirectory();    //ottiene il percorso della memoria esteran
-            dir = new File(sdCard.getAbsolutePath() + "/gymregister/");    //seleziona la cartella
+            dir = new File(sdCard.getAbsolutePath() + GymRegisterConstants.APP_DIRECTORY);    //seleziona la cartella
             dir.mkdirs();    //crea la cartella
             file = new File(dir, filez);
 
@@ -622,7 +617,7 @@ public class GestioneIscritti extends GymRegisterBaseActivity {
                 String chiave;
                 chiave = value.toString();
 
-                QueryIscritto database = (QueryIscritto) QueryIscritto.getInstance(alert.getContext());
+                QueryIscritto database = QueryIscritto.getInstance(alert.getContext());
                 risultati = database.cercaIscritto(palestra, chiave);
 
                 if (risultati.size() != 0) {
