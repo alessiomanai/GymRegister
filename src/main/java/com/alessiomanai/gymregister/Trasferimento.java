@@ -7,9 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,6 +15,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.alessiomanai.gymregister.classi.Corso;
 import com.alessiomanai.gymregister.classi.Iscritto;
@@ -39,19 +40,19 @@ import java.util.ArrayList;
 
 public class Trasferimento extends Activity {
 
-    private ArrayList<String> palestre = new ArrayList<>();
-    private Corso palestra;
-    ArrayList<Corso> elencoCorsi = new ArrayList<>();
-    private ArrayList<Iscritto> iscritti = new ArrayList<>();
     static String elencopalestre = "nomipalestre.txt";    //file contenente i nomi delle palestre
     final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1000;
+    private final ArrayList<String> palestre = new ArrayList<>();
+    private final ArrayList<Iscritto> iscritti = new ArrayList<>();
+    ArrayList<Corso> elencoCorsi = new ArrayList<>();
+    private Corso palestra;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trasferimento);
 
-        Button button = (Button) findViewById(R.id.bottoneConfermaT);
+        Button button = findViewById(R.id.bottoneConfermaT);
 
 
         int permissionCheck = ContextCompat.checkSelfPermission(Trasferimento.this,
@@ -121,8 +122,7 @@ public class Trasferimento extends Activity {
                         System.out.println("Iscritti caricati");
 
                     } catch (IOException e) {
-                        e.printStackTrace();
-                        System.out.println("Eccezione iscritti");
+                        Log.e("Eccezione iscritti", e.getMessage(), e);
                     }
 
                 } catch (IOException e) {
@@ -510,8 +510,8 @@ public class Trasferimento extends Activity {
      */
     void bottoni() {
 
-        ImageButton aggiungipalestra = (ImageButton) findViewById(R.id.paladd);
-        ImageButton eliminapalestra = (ImageButton) findViewById(R.id.palelim);
+        ImageButton aggiungipalestra = findViewById(R.id.paladd);
+        ImageButton eliminapalestra = findViewById(R.id.palelim);
 
         aggiungipalestra.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -702,7 +702,7 @@ public class Trasferimento extends Activity {
 
     void trasferisciPalestre() {
 
-        QueryCorso database = (QueryCorso) QueryCorso.getInstance(this);
+        QueryCorso database = QueryCorso.getInstance(this);
 
         for (int i = 0; i < palestre.size(); i++) {
 
@@ -716,8 +716,8 @@ public class Trasferimento extends Activity {
 
     void trasferisciIscritti(ArrayList<Iscritto> iscritti) {
 
-        QueryIscritto database = (QueryIscritto) QueryIscritto.getInstance(this);
-        QueryPagamento pagamento = (QueryPagamento) QueryPagamento.getInstance(this);
+        QueryIscritto database = QueryIscritto.getInstance(this);
+        QueryPagamento pagamento = QueryPagamento.getInstance(this);
 
         for (int i = 0; i < iscritti.size(); i++) {
             database.nuovo(iscritti.get(i), iscritti.get(i).getPalestra());
@@ -732,12 +732,12 @@ public class Trasferimento extends Activity {
 
     void ricaricaPalestre() {
 
-        QueryCorso database = (QueryCorso) QueryCorso.getInstance(this);
+        QueryCorso database = QueryCorso.getInstance(this);
         elencoCorsi = database.getElencoCorsi();
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
                 // If request is cancelled, the result arrays are empty.
@@ -752,7 +752,6 @@ public class Trasferimento extends Activity {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                 }
-                return;
             }
 
             // other 'case' lines to check for other

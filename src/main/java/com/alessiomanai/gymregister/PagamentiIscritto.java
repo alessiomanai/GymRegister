@@ -3,11 +3,16 @@ package com.alessiomanai.gymregister;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteConstraintException;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.alessiomanai.gymregister.classi.Corso;
 import com.alessiomanai.gymregister.classi.Iscritto;
@@ -29,9 +34,26 @@ public class PagamentiIscritto extends GymRegisterBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pagamenti_iscritto);
 
+        View root = findViewById(R.id.parentRelativePagamentiIscritto);
+
+        ViewCompat.setOnApplyWindowInsetsListener(root, new OnApplyWindowInsetsListener() {
+            @Override
+            public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
+                int top = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top;
+                v.setPadding(0, top, 0, 0);
+                return insets;
+            }
+        });
+
         corso = (Corso) getIntent().getExtras().get(ExtrasConstants.CORSO);
         posizione = (int) getIntent().getExtras().get(ExtrasConstants.POSITION);
         iscritto = (Iscritto) getIntent().getExtras().get(ExtrasConstants.ISCRITTO);
+
+        QueryImporti queryImporti = QueryImporti.getInstance(this);
+        iscritto.setImporti(queryImporti.caricaImporti(iscritto, corso));
+
+        QueryPagamento queryPagamento = QueryPagamento.getInstance(this);
+        iscritto.setPagamenti(queryPagamento.getPagamenti(iscritto));
 
         TextView nomePagante = findViewById(R.id.nomePagante);
         nomePagante.setText(iscritto.getId());
@@ -90,7 +112,7 @@ public class PagamentiIscritto extends GymRegisterBaseActivity {
             @Override
             public void onClick(View v) {
 
-                if (iscrizione.isChecked() == false) {    //se non è spuntato lo rende spuntabile
+                if (!iscrizione.isChecked()) {    //se non è spuntato lo rende spuntabile
                     iscrizione.setChecked(true);
                     iscritto.setIscrizione("pagato");
                     notificaPagamento(R.string.iscrizione);
@@ -121,7 +143,7 @@ public class PagamentiIscritto extends GymRegisterBaseActivity {
             @Override
             public void onClick(View v) {
 
-                if (settembre.isChecked() == false) {
+                if (!settembre.isChecked()) {
                     settembre.setChecked(true);
                     iscritto.setSettembre("pagato");
                     notificaPagamento(R.string.sept);
@@ -153,7 +175,7 @@ public class PagamentiIscritto extends GymRegisterBaseActivity {
             @Override
             public void onClick(View v) {
 
-                if (ottobre.isChecked() == false) {
+                if (!ottobre.isChecked()) {
                     ottobre.setChecked(true);
                     iscritto.setOttobre("pagato");
                     notificaPagamento(R.string.oct);
@@ -185,7 +207,7 @@ public class PagamentiIscritto extends GymRegisterBaseActivity {
             @Override
             public void onClick(View v) {
 
-                if (novembre.isChecked() == false) {
+                if (!novembre.isChecked()) {
                     novembre.setChecked(true);
                     iscritto.setNovembre("pagato");
                     notificaPagamento(R.string.nov);
@@ -215,7 +237,7 @@ public class PagamentiIscritto extends GymRegisterBaseActivity {
             @Override
             public void onClick(View v) {
 
-                if (dicembre.isChecked() == false) {
+                if (!dicembre.isChecked()) {
                     dicembre.setChecked(true);
                     iscritto.setDicembre("pagato");
                     notificaPagamento(R.string.dec);
@@ -247,7 +269,7 @@ public class PagamentiIscritto extends GymRegisterBaseActivity {
             @Override
             public void onClick(View v) {
 
-                if (gennaio.isChecked() == false) {
+                if (!gennaio.isChecked()) {
                     gennaio.setChecked(true);
                     iscritto.setGennaio("pagato");
                     notificaPagamento(R.string.jan);
@@ -278,7 +300,7 @@ public class PagamentiIscritto extends GymRegisterBaseActivity {
             @Override
             public void onClick(View v) {
 
-                if (febbraio.isChecked() == false) {
+                if (!febbraio.isChecked()) {
                     febbraio.setChecked(true);
                     iscritto.setFebbraio("pagato");
                     notificaPagamento(R.string.feb);
@@ -310,7 +332,7 @@ public class PagamentiIscritto extends GymRegisterBaseActivity {
             @Override
             public void onClick(View v) {
 
-                if (marzo.isChecked() == false) {
+                if (!marzo.isChecked()) {
                     marzo.setChecked(true);
                     iscritto.setMarzo("pagato");
                     notificaPagamento(R.string.mar);
@@ -341,7 +363,7 @@ public class PagamentiIscritto extends GymRegisterBaseActivity {
             @Override
             public void onClick(View v) {
 
-                if (aprile.isChecked() == false) {
+                if (!aprile.isChecked()) {
                     aprile.setChecked(true);
                     iscritto.setAprile("pagato");
                     notificaPagamento(R.string.apr);
@@ -372,7 +394,7 @@ public class PagamentiIscritto extends GymRegisterBaseActivity {
             @Override
             public void onClick(View v) {
 
-                if (maggio.isChecked() == false) {
+                if (!maggio.isChecked()) {
                     maggio.setChecked(true);
                     iscritto.setMaggio("pagato");
                     notificaPagamento(R.string.mag);
@@ -403,7 +425,7 @@ public class PagamentiIscritto extends GymRegisterBaseActivity {
             @Override
             public void onClick(View v) {
 
-                if (giugno.isChecked() == false) {
+                if (!giugno.isChecked()) {
                     giugno.setChecked(true);
                     iscritto.setGiugno("pagato");
                     notificaPagamento(R.string.jun);
@@ -433,7 +455,7 @@ public class PagamentiIscritto extends GymRegisterBaseActivity {
             @Override
             public void onClick(View v) {
 
-                if (luglio.isChecked() == false) {
+                if (!luglio.isChecked()) {
                     luglio.setChecked(true);
                     iscritto.setLuglio("pagato");
                     notificaPagamento(R.string.jul);
@@ -463,7 +485,7 @@ public class PagamentiIscritto extends GymRegisterBaseActivity {
             @Override
             public void onClick(View v) {
 
-                if (agosto.isChecked() == false) {
+                if (!agosto.isChecked()) {
                     agosto.setChecked(true);
                     iscritto.setAgosto("pagato");
                     notificaPagamento(R.string.ago);
@@ -484,7 +506,7 @@ public class PagamentiIscritto extends GymRegisterBaseActivity {
 
         salvaModifiche();
 
-        getDettagliActivity(posizione, iscritto, corso);
+        //getDettagliActivity(posizione, iscritto, corso);
 
         finish();
     }
@@ -504,10 +526,13 @@ public class PagamentiIscritto extends GymRegisterBaseActivity {
         QueryPagamento pagamento = QueryPagamento.getInstance(this);
 
         try {
-            pagamento.inizializza(iscritto, corso);
+            if (pagamento.controllaEsistenzaRecord(iscritto)) {
+                pagamento.update(iscritto);
+            } else {
+                pagamento.inizializza(iscritto, corso);
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
-            pagamento.update(iscritto);
+            Log.e("Errore SQL", e.getMessage(), e);
         }
 
         salvaDatabaseImporti();
@@ -558,12 +583,14 @@ public class PagamentiIscritto extends GymRegisterBaseActivity {
 
         QueryImporti database = QueryImporti.getInstance(this);
         try {
-            database.inserisciImporti(iscritto, corso);
+            if (database.controllaEsistenzaRecord(iscritto, corso)) {
+                database.updateImporti(iscritto);
+            } else {
+                database.inserisciImporti(iscritto, corso);
+            }
 
         } catch (SQLiteConstraintException exception) {
-            exception.printStackTrace();
-
-            database.updateImporti(iscritto);
+            Log.e("Errore SQL", exception.getMessage(), exception);
         }
     }
 

@@ -10,6 +10,7 @@ import android.util.Log;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -23,10 +24,10 @@ public class FileDialog {
     private static final String PARENT_DIR = "..";
     private final String TAG = getClass().getName();
     private final Activity activity;
+    private final ListenerList<FileSelectedListener> fileListenerList = new ListenerList<FileDialog.FileSelectedListener>();
+    private final ListenerList<DirectorySelectedListener> dirListenerList = new ListenerList<FileDialog.DirectorySelectedListener>();
     private String[] fileList;
     private File currentPath;
-    private ListenerList<FileSelectedListener> fileListenerList = new ListenerList<FileDialog.FileSelectedListener>();
-    private ListenerList<DirectorySelectedListener> dirListenerList = new ListenerList<FileDialog.DirectorySelectedListener>();
     private boolean selectDirectoryOption;
     private String fileEndsWith;
 
@@ -71,7 +72,7 @@ public class FileDialog {
                     try {
                         loadFileList(chosenFile);
                     } catch (NullPointerException e) {
-                        e.printStackTrace();
+                        Log.e("Errore", e.getMessage(), e);
                     }
                     dialog.cancel();
                     dialog.dismiss();
@@ -138,15 +139,13 @@ public class FileDialog {
                     if (!sel.canRead()) return false;
                     if (selectDirectoryOption) return sel.isDirectory();
                     else {
-                        boolean endsWith = fileEndsWith != null ? filename.toLowerCase().endsWith(fileEndsWith) : true;
+                        boolean endsWith = fileEndsWith == null || filename.toLowerCase().endsWith(fileEndsWith);
                         return endsWith || sel.isDirectory();
                     }
                 }
             };
             String[] fileList1 = path.list(filter);
-            for (String file : fileList1) {
-                r.add(file);
-            }
+            Collections.addAll(r, fileList1);
         }
         fileList = r.toArray(new String[]{});
     }

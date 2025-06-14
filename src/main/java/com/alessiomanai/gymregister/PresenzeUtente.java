@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteConstraintException;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,12 +19,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.alessiomanai.gymregister.classi.Corso;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
 import com.alessiomanai.gymregister.classi.Iscritto;
 import com.alessiomanai.gymregister.classi.Presenza;
 import com.alessiomanai.gymregister.database.QueryPresenze;
-import com.alessiomanai.gymregister.utils.activity.ExtrasConstants;
 import com.alessiomanai.gymregister.utils.ListatoreDettaglioPresenze;
+import com.alessiomanai.gymregister.utils.activity.ExtrasConstants;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,22 +37,32 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Objects;
 
 public class PresenzeUtente extends Activity implements AdapterView.OnItemSelectedListener {
 
+    ArrayList<Presenza> presenzeSelezionate = new ArrayList<>();
+    ImageButton ordinaAsc, ordinaDesc, aggiungiPresenza;
     private Iscritto iscritto;
     private ArrayList<Presenza> elencoPresenze = new ArrayList<>();
     private ListView list1;
     private ListatoreDettaglioPresenze adapter;
-    ArrayList<Presenza> presenzeSelezionate = new ArrayList<>();
-    ImageButton ordinaAsc, ordinaDesc, aggiungiPresenza;
     private DatePickerDialog.OnDateSetListener mDateSetListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_presenze_utente);
+
+        View root = findViewById(R.id.parentRelativePresenzeUtente);
+
+        ViewCompat.setOnApplyWindowInsetsListener(root, new OnApplyWindowInsetsListener() {
+            @Override
+            public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
+                int top = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top;
+                v.setPadding(0, top, 0, 0);
+                return insets;
+            }
+        });
 
         iscritto = (Iscritto) getIntent().getExtras().get(ExtrasConstants.ISCRITTO);
 
@@ -75,10 +89,9 @@ public class PresenzeUtente extends Activity implements AdapterView.OnItemSelect
         spinner.setAdapter(adapterSpinner);
 
         try {
-            QueryPresenze database = (QueryPresenze) QueryPresenze.getInstance(this);
+            QueryPresenze database = QueryPresenze.getInstance(this);
             elencoPresenze = database.presenzeIscritto(iscritto);
-        } catch (NullPointerException ne){
-            ne.printStackTrace();
+        } catch (NullPointerException ne) {
             Toast.makeText(this,
                     "Something went wrong. Please delete user", Toast.LENGTH_LONG).show();
         }
@@ -96,7 +109,7 @@ public class PresenzeUtente extends Activity implements AdapterView.OnItemSelect
 
                 } catch (ParseException e) {
 
-                    e.printStackTrace();
+                    Log.e("Errore parsing data", e.getMessage(), e);
                 }
 
                 return convertedDate.compareTo(convertedDate2);
@@ -130,7 +143,7 @@ public class PresenzeUtente extends Activity implements AdapterView.OnItemSelect
 
                         } catch (ParseException e) {
 
-                            e.printStackTrace();
+                            Log.e("Errore parsing", e.getMessage(), e);
                         }
 
                         return convertedDate.compareTo(convertedDate2);
@@ -150,7 +163,7 @@ public class PresenzeUtente extends Activity implements AdapterView.OnItemSelect
 
                         } catch (ParseException e) {
 
-                            e.printStackTrace();
+                            Log.e("Errore durante il parsing", e.getMessage(), e);
                         }
 
                         return convertedDate.compareTo(convertedDate2);
@@ -179,7 +192,7 @@ public class PresenzeUtente extends Activity implements AdapterView.OnItemSelect
 
                         } catch (ParseException e) {
 
-                            e.printStackTrace();
+                            Log.e("Errore durante il parsing della data", e.getMessage(), e);
                         }
 
                         return convertedDate2.compareTo(convertedDate);
@@ -199,7 +212,7 @@ public class PresenzeUtente extends Activity implements AdapterView.OnItemSelect
 
                         } catch (ParseException e) {
 
-                            e.printStackTrace();
+                            Log.e("Errore formato data", e.getMessage(), e);
                         }
 
                         return convertedDate2.compareTo(convertedDate);
@@ -240,7 +253,7 @@ public class PresenzeUtente extends Activity implements AdapterView.OnItemSelect
 
                 String mese = Integer.toString(month);
 
-                if (month >= 1 && month <= 9){  //per visualizzare lo zero iniziale
+                if (month >= 1 && month <= 9) {  //per visualizzare lo zero iniziale
 
                     mese = "0" + mese;
 
@@ -256,7 +269,7 @@ public class PresenzeUtente extends Activity implements AdapterView.OnItemSelect
 
                 try {
 
-                    QueryPresenze database = (QueryPresenze) QueryPresenze.getInstance(getApplicationContext());
+                    QueryPresenze database = QueryPresenze.getInstance(getApplicationContext());
 
                     database.aggiungiPresenzaPrecedente(iscritto, iscritto.getPalestra(), data);
 
@@ -273,7 +286,7 @@ public class PresenzeUtente extends Activity implements AdapterView.OnItemSelect
 
                 } catch (SQLiteConstraintException error) {
 
-                    error.printStackTrace();
+                    Log.e("Errore SQL", error.getMessage(), error);
 
                     //finestra di conferma
                     AlertDialog.Builder builder = new AlertDialog.Builder(PresenzeUtente.this);

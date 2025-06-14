@@ -11,6 +11,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
 import com.alessiomanai.gymregister.classi.Corso;
 import com.alessiomanai.gymregister.database.QueryCorso;
 
@@ -25,13 +29,24 @@ public class EliminaPalestre extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_elimina_palestre);
 
-        QueryCorso database = (QueryCorso) QueryCorso.getInstance(this);
+        View root = findViewById(R.id.parentRelativeEliminaPalestre);
+
+        ViewCompat.setOnApplyWindowInsetsListener(root, new OnApplyWindowInsetsListener() {
+            @Override
+            public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
+                int top = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top;
+                v.setPadding(0, top, 0, 0);
+                return insets;
+            }
+        });
+
+        QueryCorso database = QueryCorso.getInstance(this);
         palestre = database.getElencoCorsi();
 
         if (palestre.size() > 0) {    //se ci sono palestre in memoria mostra la lista di selezione
 
             //collego la listview dell'inferfaccia
-            ListView list1 = (ListView) this.findViewById(R.id.listView);
+            ListView list1 = this.findViewById(R.id.listView);
             ListatorePalestre adapter = new ListatorePalestre(EliminaPalestre.this, palestre);
             list1.setAdapter(adapter);
 
@@ -115,7 +130,7 @@ public class EliminaPalestre extends Activity {
 
     void cancellaCorsoDatabase(int posizione) {
 
-        QueryCorso database = (QueryCorso) QueryCorso.getInstance(this);
+        QueryCorso database = QueryCorso.getInstance(this);
 
         database.eliminaCorso(palestre.get(posizione));
 

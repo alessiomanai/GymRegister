@@ -13,8 +13,8 @@ import android.util.Log;
 public class Query extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 7;  //13/08/2020
-    private SQLiteDatabase db;
     protected static Query instance;
+    private final SQLiteDatabase db;
 
     protected Query(Context context) {
         super(context, Tabelle.InfoTabelle.DATABASE_NAME, null, DATABASE_VERSION);

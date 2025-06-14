@@ -1,7 +1,6 @@
 package com.alessiomanai.gymregister.classi;
 
 import android.graphics.drawable.Drawable;
-import android.widget.ImageView;
 
 import java.io.Serializable;
 import java.util.Calendar;

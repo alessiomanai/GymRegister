@@ -13,13 +13,12 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
 
-public class Save extends Activity{
+public class Save extends Activity {
 
     public Save() {
     }
 
-    boolean users(){
-
+    boolean users() {
 
 
         return true;
@@ -64,7 +63,7 @@ public class Save extends Activity{
 
 
             //salva i dati nel file
-            for(int i = 0; i < iscritti.size(); i++) {
+            for (int i = 0; i < iscritti.size(); i++) {
 
                 fileid.write(iscritti.get(i).getId());    //salva gli id
 

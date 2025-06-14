@@ -7,41 +7,41 @@ import java.io.File;
 
 public class DocumentCreator {
 
+    private final Context context;
+    private final File outputFile;
     private String document;
-    private Context context;
-    private File outputFile;
 
-    public DocumentCreator(Context context, File file){
+    public DocumentCreator(Context context, File file) {
         this.context = context;
         this.outputFile = file;
         this.document = this.newDocument();
     }
 
-    private String newDocument(){
+    private String newDocument() {
         return "<html><body>";
     }
 
-    public void endDocument(){
+    public void endDocument() {
         this.document += "</body></html>";
     }
 
-    public void setTitle(String title){
+    public void setTitle(String title) {
         this.document += "<h2>" + title + "</h2>";
     }
 
-    public void setChapter(String chapter){
+    public void setChapter(String chapter) {
         this.document += "<h3>" + chapter + "</h3>";
     }
 
-    public void setH4Chapter(String chapter){
+    public void setH4Chapter(String chapter) {
         this.document += "<h4>" + chapter + "</h4>";
     }
 
-    public void newLine(String line){
+    public void newLine(String line) {
         this.document += line + "<br/>";
     }
 
-    public void addLine(String line){
+    public void addLine(String line) {
         this.document += line + " ";
     }
 

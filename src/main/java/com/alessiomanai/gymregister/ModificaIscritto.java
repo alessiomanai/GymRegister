@@ -11,6 +11,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
 import com.alessiomanai.gymregister.classi.Corso;
 import com.alessiomanai.gymregister.classi.Iscritto;
 import com.alessiomanai.gymregister.database.QueryCertificati;
@@ -23,11 +27,11 @@ import java.util.Calendar;
 
 public class ModificaIscritto extends GymRegisterBaseActivity {
 
+    String nome, indirizzo, telefono, datadinascita, citta, stringCertificatoMedico;
+    EditText nomed, indirizzod, telefonod, datadinascitad, cittad, certificatoMedico;
     private Iscritto iscritto;
     private Corso palestra;
     private int posizione;    //posizione dell'iscritto all'interno della listview
-    String nome, indirizzo, telefono, datadinascita, citta, stringCertificatoMedico;
-    EditText nomed, indirizzod, telefonod, datadinascitad, cittad, certificatoMedico;
     private DatePickerDialog.OnDateSetListener mDateSetListener, certificatoDateSetListener;
 
 
@@ -35,6 +39,17 @@ public class ModificaIscritto extends GymRegisterBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modifica_iscritto);
+
+        View root = findViewById(R.id.parentRelativeModificaIscritto);
+
+        ViewCompat.setOnApplyWindowInsetsListener(root, new OnApplyWindowInsetsListener() {
+            @Override
+            public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
+                int top = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top;
+                v.setPadding(0, top, 0, 0);
+                return insets;
+            }
+        });
 
         palestra = (Corso) getIntent().getExtras().get(ExtrasConstants.CORSO);
         posizione = (int) getIntent().getExtras().get(ExtrasConstants.POSITION);
@@ -146,7 +161,7 @@ public class ModificaIscritto extends GymRegisterBaseActivity {
 
                     conferma();
 
-                    getGestioneIscritti(palestra);
+                    //getGestioneIscritti(palestra);
 
                     finish();
 
@@ -178,11 +193,11 @@ public class ModificaIscritto extends GymRegisterBaseActivity {
      */
     void salva() {
 
-        QueryIscritto database = (QueryIscritto) QueryIscritto.getInstance(this);
+        QueryIscritto database = QueryIscritto.getInstance(this);
 
         database.aggiorna(iscritto);
 
-        QueryCertificati certificati = (QueryCertificati) QueryCertificati.getInstance(this);
+        QueryCertificati certificati = QueryCertificati.getInstance(this);
 
         if (certificati.certificatoExists(iscritto)) {
             certificati.update(iscritto, iscritto.getCertificatoMedico());

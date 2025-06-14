@@ -2,6 +2,7 @@ package com.alessiomanai.gymregister.utils;
 
 import android.content.Context;
 import android.os.Environment;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.alessiomanai.gymregister.R;
@@ -13,8 +14,8 @@ import java.nio.channels.FileChannel;
 
 public class BackupManager {
 
-    private String databaseName = "gymRegister.db";
-    private String databaseBackup = "gymRegister_backup.db";
+    private final String databaseName = "gymRegister.db";
+    private final String databaseBackup = "gymRegister_backup.db";
 
     public BackupManager() {
     }
@@ -27,7 +28,7 @@ public class BackupManager {
             File data = Environment.getDataDirectory();
 
             if (sd.canWrite()) {
-                String currentDBPath = "//data//" + context.getPackageName() + "//databases//" + databaseName + "";
+                String currentDBPath = "//data//" + context.getPackageName() + "//databases//" + databaseName;
                 File currentDB = new File(data, currentDBPath);
                 File backupDB = new File(sd, databaseBackup);
 
@@ -40,7 +41,7 @@ public class BackupManager {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("Errore durante il backup", e.getMessage(), e);
             Toast.makeText(context.getApplicationContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
 
             return false;
@@ -59,7 +60,7 @@ public class BackupManager {
             File data = Environment.getDataDirectory();
 
             if (sd.canWrite()) {
-                String currentDBPath = "//data//" + context.getPackageName() + "//databases//" + databaseName + "";
+                String currentDBPath = "//data//" + context.getPackageName() + "//databases//" + databaseName;
                 File currentDB = new File(data, currentDBPath);
                 File backupDB = new File(sd, databaseBackup);
 
@@ -72,7 +73,7 @@ public class BackupManager {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("Errore durante il restore", e.getMessage(), e);
 
             Toast.makeText(context.getApplicationContext(), R.string.restorerr, Toast.LENGTH_SHORT).show();
 

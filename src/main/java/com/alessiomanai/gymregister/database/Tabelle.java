@@ -4,7 +4,6 @@ import android.provider.BaseColumns;
 
 /**
  * Created by alessio on 01/09/16.
- *
  */
 public class Tabelle {
 

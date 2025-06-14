@@ -10,6 +10,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
 import com.alessiomanai.gymregister.classi.Corso;
 import com.alessiomanai.gymregister.classi.Iscritto;
 import com.alessiomanai.gymregister.database.QueryCorso;
@@ -30,13 +34,24 @@ public class CambiaCorso extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cambia_corso);
 
+        View root = findViewById(R.id.linearLayoutCambiaCorso);
+
+        ViewCompat.setOnApplyWindowInsetsListener(root, new OnApplyWindowInsetsListener() {
+            @Override
+            public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
+                int top = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top;
+                v.setPadding(0, top, 0, 0);
+                return insets;
+            }
+        });
+
         iscritto = (Iscritto) getIntent().getExtras().get(ExtrasConstants.ISCRITTO);
         istruzioni = findViewById(R.id.istruzioniCambio);
 
         testo = getString(R.string.istruzioniCambio) + " " + iscritto.getId();
         istruzioni.setText(testo);
 
-        QueryCorso database = (QueryCorso) QueryCorso.getInstance(this);
+        QueryCorso database = QueryCorso.getInstance(this);
         corsi = database.getElencoCorsi();
 
         if (corsi.size() > 0) {    //se ci sono palestre in memoria mostra la lista di selezione

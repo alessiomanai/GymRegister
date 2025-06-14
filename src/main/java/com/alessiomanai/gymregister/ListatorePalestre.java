@@ -14,8 +14,8 @@ import java.util.ArrayList;
 
 public class ListatorePalestre extends ArrayAdapter<Corso> {
 
-    private Activity context;
-    private ArrayList<Corso> corso;
+    private final Activity context;
+    private final ArrayList<Corso> corso;
 
     public ListatorePalestre(Activity context, ArrayList<Corso> corso) {
 
@@ -32,7 +32,7 @@ public class ListatorePalestre extends ArrayAdapter<Corso> {
 
         View rowView = inflater.inflate(R.layout.listatore, null, true);    //infila il file xml nell' intent
 
-        TextView txtTitle = (TextView) rowView.findViewById(R.id.nomeT);
+        TextView txtTitle = rowView.findViewById(R.id.nomeT);
 
         txtTitle.setText(corso.get(position).toString());
 

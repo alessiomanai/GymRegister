@@ -36,26 +36,22 @@ public class QueryCertificati extends Query {
 
         stmt.execute();
 
+        database.close();
     }
 
     public String getCertificatoMedico(Iscritto iscritto) {
 
-        try {
-
-            SQLiteDatabase database = instance.getReadableDatabase();
-
+        try (SQLiteDatabase database = instance.getReadableDatabase()) {
             Cursor risultati = database.rawQuery("SELECT data FROM Certificato WHERE iscritto =" + iscritto.getIdDatabase(), null);
 
             if (!risultati.isAfterLast()) {
-
                 risultati.moveToFirst();
-
                 return risultati.getString(0);
             } else {
                 return null;
             }
         } catch (NullPointerException e) {
-            e.printStackTrace();
+            Log.e("Errore SQL", e.getMessage(), e);
         }
 
         return null;

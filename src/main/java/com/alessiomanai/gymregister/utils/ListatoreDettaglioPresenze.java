@@ -3,17 +3,14 @@ package com.alessiomanai.gymregister.utils;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.alessiomanai.gymregister.PresenzeUtente;
 import com.alessiomanai.gymregister.R;
 import com.alessiomanai.gymregister.classi.Presenza;
 import com.alessiomanai.gymregister.database.QueryPresenze;
@@ -66,7 +63,7 @@ public class ListatoreDettaglioPresenze extends ArrayAdapter<Presenza> {
                         // Confermato!
 
 
-                        QueryPresenze database = (QueryPresenze) QueryPresenze.getInstance(builder.getContext());
+                        QueryPresenze database = QueryPresenze.getInstance(builder.getContext());
 
                         database.eliminaPresenzaVecchia(presenze.get(position).getIscritto(),
                                 presenze.get(position).getData());

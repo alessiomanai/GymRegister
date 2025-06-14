@@ -16,10 +16,13 @@ import java.util.ArrayList;
  */
 public class QueryIscritto extends Query {
 
-    private String[] iscritto = new String[]{"id", "nome", "dataDiNascita", "telefono", "indirizzo",
+    private static QueryIscritto instance;
+    private final String[] iscritto = new String[]{"id", "nome", "dataDiNascita", "telefono", "indirizzo",
             "citta", "corso", "fotoProfilo", "notePath"};
 
-    private static QueryIscritto instance;
+    protected QueryIscritto(Context context) {
+        super(context);
+    }
 
     public static QueryIscritto getInstance(Context context) {
         if (instance == null) {
@@ -27,10 +30,6 @@ public class QueryIscritto extends Query {
         }
 
         return instance;
-    }
-
-    protected QueryIscritto(Context context) {
-        super(context);
     }
 
     /**
@@ -54,6 +53,7 @@ public class QueryIscritto extends Query {
         stmt.bindString(3, iscritto.getCitta());
         stmt.execute();
 
+        database.close();
     }
 
     /**
@@ -164,6 +164,7 @@ public class QueryIscritto extends Query {
 
         int last = Integer.parseInt(risultati.getString(0));
 
+        database.close();
         return last;
 
     }

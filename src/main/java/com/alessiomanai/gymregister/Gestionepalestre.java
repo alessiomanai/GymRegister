@@ -9,9 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,6 +17,12 @@ import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.alessiomanai.gymregister.classi.Corso;
 import com.alessiomanai.gymregister.database.QueryCorso;
@@ -31,8 +34,8 @@ import java.util.ArrayList;
 
 public class Gestionepalestre extends Activity {
 
-    private ArrayList<Corso> palestre = new ArrayList<>(); //stringhe selezione palestre
     final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1000;
+    private ArrayList<Corso> palestre = new ArrayList<>(); //stringhe selezione palestre
 
     /***
      * avvio del codice
@@ -41,6 +44,17 @@ public class Gestionepalestre extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gestionepalestre);
+
+        View root = findViewById(R.id.linearLayout_1);
+
+        ViewCompat.setOnApplyWindowInsetsListener(root, new OnApplyWindowInsetsListener() {
+            @Override
+            public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
+                int top = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top;
+                v.setPadding(0, top, 0, 0);
+                return insets;
+            }
+        });
 
         View noPalestre = findViewById(R.id.addGYM);
 
@@ -84,7 +98,7 @@ public class Gestionepalestre extends Activity {
             noPalestre.setVisibility(View.GONE);
 
             //collego la listview dell'inferfaccia
-            ListView list1 = (ListView) this.findViewById(R.id.listView);
+            ListView list1 = this.findViewById(R.id.listView);
             ListatorePalestre adapter = new ListatorePalestre(Gestionepalestre.this, palestre);
             list1.setAdapter(adapter);
 
@@ -119,7 +133,7 @@ public class Gestionepalestre extends Activity {
 
                     palestre.clear();
 
-                    finish();
+                    //finish();
 
                 }
             });  //fine bottone
@@ -127,13 +141,22 @@ public class Gestionepalestre extends Activity {
         }
     }    //fine oncreate
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        palestre = caricaDatabase();
+
+        ListView list1 = this.findViewById(R.id.listView);
+        ListatorePalestre adapter = new ListatorePalestre(Gestionepalestre.this, palestre);
+        list1.setAdapter(adapter);
+    }
 
     /**
      * carica i dettagli delle palestre da database
      */
     ArrayList<Corso> caricaDatabase() {
 
-        QueryCorso database = (QueryCorso) QueryCorso.getInstance(this);
+        QueryCorso database = QueryCorso.getInstance(this);
         return database.getElencoCorsi();
     }
 
@@ -183,9 +206,9 @@ public class Gestionepalestre extends Activity {
                 //avvia la finestra corrispondente
                 startActivity(aggiungi);
 
-                palestre.clear();
+                //palestre.clear();
 
-                finish();
+                //finish();
 
             }
         });  //fine bottone
@@ -200,9 +223,9 @@ public class Gestionepalestre extends Activity {
                 //avvia la finestra corrispondente
                 startActivity(aggiungi);
 
-                palestre.clear();
+                //palestre.clear();
 
-                finish();
+                //finish();
 
             }
         });  //fine bottone
@@ -218,9 +241,9 @@ public class Gestionepalestre extends Activity {
                 //avvia la finestra corrispondente
                 startActivity(elimina);
 
-                palestre.clear();
+                //palestre.clear();
 
-                finish();
+                //finish();
             }
         });
 
@@ -316,7 +339,7 @@ public class Gestionepalestre extends Activity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
                 // If request is cancelled, the result arrays are empty.
@@ -331,7 +354,6 @@ public class Gestionepalestre extends Activity {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                 }
-                return;
             }
 
             // other 'case' lines to check for other

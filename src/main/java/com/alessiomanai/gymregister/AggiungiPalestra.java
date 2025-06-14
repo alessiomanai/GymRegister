@@ -1,7 +1,6 @@
 package com.alessiomanai.gymregister;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
@@ -9,6 +8,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.alessiomanai.gymregister.classi.Corso;
 import com.alessiomanai.gymregister.database.QueryCorso;
@@ -25,11 +28,22 @@ public class AggiungiPalestra extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_aggiungi_palestra);
 
+        View root = findViewById(R.id.linearLayout);
+
+        ViewCompat.setOnApplyWindowInsetsListener(root, new OnApplyWindowInsetsListener() {
+            @Override
+            public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
+                int top = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top;
+                v.setPadding(0, top, 0, 0);
+                return insets;
+            }
+        });
+
         //collego il codice alla gui
         nomepalestra = findViewById(R.id.nec1);
         conferma = findViewById(R.id.confermabut1);
 
-        final QueryCorso database = (QueryCorso) QueryCorso.getInstance(this);
+        final QueryCorso database = QueryCorso.getInstance(this);
 
         /**alla pressione del bottone salva i dati*/
         conferma.setOnClickListener(new View.OnClickListener() {
@@ -60,9 +74,9 @@ public class AggiungiPalestra extends Activity {
                     Toast.makeText(AggiungiPalestra.this, R.string.addgim, Toast.LENGTH_LONG).show();
 
                     //torna all'activity precedente
-                    Intent gestione = new Intent(getBaseContext(), Gestionepalestre.class);
+                    //Intent gestione = new Intent(getBaseContext(), Gestionepalestre.class);
                     //avvia la finestra corrispondente
-                    startActivity(gestione);
+                    //startActivity(gestione);
 
                     finish();
                 }
@@ -77,10 +91,10 @@ public class AggiungiPalestra extends Activity {
     @Override
     public void onBackPressed() {
 
-        Intent asd = new Intent(getBaseContext(), Gestionepalestre.class);
+        //Intent asd = new Intent(getBaseContext(), Gestionepalestre.class);
 
         //avvia la finestra corrispondente
-        startActivity(asd);
+        //startActivity(asd);
 
         finish();
     }    //fine tasto back

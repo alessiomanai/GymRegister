@@ -3,6 +3,7 @@ package com.alessiomanai.gymregister.utils.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.alessiomanai.gymregister.Aggiungi;
 import com.alessiomanai.gymregister.CambiaCorso;
@@ -17,6 +18,8 @@ import com.alessiomanai.gymregister.R;
 import com.alessiomanai.gymregister.Risultati;
 import com.alessiomanai.gymregister.classi.Corso;
 import com.alessiomanai.gymregister.classi.Iscritto;
+import com.alessiomanai.gymregister.classi.Pagamento;
+import com.alessiomanai.gymregister.database.QueryPagamento;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -114,6 +117,13 @@ public class GymRegisterBaseActivity extends Activity {
 
     protected String caricaRiepilogoPagamenti(Iscritto iscritto, Context context) {
 
+        QueryPagamento queryPagamento = QueryPagamento.getInstance(this);
+        Pagamento pagamento = queryPagamento.getPagamenti(iscritto);
+
+        if (pagamento != null) {
+            iscritto.setPagamenti(pagamento);
+        }
+
         String riepilogo = context.getResources().getString(R.string.riepilogo);
         boolean nessunPagamento = true;
 
@@ -122,7 +132,7 @@ public class GymRegisterBaseActivity extends Activity {
         try {
 
             if (iscritto.getIscrizione().charAt(0) == 'p') {
-                riepilogo += "" + context.getResources().getString(R.string.iscrizione);
+                riepilogo += context.getResources().getString(R.string.iscrizione);
                 nessunPagamento = false;
             }
 
@@ -191,7 +201,7 @@ public class GymRegisterBaseActivity extends Activity {
             }
 
         } catch (NullPointerException e) {
-            e.printStackTrace();
+            Log.e("Errore nel caricamento dei pagamenti", e.getMessage(), e);
         }
 
         return riepilogo;

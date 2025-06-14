@@ -9,7 +9,7 @@ import java.util.List;
 
 class ListenerList<L> {
 
-    private List<L> listenerList = new ArrayList<L>();
+    private final List<L> listenerList = new ArrayList<L>();
 
     public void add(L listener) {
         listenerList.add(listener);

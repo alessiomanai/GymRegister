@@ -1,13 +1,13 @@
 package com.alessiomanai.gymregister.database;
 
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.alessiomanai.gymregister.classi.Corso;
 import com.alessiomanai.gymregister.classi.Iscritto;
+import com.alessiomanai.gymregister.classi.Pagamento;
 
 import java.util.ArrayList;
 
@@ -19,16 +19,16 @@ public class QueryPagamento extends Query {
 
     private static QueryPagamento instance;
 
+    protected QueryPagamento(Context context) {
+        super(context);
+    }
+
     public static QueryPagamento getInstance(Context context) {
         if (instance == null) {
             instance = new QueryPagamento(context);
         }
 
         return instance;
-    }
-
-    protected QueryPagamento(Context context) {
-        super(context);
     }
 
     public void inizializza(Iscritto iscritto, Corso corso) {
@@ -51,6 +51,7 @@ public class QueryPagamento extends Query {
 
         Log.v("Corso", "aggiunto");
 
+        db.close();
     }
 
     /**
@@ -79,16 +80,9 @@ public class QueryPagamento extends Query {
 
         Log.v("Corso", "aggiunto");
 
+        database.close();
     }
 
-    public Cursor getPagamenti() {
-
-        SQLiteDatabase database = instance.getReadableDatabase();
-        Cursor informazioni = database.query(Tabelle.InfoTabelle.tabelle[3], Tabelle.InfoTabelle.pagamento, null,
-                null, null, null, null);
-
-        return informazioni;
-    }
 
     public ArrayList<String> utentiNotPay(String mese, String month, Corso corso) {
 
@@ -119,6 +113,70 @@ public class QueryPagamento extends Query {
 
         return nomi;
 
+    }
+
+    public Pagamento getPagamenti(Iscritto iscritto) {
+
+        SQLiteDatabase db = instance.getReadableDatabase();
+
+        String selection = "iscritto = ? AND corso = ?";
+        String[] selectionArgs = {String.valueOf(iscritto.getIdDatabase()), String.valueOf(iscritto.getIdCorso())};
+
+        Cursor cursor = db.query(
+                Tabelle.InfoTabelle.tabelle[3],
+                Tabelle.InfoTabelle.pagamento,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+        );
+
+        Pagamento pagamento = null;
+
+        if (cursor != null && cursor.moveToFirst()) {
+            String iscrizione = cursor.getString(cursor.getColumnIndexOrThrow("iscrizione"));
+            String settembre = cursor.getString(cursor.getColumnIndexOrThrow("settembre"));
+            String ottobre = cursor.getString(cursor.getColumnIndexOrThrow("ottobre"));
+            String novembre = cursor.getString(cursor.getColumnIndexOrThrow("novembre"));
+            String dicembre = cursor.getString(cursor.getColumnIndexOrThrow("dicembre"));
+            String gennaio = cursor.getString(cursor.getColumnIndexOrThrow("gennaio"));
+            String febbraio = cursor.getString(cursor.getColumnIndexOrThrow("febbraio"));
+            String marzo = cursor.getString(cursor.getColumnIndexOrThrow("marzo"));
+            String aprile = cursor.getString(cursor.getColumnIndexOrThrow("aprile"));
+            String maggio = cursor.getString(cursor.getColumnIndexOrThrow("maggio"));
+            String giugno = cursor.getString(cursor.getColumnIndexOrThrow("giugno"));
+            String luglio = cursor.getString(cursor.getColumnIndexOrThrow("luglio"));
+            String agosto = cursor.getString(cursor.getColumnIndexOrThrow("agosto"));
+
+            pagamento = new Pagamento(iscrizione, settembre, ottobre, novembre, dicembre,
+                    gennaio, febbraio, marzo, aprile, maggio, giugno, luglio, agosto);
+
+            cursor.close();
+        }
+
+        db.close();
+        return pagamento;
+    }
+
+    public Boolean controllaEsistenzaRecord(Iscritto iscritto) {
+
+        SQLiteDatabase db = instance.getReadableDatabase();
+
+        String selection = "iscritto = ? AND corso = ?";
+        String[] selectionArgs = {String.valueOf(iscritto.getIdDatabase()), String.valueOf(iscritto.getIdCorso())};
+
+        Cursor cursor = db.query(
+                Tabelle.InfoTabelle.tabelle[3],
+                Tabelle.InfoTabelle.pagamento,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+        );
+
+        return cursor.getCount() > 0;
     }
 
 }

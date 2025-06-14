@@ -1,7 +1,5 @@
 package com.alessiomanai.gymregister;
 
-import java.util.ArrayList;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,28 +7,44 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.alessiomanai.gymregister.classi.Corso;
 import com.alessiomanai.gymregister.classi.Iscritto;
 import com.alessiomanai.gymregister.database.QueryIscritto;
-import com.alessiomanai.gymregister.utils.activity.ExtrasConstants;
 import com.alessiomanai.gymregister.utils.ListatoreIscritti;
+import com.alessiomanai.gymregister.utils.activity.ExtrasConstants;
 import com.alessiomanai.gymregister.utils.activity.GymRegisterBaseActivity;
+
+import java.util.ArrayList;
 
 
 public class Risultati extends GymRegisterBaseActivity {
 
-    private ArrayList<Iscritto> risultati = new ArrayList<>();
     EditText search;
     ImageButton cerca;
     Corso palestra;
+    private ArrayList<Iscritto> risultati = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_risultati);
+
+        View root = findViewById(R.id.parentRelativeRisultati);
+
+        ViewCompat.setOnApplyWindowInsetsListener(root, new OnApplyWindowInsetsListener() {
+            @Override
+            public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
+                int top = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top;
+                v.setPadding(0, top, 0, 0);
+                return insets;
+            }
+        });
 
         palestra = (Corso) getIntent().getExtras().get(ExtrasConstants.CORSO);
         risultati = (ArrayList<Iscritto>) getIntent().getExtras().get(ExtrasConstants.ISCRITTO);
@@ -61,9 +75,9 @@ public class Risultati extends GymRegisterBaseActivity {
 
                     getDettagliActivity(position, risultati.get(position), risultati.get(position).getPalestra());
 
-                    risultati.clear();
-
-                    finish();
+//                    risultati.clear();
+//
+//                    finish();
                 }
             });
 
@@ -77,7 +91,7 @@ public class Risultati extends GymRegisterBaseActivity {
 
         chiave = search.getText().toString();
 
-        QueryIscritto database = (QueryIscritto) QueryIscritto.getInstance(this);
+        QueryIscritto database = QueryIscritto.getInstance(this);
         risultati = database.cercaIscritto(palestra, chiave);
 
         if (risultati.size() != 0) {
@@ -98,9 +112,9 @@ public class Risultati extends GymRegisterBaseActivity {
     @Override
     public void onBackPressed() {
 
-        risultati.clear();
-
-        getGestioneIscritti(palestra);
+//        risultati.clear();
+//
+//        getGestioneIscritti(palestra);
 
         finish();
 

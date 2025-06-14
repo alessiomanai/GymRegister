@@ -12,6 +12,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
 import com.alessiomanai.gymregister.classi.Corso;
 import com.alessiomanai.gymregister.database.QueryCorso;
 
@@ -26,13 +30,24 @@ public class RinominaCorso extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rinomina_corso);
 
-        QueryCorso database = (QueryCorso) QueryCorso.getInstance(this);
+        View root = findViewById(R.id.parentRelativeRinominaCorso);
+
+        ViewCompat.setOnApplyWindowInsetsListener(root, new OnApplyWindowInsetsListener() {
+            @Override
+            public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
+                int top = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top;
+                v.setPadding(0, top, 0, 0);
+                return insets;
+            }
+        });
+
+        QueryCorso database = QueryCorso.getInstance(this);
         palestre = database.getElencoCorsi();
 
         if (palestre.size() > 0) {    //se ci sono palestre in memoria mostra la lista di selezione
 
             //collego la listview dell'inferfaccia
-            final ListView list1 = (ListView) this.findViewById(R.id.listViewRinomina);
+            final ListView list1 = this.findViewById(R.id.listViewRinomina);
             final ListatorePalestre adapter = new ListatorePalestre(RinominaCorso.this, palestre);
             list1.setAdapter(adapter);
 
@@ -69,7 +84,7 @@ public class RinominaCorso extends Activity {
 
                             } else {
 
-                                QueryCorso database = (QueryCorso) QueryCorso.getInstance(getApplicationContext());
+                                QueryCorso database = QueryCorso.getInstance(getApplicationContext());
                                 database.rinominaCorso(palestre.get(position), nuovoNome);
 
                                 palestre.get(position).setNome(nuovoNome);
@@ -106,7 +121,6 @@ public class RinominaCorso extends Activity {
         }
 
     }
-
 
 
     /***

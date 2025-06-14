@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.Editable;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
@@ -24,20 +25,24 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.alessiomanai.gymregister.classi.Corso;
 import com.alessiomanai.gymregister.classi.Iscritto;
 import com.alessiomanai.gymregister.database.QueryCertificati;
+import com.alessiomanai.gymregister.database.QueryImporti;
 import com.alessiomanai.gymregister.database.QueryIscritto;
 import com.alessiomanai.gymregister.database.QueryPagamento;
 import com.alessiomanai.gymregister.database.Tabelle;
 import com.alessiomanai.gymregister.utils.AppPermissionsUtils;
 import com.alessiomanai.gymregister.utils.BackupManager;
 import com.alessiomanai.gymregister.utils.DocumentCreator;
+import com.alessiomanai.gymregister.utils.GymRegisterConstants;
+import com.alessiomanai.gymregister.utils.ListatoreIscritti;
 import com.alessiomanai.gymregister.utils.activity.ExtrasConstants;
 import com.alessiomanai.gymregister.utils.activity.GymRegisterBaseActivity;
-import com.alessiomanai.gymregister.utils.ListatoreIscritti;
-import com.alessiomanai.gymregister.utils.GymRegisterConstants;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -56,11 +61,11 @@ import java.util.Comparator;
 public class GestioneIscritti extends GymRegisterBaseActivity {
 
     private final int REQUEST_WRITE_STORAGE = 112;
+    private final int WRITE_REQUEST_CODE = 122;
+    String text = "";
     private ArrayList<Iscritto> iscritti = new ArrayList<>();
     private Corso palestra;
-    String text = "";
     private View donotpay;
-    private final int WRITE_REQUEST_CODE = 122;
     private String toExportMemory;
 
     /***
@@ -71,6 +76,17 @@ public class GestioneIscritti extends GymRegisterBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gestione_iscritti);
 
+        View root = findViewById(R.id.parentRelativeUtenti);
+
+        ViewCompat.setOnApplyWindowInsetsListener(root, new OnApplyWindowInsetsListener() {
+            @Override
+            public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
+                int top = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top;
+                v.setPadding(0, top, 0, 0);
+                return insets;
+            }
+        });
+
         palestra = (Corso) getIntent().getExtras().get(ExtrasConstants.CORSO);
 
         donotpay = findViewById(R.id.notpayView);
@@ -79,7 +95,6 @@ public class GestioneIscritti extends GymRegisterBaseActivity {
         try {
             iscritti = caricaDatabase();
 
-            iscritti = caricaCertificati(iscritti);
         } catch (NullPointerException np) {
             Toast.makeText(this,
                     "Something went wrong. Please delete gym", Toast.LENGTH_LONG).show();
@@ -105,11 +120,41 @@ public class GestioneIscritti extends GymRegisterBaseActivity {
         try {
             pagamentiArretrati();   //funzionalità non presente in database corrotti
         } catch (NullPointerException ne) {
-            ne.printStackTrace();
+            Log.e("Pagamenti non trovati", ne.getMessage(), ne);
         }
 
     }    //fine onCreate
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            iscritti = caricaDatabase();
+        } catch (NullPointerException np) {
+            Toast.makeText(this,
+                    "Something went wrong. Please delete gym", Toast.LENGTH_LONG).show();
+        }
+
+
+        /**ordina gli iscritti prima di mostrarli a schermo**/
+        Collections.sort(iscritti, new Comparator<Iscritto>() {
+            public int compare(Iscritto s1, Iscritto s2) {
+                return s1.getId().compareTo(s2.getId());
+            }
+        });
+
+        //mostra il numero di iscritti
+        mostranumero();
+
+        //carica l'elenco
+        caricaelenco();
+
+        try {
+            pagamentiArretrati();   //funzionalità non presente in database corrotti
+        } catch (NullPointerException ne) {
+            Log.e("Pagamenti non trovati", ne.getMessage(), ne);
+        }
+    }
 
     /**
      * restore id over activity in pause for long time
@@ -123,9 +168,8 @@ public class GestioneIscritti extends GymRegisterBaseActivity {
         try {
             iscritti = caricaDatabase();
 
-            iscritti = caricaCertificati(iscritti);
         } catch (NullPointerException np) {
-            np.printStackTrace();
+            Log.e("Errore durante il caricamento", np.getMessage(), np);
         }
 
         /**ordina gli iscritti prima di mostrarli a schermo**/
@@ -147,7 +191,7 @@ public class GestioneIscritti extends GymRegisterBaseActivity {
         try {
             pagamentiArretrati();   //funzionalità non presente in database corrotti
         } catch (NullPointerException ne) {
-            ne.printStackTrace();
+            Log.e("Errore durante il caricamento arretrati", ne.getMessage(), ne);
         }
     }
 
@@ -176,7 +220,7 @@ public class GestioneIscritti extends GymRegisterBaseActivity {
                                     int position, long idonet) {    //a seconda della posizione (rilevata automaticamente) apro un profilo
 
                 getDettagliActivity(position, iscritti.get(position), palestra);
-                finish();
+                //finish();
             }
         });        //fine lista clickabile
 
@@ -186,11 +230,16 @@ public class GestioneIscritti extends GymRegisterBaseActivity {
 
         QueryIscritto database = QueryIscritto.getInstance(this);
 
-        return database.caricaIscritti(palestra);
+        ArrayList<Iscritto> iscrittoArrayList = database.caricaIscritti(palestra);
 
+        iscrittoArrayList = caricaCertificati(iscrittoArrayList);
+        iscrittoArrayList = caricaImporti(iscrittoArrayList);
+        iscrittoArrayList = caricaPagamenti(iscrittoArrayList);
+
+        return iscrittoArrayList;
     }
 
-    public ArrayList<Iscritto> caricaCertificati(ArrayList<Iscritto> iscritti) {
+    private ArrayList<Iscritto> caricaCertificati(ArrayList<Iscritto> iscritti) {
 
         QueryCertificati database = QueryCertificati.getInstance(this);
 
@@ -199,6 +248,29 @@ public class GestioneIscritti extends GymRegisterBaseActivity {
         }
 
         return iscritti;
+    }
+
+    private ArrayList<Iscritto> caricaImporti(ArrayList<Iscritto> iscritti) {
+
+        QueryImporti database = QueryImporti.getInstance(this);
+
+        for (int i = 0; i < iscritti.size(); i++) {
+            iscritti.get(i).setImporti(database.caricaImporti(iscritti.get(i), iscritti.get(i).getPalestra()));
+        }
+
+        return iscritti;
+    }
+
+    private ArrayList<Iscritto> caricaPagamenti(ArrayList<Iscritto> iscritti) {
+
+        QueryPagamento queryPagamento = QueryPagamento.getInstance(this);
+
+        for (int i = 0; i < iscritti.size(); i++) {
+            iscritti.get(i).setPagamenti(queryPagamento.getPagamenti(iscritti.get(i)));
+        }
+
+        return iscritti;
+
     }
 
     /**
@@ -212,7 +284,7 @@ public class GestioneIscritti extends GymRegisterBaseActivity {
             public void onClick(View arg0) {
 
                 getAggiungiIscritto(palestra);
-                finish();
+                //finish();
             }
         });
 
@@ -249,8 +321,6 @@ public class GestioneIscritti extends GymRegisterBaseActivity {
     }    //fine gestione bottoni
 
 
-
-
     /**
      * se viene premuto il tasto indietro - funziona
      */
@@ -283,7 +353,7 @@ public class GestioneIscritti extends GymRegisterBaseActivity {
                 try {
                     esportaPDF();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Log.e("Errore durante il salvataggio del PDF", e.getMessage(), e);
                 }
                 return true;
             }
@@ -378,6 +448,8 @@ public class GestioneIscritti extends GymRegisterBaseActivity {
                     }
                 });
 
+            } else {
+                donotpay.setVisibility(View.GONE);
             }
 
         }
@@ -624,7 +696,7 @@ public class GestioneIscritti extends GymRegisterBaseActivity {
 
                     getRisultatiRicerca(palestra, risultati);
 
-                    finish();
+                    //finish();
                 } else
                     Toast.makeText(GestioneIscritti.this, R.string.notfund, Toast.LENGTH_SHORT).show();
 
@@ -685,7 +757,7 @@ public class GestioneIscritti extends GymRegisterBaseActivity {
             bw.close();
             Toast.makeText(this, getString(R.string.fsave), Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e("Errore durante la scrittura del file", e.getMessage(), e);
             Toast.makeText(this, getString(R.string.ferror), Toast.LENGTH_SHORT).show();
         }
     }

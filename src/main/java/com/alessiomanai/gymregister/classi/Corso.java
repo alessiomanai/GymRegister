@@ -27,14 +27,14 @@ public class Corso implements Serializable {
         return nome;
     }
 
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
     public String toString() {
 
         return this.getNome();
 
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
     }
 
     public String getFileUsers() {

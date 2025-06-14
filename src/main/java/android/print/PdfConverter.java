@@ -1,14 +1,11 @@
 package android.print;
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Handler;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-
-import com.alessiomanai.gymregister.R;
 
 import java.io.File;
 
@@ -59,8 +56,8 @@ public class PdfConverter implements Runnable {
                             destroy();
                         }
                     });
-                } catch (Exception e){
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    Log.e("Errore PDF", e.getMessage(), e);
                 }
             }
         });
@@ -104,7 +101,6 @@ public class PdfConverter implements Runnable {
     }
 
     private PrintAttributes getDefaultPrintAttrs() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return null;
 
         return new PrintAttributes.Builder()
                 .setMediaSize(PrintAttributes.MediaSize.NA_GOVT_LETTER)

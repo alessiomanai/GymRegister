@@ -19,11 +19,11 @@ import java.util.Locale;
  */
 public class QueryPresenze extends Query {
 
+    private static QueryPresenze instance;
+
     protected QueryPresenze(Context context) {
         super(context);
     }
-
-    private static QueryPresenze instance;
 
     public static QueryPresenze getInstance(Context context) {
         if (instance == null) {
@@ -156,7 +156,7 @@ public class QueryPresenze extends Query {
                 "(" + Tabelle.InfoTabelle.presenze[0] + ", " +
                 Tabelle.InfoTabelle.presenze[1] + ", " +
                 Tabelle.InfoTabelle.presenze[2] +
-                ") VALUES (" + iscritto.getIdDatabase() + "" +
+                ") VALUES (" + iscritto.getIdDatabase() +
                 ", " + corso.getId() +
                 ", '" + data + "')");
 
@@ -240,7 +240,7 @@ public class QueryPresenze extends Query {
                 "(" + Tabelle.InfoTabelle.presenze[0] + ", " +
                 Tabelle.InfoTabelle.presenze[1] + ", " +
                 Tabelle.InfoTabelle.presenze[2] +
-                ") VALUES (" + iscritto.getIdDatabase() + "" +
+                ") VALUES (" + iscritto.getIdDatabase() +
                 ", " + corso.getId() +
                 ", '" + data + "')");
 

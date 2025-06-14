@@ -17,8 +17,7 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".MainActivity"
-            android:exported="true"
-            android:screenOrientation="portrait">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,60 +26,45 @@
         </activity>
         <activity
             android:name=".Gestionepalestre"
-            android:label="@string/title_activity_gestionepalestre"
-            android:screenOrientation="portrait" />
+            android:label="@string/title_activity_gestionepalestre" />
         <activity
             android:name=".GestioneIscritti"
-            android:label="@string/title_activity_gestione_iscritti"
-            android:screenOrientation="portrait" />
+            android:label="@string/title_activity_gestione_iscritti" />
         <activity
             android:name=".Aggiungi"
-            android:label="@string/title_activity_aggiungi"
-            android:screenOrientation="portrait" />
+            android:label="@string/title_activity_aggiungi" />
         <activity
             android:name=".Dettagli"
             android:configChanges="orientation"
-            android:label="@string/title_activity_dettagli"
-            android:screenOrientation="portrait" />
+            android:label="@string/title_activity_dettagli" />
         <activity
             android:name=".EliminaPalestre"
-            android:label="@string/title_activity_elimina_palestre"
-            android:screenOrientation="portrait" />
+            android:label="@string/title_activity_elimina_palestre" />
         <activity
             android:name=".AggiungiPalestra"
-            android:label="@string/title_activity_aggiungi_palestra"
-            android:screenOrientation="portrait" />
+            android:label="@string/title_activity_aggiungi_palestra" />
         <activity
             android:name=".ModificaIscritto"
-            android:label="@string/title_activity_modifica_iscritto"
-            android:screenOrientation="portrait" />
+            android:label="@string/title_activity_modifica_iscritto" />
         <activity
             android:name=".InfoApp"
-            android:label="@string/title_activity_info_app"
-            android:screenOrientation="portrait" />
+            android:label="@string/title_activity_info_app" />
         <activity
             android:name=".Risultati"
-            android:label="@string/title_activity_risultati"
-            android:screenOrientation="portrait" />
+            android:label="@string/title_activity_risultati" />
         <activity
             android:name=".Note"
-            android:label="@string/title_activity_note"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".Trasferimento"
-            android:screenOrientation="portrait" />
+            android:label="@string/title_activity_note" />
+        <activity android:name=".Trasferimento" />
         <activity
             android:name=".Presenze"
-            android:label="@string/registroPresenze"
-            android:screenOrientation="portrait" />
+            android:label="@string/registroPresenze" />
         <activity
             android:name=".PresenzeUtente"
-            android:label="@string/registroPresenze"
-            android:screenOrientation="portrait" />
+            android:label="@string/registroPresenze" />
         <activity
             android:name=".PagamentiIscritto"
-            android:label="@string/pay"
-            android:screenOrientation="portrait" />
+            android:label="@string/pay" />
         <activity
             android:name=".CercaPresenze"
             android:label="@string/search1" />
@@ -109,8 +93,5 @@
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
-    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
 
 </manifest>

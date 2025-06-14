@@ -24,6 +24,24 @@ public class Pagamento implements Serializable {
 
     }
 
+    public Pagamento(String iscrizione, String settembre, String ottobre,
+                     String novembre, String dicembre, String gennaio, String febbraio, String marzo,
+                     String aprile, String maggio, String giugno, String luglio, String agosto) {
+        this.iscrizione = iscrizione;
+        this.settembre = settembre;
+        this.ottobre = ottobre;
+        this.novembre = novembre;
+        this.dicembre = dicembre;
+        this.gennaio = gennaio;
+        this.febbraio = febbraio;
+        this.marzo = marzo;
+        this.aprile = aprile;
+        this.maggio = maggio;
+        this.giugno = giugno;
+        this.luglio = luglio;
+        this.agosto = agosto;
+    }
+
     public String getIscrizione() {
         return iscrizione;
     }

@@ -20,16 +20,16 @@ public class QueryCorso extends Query {
 
     private static QueryCorso instance;
 
+    protected QueryCorso(Context context) {
+        super(context);
+    }
+
     public static QueryCorso getInstance(Context context) {
         if (instance == null) {
             instance = new QueryCorso(context);
         }
 
         return instance;
-    }
-
-    protected QueryCorso(Context context) {
-        super(context);
     }
 
     /**
@@ -45,6 +45,7 @@ public class QueryCorso extends Query {
         stmt.bindString(1, nuovoCorso.getNome());
         stmt.execute();
 
+        database.close();
     }
 
     /**

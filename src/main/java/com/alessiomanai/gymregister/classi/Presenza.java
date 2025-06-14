@@ -47,9 +47,21 @@ public class Presenza {
         return this.iscritto.getIdDatabase();
     }
 
+    public void setIdIscritto(int idIscritto) {
+
+        this.iscritto.setIdDatabase(idIscritto);
+
+    }
+
     public int getIdCorso() {
 
         return this.corso.getId();
+    }
+
+    public void setIdCorso(int idCorso) {
+
+        this.corso.setId(idCorso);
+
     }
 
     public Iscritto getIscritto() {
@@ -74,18 +86,6 @@ public class Presenza {
 
     public void setData(String data) {
         this.data = data;
-    }
-
-    public void setIdIscritto(int idIscritto) {
-
-        this.iscritto.setIdDatabase(idIscritto);
-
-    }
-
-    public void setIdCorso(int idCorso) {
-
-        this.corso.setId(idCorso);
-
     }
 
 }

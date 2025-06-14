@@ -14,7 +14,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.alessiomanai.gymregister.PresenzeUtente;
 import com.alessiomanai.gymregister.R;
 import com.alessiomanai.gymregister.classi.Presenza;
@@ -28,8 +27,8 @@ import java.util.Locale;
 
 public class ListatorePresenze extends ArrayAdapter<Presenza> {
 
-    private Activity context;
-    private ArrayList<Presenza> presenze;
+    private final Activity context;
+    private final ArrayList<Presenza> presenze;
 
     public ListatorePresenze(Activity context, ArrayList<Presenza> nome) {
 
@@ -79,7 +78,7 @@ public class ListatorePresenze extends ArrayAdapter<Presenza> {
 
                 if (presenze.get(posizioneClick).getData().equals(data)) {
 
-                    QueryPresenze database = (QueryPresenze) QueryPresenze.getInstance(v.getContext());
+                    QueryPresenze database = QueryPresenze.getInstance(v.getContext());
 
                     database.eliminaPresenzaOdierna(presenze.get(posizioneClick).getIscritto());
 
@@ -93,14 +92,14 @@ public class ListatorePresenze extends ArrayAdapter<Presenza> {
 
                 } else {
 
-                    QueryPresenze database = (QueryPresenze) QueryPresenze.getInstance(v.getContext());
+                    QueryPresenze database = QueryPresenze.getInstance(v.getContext());
 
                     try {
                         database.aggiungi(presenze.get(posizioneClick).getIscritto(),
                                 presenze.get(posizioneClick).getCorso());
 
                     } catch (SQLiteConstraintException exception) {
-                        exception.printStackTrace();
+                        Log.e("Errore SQL", exception.getMessage(), exception);
                     }
 
                     presenze.get(posizioneClick).setData(data);

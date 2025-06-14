@@ -1,5 +1,7 @@
 package com.alessiomanai.gymregister;
 
+import static android.content.ContentValues.TAG;
+
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -12,9 +14,6 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-
-import androidx.core.app.ActivityCompat;
-
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,14 +24,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
 import com.alessiomanai.gymregister.classi.Corso;
 import com.alessiomanai.gymregister.classi.Iscritto;
 import com.alessiomanai.gymregister.database.QueryIscritto;
 import com.alessiomanai.gymregister.utils.AppPermissionsUtils;
-import com.alessiomanai.gymregister.utils.activity.ExtrasConstants;
 import com.alessiomanai.gymregister.utils.FileDialog;
-import com.alessiomanai.gymregister.utils.activity.GymRegisterBaseActivity;
 import com.alessiomanai.gymregister.utils.GymRegisterConstants;
+import com.alessiomanai.gymregister.utils.activity.ExtrasConstants;
+import com.alessiomanai.gymregister.utils.activity.GymRegisterBaseActivity;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -42,25 +46,23 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.Objects;
 
-import static android.content.ContentValues.TAG;
-
 public class Dettagli extends GymRegisterBaseActivity {
 
     private static final String FTYPE = ".jpg";
     private static final int DIALOG_LOAD_FILE = 1000;
+    final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1001;
+    private final File mPath = new File(Environment.getExternalStorageDirectory() + "//yourdir//");
+    ImageButton modifica;
+    ImageButton elimina, pagamenti, presenze, note, cambia;
+    ImageView fotoProfilo;  //foto profilo utente
     private TextView riepilogoPagamentiT;
     private int posizione;    //posizione all' interno dell array utenti
     private Corso palestra;        //nome palestra usata
     private Iscritto iscritto;   //dettagli utente
-    final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1001;
-    ImageButton modifica;
-    ImageButton elimina, pagamenti, presenze, note, cambia;
-    ImageView fotoProfilo;  //foto profilo utente
     /**
      * per il caricamento della foto
      */
     private String[] mFileList;
-    private File mPath = new File(Environment.getExternalStorageDirectory() + "//yourdir//");
     private String mChosenFile;
 
 
@@ -69,65 +71,22 @@ public class Dettagli extends GymRegisterBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dettagli);
 
+        View root = findViewById(R.id.parentRelativeDettagli);
+
+        ViewCompat.setOnApplyWindowInsetsListener(root, new OnApplyWindowInsetsListener() {
+            @Override
+            public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
+                int top = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top;
+                v.setPadding(0, top, 0, 0);
+                return insets;
+            }
+        });
+
         palestra = (Corso) getIntent().getExtras().get(ExtrasConstants.CORSO);
         posizione = (int) getIntent().getExtras().get(ExtrasConstants.POSITION);
         iscritto = (Iscritto) getIntent().getExtras().get(ExtrasConstants.ISCRITTO);
 
-        //variabili textview
-        TextView detid, detaddr, dettel, detnasc, detcit, detcert;
-
-        //collego le textview alla gui
-        detid = findViewById(R.id.detid);
-        detaddr = findViewById(R.id.detaddr);
-        dettel = findViewById(R.id.dettel);
-        detnasc = findViewById(R.id.detnasc);
-        detcit = findViewById(R.id.detcit);
-        detcert = findViewById(R.id.detcert);
-
-        //mostra a schermo i dettagli utente
-        try {
-            detid.setText(iscritto.getId());
-        } catch (NullPointerException e) {
-            detid.setText(" ");
-        }
-
-        try {
-            detaddr.setText(iscritto.getIndirizzo());
-        } catch (NullPointerException e) {
-            detaddr.setText(" ");
-        }
-
-        try {
-            dettel.setText(iscritto.getTelefono());
-        } catch (NullPointerException e) {
-            dettel.setText(" ");
-        }
-
-        try {
-            detnasc.setText(iscritto.getDataDiNascita());
-        } catch (NullPointerException e) {
-            detnasc.setText(" ");
-        }
-
-        try {
-            detcit.setText(iscritto.getCitta());
-        } catch (NullPointerException e) {
-            detcit.setText(" ");
-        }
-
-        try {
-            detcert.setText(iscritto.getCertificatoMedico());
-        } catch (NullPointerException e) {
-            detcit.setText("No data");
-        }
-
-        riepilogoPagamentiT = findViewById(R.id.riepilogoPagamenti);
-
-        try {
-            riepilogoPagamentiT.setText(caricaRiepilogoPagamenti(iscritto, this));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        caricaDettagli();
 
         modifica();     //carica il menù di modifica
 
@@ -184,7 +143,7 @@ public class Dettagli extends GymRegisterBaseActivity {
             public void onClick(View arg0) {
 
                 getPagamentiIscritto(posizione, iscritto, palestra);
-                finish();
+
             }
         });
 
@@ -218,7 +177,7 @@ public class Dettagli extends GymRegisterBaseActivity {
 
                         confermaeli();    //conferma l'avvenuto eliminazione con un messaggio
 
-                        getGestioneIscritti(palestra);
+                        //getGestioneIscritti(palestra);
 
                         finish();    //chiude l'activity
 
@@ -255,6 +214,13 @@ public class Dettagli extends GymRegisterBaseActivity {
 
     }    //fine oncreate
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        caricaDettagli();
+    }
+
     /**
      * onBackPressed
      */
@@ -262,7 +228,7 @@ public class Dettagli extends GymRegisterBaseActivity {
     @Override
     public void onBackPressed() {
 
-        getGestioneIscritti(palestra);
+        //getGestioneIscritti(palestra);
 
         try {
             salvaModifiche();
@@ -290,6 +256,64 @@ public class Dettagli extends GymRegisterBaseActivity {
         inflater.inflate(R.menu.note, menu);
 
         return true;
+    }
+
+    private void caricaDettagli() {
+        //variabili textview
+        TextView detid, detaddr, dettel, detnasc, detcit, detcert;
+
+        //collego le textview alla gui
+        detid = findViewById(R.id.detid);
+        detaddr = findViewById(R.id.detaddr);
+        dettel = findViewById(R.id.dettel);
+        detnasc = findViewById(R.id.detnasc);
+        detcit = findViewById(R.id.detcit);
+        detcert = findViewById(R.id.detcert);
+
+        //mostra a schermo i dettagli utente
+        try {
+            detid.setText(iscritto.getId());
+        } catch (NullPointerException e) {
+            detid.setText(" ");
+        }
+
+        try {
+            detaddr.setText(iscritto.getIndirizzo());
+        } catch (NullPointerException e) {
+            detaddr.setText(" ");
+        }
+
+        try {
+            dettel.setText(iscritto.getTelefono());
+        } catch (NullPointerException e) {
+            dettel.setText(" ");
+        }
+
+        try {
+            detnasc.setText(iscritto.getDataDiNascita());
+        } catch (NullPointerException e) {
+            detnasc.setText(" ");
+        }
+
+        try {
+            detcit.setText(iscritto.getCitta());
+        } catch (NullPointerException e) {
+            detcit.setText(" ");
+        }
+
+        try {
+            detcert.setText(iscritto.getCertificatoMedico());
+        } catch (NullPointerException e) {
+            detcit.setText("No data");
+        }
+
+        riepilogoPagamentiT = findViewById(R.id.riepilogoPagamenti);
+
+        try {
+            riepilogoPagamentiT.setText(caricaRiepilogoPagamenti(iscritto, this));
+        } catch (Exception e) {
+            Log.e("Errore caricamento pagamenti", e.getMessage(), e);
+        }
     }
 
     @Override
@@ -394,12 +418,12 @@ public class Dettagli extends GymRegisterBaseActivity {
             bitmapImage.compress(Bitmap.CompressFormat.PNG, 60, fos);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("Errore durante il salvataggio della foto", e.getMessage(), e);
         } finally {
             try {
                 fos.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e("Errore durante la chiusura dello stream", e.getMessage(), e);
             }
         }
 
@@ -433,7 +457,7 @@ public class Dettagli extends GymRegisterBaseActivity {
             fotoProfilo = findViewById(R.id.fotoProfilo);
             fotoProfilo.setImageBitmap(b);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            Log.e("Foto non trovata", e.getMessage(), e);
         }
 
     }
@@ -446,7 +470,7 @@ public class Dettagli extends GymRegisterBaseActivity {
         try {
             mPath.mkdirs();
         } catch (SecurityException e) {
-            Log.e(TAG, "unable to write on the sd card " + e.toString());
+            Log.e(TAG, "unable to write on the sd card " + e);
         }
         if (mPath.exists()) {
             FilenameFilter filter = new FilenameFilter() {
@@ -465,7 +489,9 @@ public class Dettagli extends GymRegisterBaseActivity {
     }
 
 
-    /**richiesta permessi lettura memoria interna */
+    /**
+     * richiesta permessi lettura memoria interna
+     */
 
     void richiestaPermessiLettura() {
 
@@ -494,7 +520,7 @@ public class Dettagli extends GymRegisterBaseActivity {
 
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
                 // If request is cancelled, the result arrays are empty.
@@ -510,7 +536,6 @@ public class Dettagli extends GymRegisterBaseActivity {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                 }
-                return;
             }
 
             // other 'case' lines to check for other

@@ -1,45 +1,59 @@
 package com.alessiomanai.gymregister;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
 import com.alessiomanai.gymregister.classi.Corso;
 import com.alessiomanai.gymregister.classi.Iscritto;
 import com.alessiomanai.gymregister.utils.activity.ExtrasConstants;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+
 
 public class Note extends Activity {
 
-    private Corso corso;
-    private Iscritto iscritto;
-    private boolean noteIscritto;
+    final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1000;
     String nomeid;
     TextView nomeT;
     EditText testo;
-    final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1000;
-
+    private Corso corso;
+    private Iscritto iscritto;
+    private boolean noteIscritto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_note);
+
+        View root = findViewById(R.id.parentRelativeNote);
+
+        ViewCompat.setOnApplyWindowInsetsListener(root, new OnApplyWindowInsetsListener() {
+            @Override
+            public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
+                int top = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top;
+                v.setPadding(0, top, 0, 0);
+                return insets;
+            }
+        });
 
         noteIscritto = (boolean) getIntent().getExtras().get(ExtrasConstants.NOTE_ISCRITTO);
         iscritto = (Iscritto) getIntent().getExtras().get(ExtrasConstants.ISCRITTO);
@@ -101,7 +115,7 @@ public class Note extends Activity {
         try {
             carica(file);
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e("Errore durante il caricamento del file", e.getMessage(), e);
         }
 
 
@@ -121,7 +135,7 @@ public class Note extends Activity {
 
                 } catch (IOException e) {
 
-                    e.printStackTrace();
+                    Log.e("Errore durante il salvataggio del file", e.getMessage(), e);
 
                     Toast.makeText(Note.this, R.string.richiestaPermessi, Toast.LENGTH_SHORT).show();
 
@@ -166,7 +180,7 @@ public class Note extends Activity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
                 // If request is cancelled, the result arrays are empty.
@@ -181,7 +195,6 @@ public class Note extends Activity {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                 }
-                return;
             }
 
             // other 'case' lines to check for other

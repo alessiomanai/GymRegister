@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteStatement;
-import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.alessiomanai.gymregister.classi.Corso;
@@ -16,16 +15,16 @@ public class QueryImporti extends Query {
 
     private static QueryImporti instance;
 
+    protected QueryImporti(Context context) {
+        super(context);
+    }
+
     public static QueryImporti getInstance(Context context) {
         if (instance == null) {
             instance = new QueryImporti(context);
         }
 
         return instance;
-    }
-
-    protected QueryImporti(Context context) {
-        super(context);
     }
 
     public void inserisciImporti(Iscritto iscritto, Corso corso) {
@@ -138,7 +137,7 @@ public class QueryImporti extends Query {
 
         } catch (SQLiteException e) {    //se non è stata trovata nessuna tabella importi
 
-            e.printStackTrace();
+            Log.e("Errore SQL", e.getMessage(), e);
 
             SQLiteDatabase db = instance.getWritableDatabase();
 
@@ -169,4 +168,25 @@ public class QueryImporti extends Query {
 
     }
 
+    public Boolean controllaEsistenzaRecord(Iscritto iscritto, Corso corso) {
+
+        SQLiteDatabase database = instance.getReadableDatabase();
+
+        try {
+            //estraggo i dati degli iscritti e dei pagamenti
+            Cursor risultati = database.rawQuery(
+                    "SELECT * " +
+                            "FROM Importi " +
+                            "WHERE iscritto=" + iscritto.getIdDatabase() +
+                            " AND corso=" + corso.getId(), null);
+
+            if (risultati.getCount() > 0) {
+                return Boolean.TRUE;
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        Log.v("Risultati", "nessun risultato ");
+        return Boolean.FALSE;
+    }
 }

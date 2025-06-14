@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +23,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.alessiomanai.gymregister.classi.Corso;
 import com.alessiomanai.gymregister.classi.Iscritto;
@@ -30,9 +34,9 @@ import com.alessiomanai.gymregister.database.QueryIscritto;
 import com.alessiomanai.gymregister.database.QueryPresenze;
 import com.alessiomanai.gymregister.utils.AppPermissionsUtils;
 import com.alessiomanai.gymregister.utils.DocumentCreator;
-import com.alessiomanai.gymregister.utils.activity.ExtrasConstants;
-import com.alessiomanai.gymregister.utils.ListatorePresenze;
 import com.alessiomanai.gymregister.utils.GymRegisterConstants;
+import com.alessiomanai.gymregister.utils.ListatorePresenze;
+import com.alessiomanai.gymregister.utils.activity.ExtrasConstants;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -46,18 +50,29 @@ import java.util.Locale;
 
 public class Presenze extends Activity {
 
-    private Corso corso;
+    private final int WRITE_REQUEST_CODE = 100;
+    private final int REQUEST_WRITE_STORAGE = 200;
     EditText ricerca;
     ImageButton bottone;
     boolean risultatiDefault = true;
+    private Corso corso;
     private String toExportMemory;
-    private final int WRITE_REQUEST_CODE = 100;
-    private final int REQUEST_WRITE_STORAGE = 200;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_presenze);
+
+        View root = findViewById(R.id.parentRelativePresenze);
+
+        ViewCompat.setOnApplyWindowInsetsListener(root, new OnApplyWindowInsetsListener() {
+            @Override
+            public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
+                int top = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top;
+                v.setPadding(0, top, 0, 0);
+                return insets;
+            }
+        });
 
         corso = (Corso) getIntent().getExtras().get(ExtrasConstants.CORSO);
 
@@ -113,16 +128,16 @@ public class Presenze extends Activity {
 
         try {
 
-            QueryIscritto database = (QueryIscritto) QueryIscritto.getInstance(this);
+            QueryIscritto database = QueryIscritto.getInstance(this);
             elencoIscritti = database.caricaIscritti(corso);
 
         } catch (NullPointerException e) {
-            e.printStackTrace();
+            Log.e("Errore SQL", e.getMessage(), e);
         }
 
         ArrayList<Presenza> listaPresenze = new ArrayList<>();
 
-        QueryPresenze db = (QueryPresenze) QueryPresenze.getInstance(this);
+        QueryPresenze db = QueryPresenze.getInstance(this);
         presenzeOdierne = db.presenzeOdierne(corso);
 
 
@@ -244,7 +259,7 @@ public class Presenze extends Activity {
                 try {
                     esportaPresenzePDF();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Log.e("Errore PDF", e.getMessage(), e);
                 }
                 return true;
             }
@@ -330,18 +345,18 @@ public class Presenze extends Activity {
 
         try {
 
-            QueryIscritto database = (QueryIscritto) QueryIscritto.getInstance(this);
+            QueryIscritto database = QueryIscritto.getInstance(this);
             elencoIscritti = database.caricaIscritti(corso);
 
         } catch (NullPointerException e) {
-            e.printStackTrace();
+            Log.e("Errore SQL", e.getMessage(), e);
         }
 
         for (int i = 0; i < elencoIscritti.size(); i++) {
 
             document.setH4Chapter(elencoIscritti.get(i).getId());
 
-            QueryPresenze database = (QueryPresenze) QueryPresenze.getInstance(this);
+            QueryPresenze database = QueryPresenze.getInstance(this);
             ArrayList<Presenza> presenze = database.presenzeCorsoMese(elencoIscritti.get(i), corso, data);
 
             for (int j = 0; j < presenze.size(); j++) {
@@ -396,7 +411,7 @@ public class Presenze extends Activity {
             bw.close();
             Toast.makeText(this, getString(R.string.fsave), Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e("Errore SQL", e.getMessage(), e);
             Toast.makeText(this, getString(R.string.ferror), Toast.LENGTH_SHORT).show();
         }
     }

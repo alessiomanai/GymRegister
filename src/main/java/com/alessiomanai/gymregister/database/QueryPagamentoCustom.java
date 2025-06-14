@@ -13,9 +13,13 @@ import java.util.ArrayList;
 
 public class QueryPagamentoCustom extends QueryPagamento {
 
-    private String nomeTabella = "PagamentiCustom";
-
     private static QueryPagamentoCustom instance;
+    private final String nomeTabella = "PagamentiCustom";
+
+    protected QueryPagamentoCustom(Context context) {
+        super(context);
+
+    }
 
     public static QueryPagamentoCustom getInstance(Context context) {
         if (instance == null) {
@@ -23,11 +27,6 @@ public class QueryPagamentoCustom extends QueryPagamento {
         }
 
         return instance;
-    }
-
-    protected QueryPagamentoCustom(Context context) {
-        super(context);
-
     }
 
     public void creaNuovoPagamento(Corso corso, String nuovoPagamento) {
@@ -56,8 +55,7 @@ public class QueryPagamentoCustom extends QueryPagamento {
         SQLiteDatabase database = instance.getWritableDatabase();
 
         database.execSQL("INSERT INTO " + pagamento + " (iscritto, corso, pagato) VALUES " +
-                "(" + iscritto.getIdDatabase() + ", " + iscritto.getIdCorso() + ", " +
-                "" + tipo + ") ");
+                "(" + iscritto.getIdDatabase() + ", " + iscritto.getIdCorso() + ", " + tipo + ") ");
 
     }
 

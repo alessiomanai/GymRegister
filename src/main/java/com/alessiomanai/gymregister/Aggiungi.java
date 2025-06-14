@@ -12,6 +12,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
 import com.alessiomanai.gymregister.classi.Corso;
 import com.alessiomanai.gymregister.classi.Iscritto;
 import com.alessiomanai.gymregister.database.QueryCertificati;
@@ -38,6 +42,17 @@ public class Aggiungi extends GymRegisterBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_aggiungi);
 
+        View root = findViewById(R.id.linearLayout);
+
+        ViewCompat.setOnApplyWindowInsetsListener(root, new OnApplyWindowInsetsListener() {
+            @Override
+            public WindowInsetsCompat onApplyWindowInsets(View v, WindowInsetsCompat insets) {
+                int top = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top;
+                v.setPadding(0, top, 0, 0);
+                return insets;
+            }
+        });
+
         palestra = (Corso) getIntent().getExtras().get(ExtrasConstants.CORSO);
 
         //collego le edit text
@@ -50,7 +65,7 @@ public class Aggiungi extends GymRegisterBaseActivity {
         certificatoMedico = findViewById(R.id.aggiungiCertificato);
         editCertificatoMedico = findViewById(R.id.aggiungiCertificato);
 
-        ImageButton conferma = (ImageButton) findViewById(R.id.confermabut);
+        ImageButton conferma = findViewById(R.id.confermabut);
 
         // il popup con il date picker si lancia al click sul campo di testo...
         dantf.setOnClickListener(new View.OnClickListener() {
@@ -152,7 +167,7 @@ public class Aggiungi extends GymRegisterBaseActivity {
                     //Toast
                     Toast.makeText(Aggiungi.this, R.string.addurs, Toast.LENGTH_LONG).show();
 
-                    getGestioneIscritti(palestra);
+                    //getGestioneIscritti(palestra);
                     finish();
                 }
             }
@@ -164,13 +179,13 @@ public class Aggiungi extends GymRegisterBaseActivity {
     //se viene premuto il tasto indietro torna alla precedente activity senza
     @Override
     public void onBackPressed() {
-        getGestioneIscritti(palestra);
+        //getGestioneIscritti(palestra);
         finish();
     }
 
     void salva(Iscritto iscritto, Corso corso, String certificatoMedico) {
 
-        QueryIscritto database = (QueryIscritto) QueryIscritto.getInstance(this);
+        QueryIscritto database = QueryIscritto.getInstance(this);
 
         database.nuovo(iscritto, corso);
         iscritto.setIdDatabase(database.selectLastIDIscritto());
