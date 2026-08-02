@@ -1,0 +1,2 @@
+GymRegister is an Android app for managing members enrolled in classes at any sports facility.
+The app is designed to ensure maximum efficiency through code optimization and the use of algorithms capable of handling large amounts of data. 
