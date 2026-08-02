@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/infos"
+        android:icon="@drawable/info"
+        android:showAsAction="ifRoom"
+        android:src="@drawable/info"
+        android:title="Info applicazione">
+
+    </item>
+
+</menu>
+
+

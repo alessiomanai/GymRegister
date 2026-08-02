@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <drawable name="gymregister">#FFF</drawable>
+    <string name="app_name">Gym Register</string>
+
+    <string name="action_settings">Settings</string>
+
+    <!-- nome activity -->
+    <string name="slogan">Il tuo registro digitale</string>
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="title_activity_gestionepalestre">Gestione corsi</string>
+    <string name="title_activity_gestione_iscritti">Gestione iscritti</string>
+    <string name="title_activity_aggiungi">Aggiungi iscritto</string>
+    <string name="title_activity_dettagli">Dettagli iscritto</string>
+    <string name="title_activity_elimina_palestre">Elimina corso</string>
+    <string name="title_activity_aggiungi_palestra">Aggiungi corso</string>
+    <string name="title_activity_rinomina_palestra">Rinomina Palestra</string>
+    <string name="title_activity_rinomina_edit">Rinomina</string>
+    <string name="title_activity_modifica_iscritto">Modifica iscritto</string>
+    <string name="title_activity_info_app">Informazioni</string>
+    <string name="title_activity_risultati">Risultati ricerca</string>
+    <string name="title_activity_note">Note</string>
+
+    <!-- nomi pagine -->
+    <string name="id">Cognome e nome</string>
+    <string name="data">Data di nascita</string>
+    <string name="address">Indirizzo</string>
+    <string name="citta">Città</string>
+    <string name="phone">Numero</string>
+    <string name="pay">Pagamenti</string>
+    <string name="iscrizione">Iscrizione</string>
+    <string name="sept">Settembre</string>
+    <string name="oct">Ottobre</string>
+    <string name="nov">Novembre</string>
+    <string name="dec">Dicembre</string>
+    <string name="jan">Gennaio</string>
+    <string name="feb">Febbraio</string>
+    <string name="mar">Marzo</string>
+    <string name="apr">Aprile</string>
+    <string name="mag">Maggio</string>
+    <string name="jun">Giugno</string>
+    <string name="jul">Luglio</string>
+    <string name="ago">Agosto</string>
+
+    <string name="isnp">Inserisci il nome della palestra</string>
+    <string name="nomepalestra">Nome palestra</string>
+    <string name="toccapalestra">Tocca un elemento per eliminarlo</string>
+    <string name="search1">Ricerca iscritto</string>
+    <string name="totale123">Numero totale iscritti: </string>
+    <string name="search2">Inserisci il nome da cercare</string>
+
+    <!-- stringhe delle opzioni -->
+    <string name="info">Dettagli applicazione</string>
+    <string name="men1">Esporta elenco su PDF/HTML</string>
+    <string name="men2">Salva elenco</string>
+    <string name="men3">Backup elenco</string>
+    <string name="men4">Ripristina backup</string>
+    <string name="men5">Cancella dati</string>
+
+    <!-- finestre dialogo -->
+    <string name="conferma">Conferma</string>
+    <string name="ripristino">Ripristinando il backup i dati attuali verranno persi</string>
+    <string name="ripristina">Ripristina</string>
+    <string name="annulla">Annulla</string>
+    <string name="cleall">Verranno cancellati tutti i dati relativi al corso.\nVuoi continuare?</string>
+    <string name="elimina">Elimina</string>
+    <string name="elimusr">Vuoi eliminare questo iscritto dall\'elenco?</string>
+
+    <!-- toast -->
+    <string name="opannul">Operazione annullata</string>
+    <string name="utel">Utente eliminato</string>
+    <string name="corcan">Corso cancellato</string>
+    <string name="nopal">Non ci sono palestre in elenco</string>
+    <string name="notfund">Nessun iscritto trovato</string>
+    <string name="erior">Elenco riordinato</string>
+    <string name="fsave">File salvato correttamente</string>
+    <string name="ferror">Errore nel salvataggio dell\'elenco</string>
+    <string name="datidel">Dati eliminati</string>
+    <string name="datiexp">Dati esportati in </string>
+    <string name="backupdone">Backup effettuato correttamente</string>
+    <string name="restoredone">Backup ripristinato correttamente</string>
+    <string name="restorerr">Backup non presente</string>
+    <string name="notesav">Note salvate</string>
+    <string name="addurs">Utente registrato</string>
+    <string name="addgim">Palestra aggiunta</string>
+    <string name="registroPresenze">Attendance Register</string>
+    <string name="guidaPres">Questo è il registro presenze. Viene mostrato l\'elenco degli iscritti della palestra e le presenze in data odierna. Per aggiungere o togliere le presenze, premi il pulsante rosso per assegnare la presenza di questo giorno. Per vedere lo storico delle presenze per utente, clicca il bottone \'Controlla presenze\' del relativo utente</string>
+    <string name="noPres">Non ci sono presenze per questo iscritto</string>
+    <string name="presAdd">Presenza aggiunta</string>
+    <string name="presRemove">Presenza tolta</string>
+    <string name="controllaPresenze">Controlla presenze</string>
+    <string name="ok">Ok</string>
+    <string name="clearAttenda">Cancella presenza</string>
+    <string name="clearAttMes">Questa operazione rimuoverà la presenza. Vuoi continuare?</string>
+    <string name="todayAtten">Presenze di oggi</string>
+    <string name="riepilogo">Riepilogo</string>
+    <string name="pagato">pagato</string>
+    <string name="nopay">Nessun pagamento</string>
+
+    <string name="numeroPres">Totale presenze:</string>
+
+    <string name="haiSelezionato">Hai selezionato</string>
+    <string name="noName">Inserisci un nome</string>
+    <string name="presenzagiadatabase">Presenza già inserita!</string>
+    <string name="presefrase">Hai già inserito questa data nel registro, inseriscine una non presente</string>
+    <string name="rename">Rinomina corso</string>
+    <string name="renamedone">Corso rinominato</string>
+    <string name="wrong">Something went wrong. Please check every field</string>
+    <string name="tap2">Tap twice</string>
+    <string name="istruzioniCambio">Seleziona il corso in cui spostare</string>
+    <string name="cambiaCorso">Cambia corso</string>
+    <string name="opdone">Done</string>
+    <string name="richiestaPermessi">You have to allow this app to read and write storage. To do this, go to Settings > apps > GymRegister > Permissions and tap on Storage switch button</string>
+    <string name="profilePic">Profile picture editor</string>
+    <string name="backup" translatable="false">Backup</string>
+    <string name="gymlist">Gyms list</string>
+    <string name="backupmenu">Backup and restore menu</string>
+    <string name="backupdescription">You can backup and restore your data from this menu</string>
+    <string name="donotpayannuncio">Some users didn\'t pay this month. Check out</string>
+    <string name="certificato">End of medical certificate</string>
+    <string name="richiestaPermessiFile">You have to allow this app to read and write storage. To do this, go to Settings > apps > GymRegister > Permissions and tap on Storage switch button</string>
+    <string name="permessiError">The app was not allowed to write to your storage. Hence, it cannot function properly. Please consider granting it this permission</string>
+    <string name="title_activity_info_gdpractivity">"Info GDPR "</string>
+    <string name="info_gdpractivity">GymRegister, an opensource app, take pride in being 100% GDPR compliant. All your data is handled in strict compliance with EU data protection laws. GymRegister will not share your users informations, or sell or collect any data. Everything will be stored in you device. All your users data, name, surname, address, phone number, payments and profile pic are all under your control. If you delete them, they are gone. GymRegister will never share any kind of information. Click on the button below if you understand. </string>
+    <string-array name="month_array">
+        <item>Tutte</item>
+        <item>@string/sept</item>
+        <item>@string/oct</item>
+        <item>@string/nov</item>
+        <item>@string/dec</item>
+        <item>@string/jan</item>
+        <item>@string/feb</item>
+        <item>@string/mar</item>
+        <item>@string/apr</item>
+        <item>@string/mag</item>
+        <item>@string/jun</item>
+        <item>@string/jul</item>
+        <item>@string/ago</item>
+    </string-array>
+
+
+</resources>

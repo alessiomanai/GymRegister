@@ -1,0 +1,562 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/parentRelativePagamentiIscritto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#3CB371"
+    tools:context="com.alessiomanai.gymregister.PagamentiIscritto">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="@string/pay"
+                    android:textColor="#ffffff"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/nomePagante"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10sp"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:gravity="left"
+                    android:text="@string/pay"
+                    android:textColor="#ffffff"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <!-- lista con i dettagli dell'utente -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50sp"
+                android:layout_marginRight="50sp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <CheckedTextView
+                    android:id="@+id/checkedTextView1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                    android:checked="true"
+                    android:text="@string/iscrizione"
+                    android:textColor="#ffffff"
+                    android:textSize="20dp"
+                    android:textStyle="bold">
+
+                </CheckedTextView>
+
+                <EditText
+                    android:id="@+id/feeIscrizione"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:hint="€ $ £"
+                    android:inputType="numberDecimal"
+
+                    />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50sp"
+                android:layout_marginRight="50sp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <CheckedTextView
+                    android:id="@+id/checkedTextView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                    android:checked="true"
+                    android:text="@string/sept"
+                    android:textColor="#ffffff"
+
+                    android:textSize="20dp"
+                    android:textStyle="bold">
+
+                </CheckedTextView>
+
+                <EditText
+                    android:id="@+id/feeSette"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:hint="€ $ £"
+                    android:inputType="numberDecimal"
+
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50sp"
+                android:layout_marginRight="50sp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <CheckedTextView
+                    android:id="@+id/checkedTextView3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                    android:checked="true"
+                    android:text="@string/oct"
+                    android:textColor="#ffffff"
+                    android:textSize="20dp"
+                    android:textStyle="bold">
+
+
+                </CheckedTextView>
+
+                <EditText
+                    android:id="@+id/feeOtto"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:hint="€ $ £"
+                    android:inputType="numberDecimal"
+
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50sp"
+                android:layout_marginRight="50sp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <CheckedTextView
+                    android:id="@+id/checkedTextView4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                    android:checked="true"
+                    android:text="@string/nov"
+                    android:textColor="#ffffff"
+                    android:textSize="20dp"
+                    android:textStyle="bold">
+
+                </CheckedTextView>
+
+                <EditText
+                    android:id="@+id/feeNove"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:hint="€ $ £"
+                    android:inputType="numberDecimal"
+
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50sp"
+                android:layout_marginRight="50sp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <CheckedTextView
+                    android:id="@+id/checkedTextView5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                    android:checked="true"
+                    android:text="@string/dec"
+                    android:textColor="#ffffff"
+
+                    android:textSize="20dp"
+                    android:textStyle="bold">
+
+                </CheckedTextView>
+
+                <EditText
+                    android:id="@+id/feeDice"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:hint="€ $ £"
+                    android:inputType="numberDecimal"
+
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50sp"
+                android:layout_marginRight="50sp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <CheckedTextView
+                    android:id="@+id/checkedTextView6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                    android:checked="true"
+                    android:text="@string/jan"
+                    android:textColor="#ffffff"
+                    android:textSize="20dp"
+                    android:textStyle="bold">
+
+                </CheckedTextView>
+
+                <EditText
+                    android:id="@+id/feeGen"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:hint="€ $ £"
+                    android:inputType="numberDecimal"
+
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50sp"
+                android:layout_marginRight="50sp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <CheckedTextView
+                    android:id="@+id/checkedTextView7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                    android:checked="true"
+                    android:text="@string/feb"
+                    android:textColor="#ffffff"
+                    android:textSize="20dp"
+                    android:textStyle="bold">
+
+                </CheckedTextView>
+
+                <EditText
+                    android:id="@+id/feeFeb"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:hint="€ $ £"
+                    android:inputType="numberDecimal"
+
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50sp"
+                android:layout_marginRight="50sp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <CheckedTextView
+                    android:id="@+id/checkedTextView8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                    android:checked="true"
+                    android:text="@string/mar"
+                    android:textColor="#ffffff"
+                    android:textSize="20dp"
+                    android:textStyle="bold">
+
+                </CheckedTextView>
+
+                <EditText
+                    android:id="@+id/feeMar"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:hint="€ $ £"
+                    android:inputType="numberDecimal"
+
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50sp"
+                android:layout_marginRight="50sp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <CheckedTextView
+                    android:id="@+id/checkedTextView9"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                    android:checked="true"
+                    android:text="@string/apr"
+                    android:textColor="#ffffff"
+                    android:textSize="20dp"
+                    android:textStyle="bold">
+
+                </CheckedTextView>
+
+                <EditText
+                    android:id="@+id/feeApr"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:hint="€ $ £"
+                    android:inputType="numberDecimal"
+
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50sp"
+                android:layout_marginRight="50sp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <CheckedTextView
+                    android:id="@+id/checkedTextView10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                    android:checked="true"
+                    android:text="@string/mag"
+                    android:textColor="#ffffff"
+                    android:textSize="20dp"
+                    android:textStyle="bold">
+
+                </CheckedTextView>
+
+                <EditText
+                    android:id="@+id/feeMag"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:hint="€ $ £"
+                    android:inputType="numberDecimal"
+
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50sp"
+                android:layout_marginRight="50sp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <CheckedTextView
+                    android:id="@+id/checkedTextView11"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                    android:checked="true"
+                    android:text="@string/jun"
+                    android:textColor="#ffffff"
+                    android:textSize="20dp"
+                    android:textStyle="bold">
+
+                </CheckedTextView>
+
+                <EditText
+                    android:id="@+id/feeGiu"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:hint="€ $ £"
+                    android:inputType="numberDecimal" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50sp"
+                android:layout_marginRight="50sp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <CheckedTextView
+                    android:id="@+id/checkedTextView12"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_weight="1"
+                    android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                    android:checked="true"
+                    android:text="@string/jul"
+                    android:textColor="#ffffff"
+                    android:textSize="20dp"
+                    android:textStyle="bold">
+
+                </CheckedTextView>
+
+                <EditText
+                    android:id="@+id/feeLug"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:hint="€ $ £"
+                    android:inputType="numberDecimal" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="50sp"
+                android:layout_marginRight="50sp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <CheckedTextView
+                    android:id="@+id/checkedTextView13"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10sp"
+                    android:layout_weight="1"
+                    android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+                    android:checked="true"
+                    android:text="@string/ago"
+                    android:textColor="#ffffff"
+                    android:textSize="20dp"
+                    android:textStyle="bold">
+
+                </CheckedTextView>
+
+                <EditText
+                    android:id="@+id/feeAgo"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:hint="€ $ £"
+                    android:inputType="numberDecimal" />
+
+            </LinearLayout>
+
+
+            <!--<ListView
+                android:id="@+id/listPagamentiAggiunti"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10sp"
+                android:layout_marginLeft="40sp"
+                android:layout_marginRight="40sp"
+                android:orientation="vertical">
+
+            </ListView>
+
+            <ImageButton
+                android:id="@+id/aggiungiPagamento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/userpayadd"
+                android:textColor="#ffffff"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+-->
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

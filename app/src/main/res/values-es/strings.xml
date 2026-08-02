@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Gym Register</string>
+    <string name="action_settings">Settings</string>
+
+    <drawable name="engymregister">#FFF</drawable>
+
+    <string name="slogan">Su registro digitales</string>
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="title_activity_gestionepalestre">Gestionar gimnasio</string>
+    <string name="title_activity_aggiungi">Añadir usuario</string>
+    <string name="title_activity_gestione_iscritti">Gestionar usuario</string>
+    <string name="title_activity_dettagli">Información de usuario</string>
+    <string name="title_activity_elimina_palestre">Eliminar gimnasio</string>
+    <string name="title_activity_aggiungi_palestra">Añadir gimnasio</string>
+    <string name="title_activity_rinomina_palestra">Rinomina Palestra</string>
+    <string name="title_activity_rinomina_edit">Rinomina</string>
+    <string name="title_activity_modifica_iscritto">Modifica Iscritto</string>
+    <string name="title_activity_info_app">Información</string>
+    <string name="title_activity_risultati">Resultados</string>
+    <string name="title_activity_note">Notes</string>
+    <string name="id">Nombre y apellidos</string>
+    <string name="data">Fecha de nacimiento</string>
+    <string name="address">Dirección</string>
+    <string name="citta">Ciudad</string>
+    <string name="phone">Número</string>
+    <string name="pay">Pagos</string>
+    <string name="iscrizione">Inscripción</string>
+    <string name="sept">Septiembre</string>
+    <string name="oct">Octubre</string>
+    <string name="nov">Noviembre</string>
+    <string name="dec">Diciembre</string>
+    <string name="jan">Enero</string>
+    <string name="feb">Febrero</string>
+    <string name="mar">Marzo</string>
+    <string name="apr">Abril</string>
+    <string name="mag">Mayo</string>
+    <string name="jun">Junio</string>
+    <string name="jul">Julio</string>
+    <string name="ago">August</string>
+
+    <string name="isnp">Introduzca el nombre del gimnasio</string>
+    <string name="nomepalestra">Nombre del gimnasio</string>
+    <string name="toccapalestra">Toque en un elemento para eliminarlo</string>
+    <string name="search1">Búsqueda</string>
+    <string name="totale123">Total de suscriptores: </string>
+    <string name="search2">Incluya el nombre a buscar</string>
+
+
+    <!-- stringhe delle opzioni -->
+    <string name="info">Información</string>
+    <string name="men1">Exportar a PDF/HTML</string>
+    <string name="men2">Guardar</string>
+    <string name="men3">Backup</string>
+    <string name="men4">Restaurar</string>
+    <string name="men5">Borra los datos</string>
+
+    <!-- finestre dialogo -->
+    <string name="conferma">Confirmación</string>
+    <string name="ripristino">Restauración de la copia de seguridad se perderán los datos actuales</string>
+    <string name="ripristina">Restaurar</string>
+    <string name="annulla">Cancela</string>
+    <string name="cleall">Esto borrará todos los datos relacionados con el curso.\n¿Estás seguro?</string>
+    <string name="elimina">Elimina</string>
+    <string name="elimusr">¿Quieres eliminar este escrito de la lista?</string>
+
+
+    <!-- toast -->
+    <string name="opannul">Abortar</string>
+    <string name="utel">Usuario eliminado</string>
+    <string name="corcan">Gimnasio eliminado</string>
+    <string name="nopal">No hay gimnasio encontrado</string>
+    <string name="notfund">Ningún usuario</string>
+    <string name="erior">Reordenado</string>
+    <string name="fsave">Hecho</string>
+    <string name="ferror">Error</string>
+    <string name="datidel">Hecho</string>
+    <string name="datiexp">Datos exportados en</string>
+    <string name="backupdone">Hecho</string>
+    <string name="restoredone">Hecho</string>
+    <string name="restorerr">No se han encontrado contenidos</string>
+    <string name="notesav">Note salvado</string>
+    <string name="addurs">Usuario adicional</string>
+    <string name="addgim">Gimnasio adicional</string>
+    <string name="registroPresenze">Attendance Register</string>
+    <string name="guidaPres">Questo è il registro presenze. Viene mostrato l\'elenco degli iscritti della palestra e le presenze in data odierna. Per aggiungere o togliere le presenze, premi il pulsante rosso per assegnare la presenza di questo giorno. Per vedere lo storico delle presenze per utente, clicca il bottone \'Controlla presenze\' del relativo utente</string>
+    <string name="noPres">No attendances</string>
+    <string name="controllaPresenze">Check attendances</string>
+    <string name="ok">Ok</string>
+    <string name="clearAttenda">Remove attendance</string>
+    <string name="clearAttMes">This operation will remove this attendance. Are you sure?</string>
+    <string name="presAdd">Attendance added</string>
+    <string name="presRemove">Attendance removed</string>
+    <string name="todayAtten">Today attendances</string>
+    <string name="riepilogo">Recap</string>
+    <string name="pagato">paid</string>
+    <string name="nopay">No payments</string>
+    <string name="numeroPres">Attendances:</string>
+    <string-array name="month_array">
+        <item>Todo</item>
+        <item>@string/sept</item>
+        <item>@string/oct</item>
+        <item>@string/nov</item>
+        <item>@string/dec</item>
+        <item>@string/jan</item>
+        <item>@string/feb</item>
+        <item>@string/mar</item>
+        <item>@string/apr</item>
+        <item>@string/mag</item>
+        <item>@string/jun</item>
+        <item>@string/jul</item>
+        <item>@string/ago</item>
+    </string-array>
+    <string name="haiSelezionato">You selected</string>
+    <string name="noName">Insert a name</string>
+    <string name="presenzagiadatabase">Attendance alredy insert!</string>
+    <string name="presefrase">You have alredy insert this date, try again</string>
+    <string name="rename">Rename gym</string>
+    <string name="renamedone">Gym renamed!</string>
+    <string name="wrong">Something went wrong. Please check every field</string>
+    <string name="tap2">Tap twice</string>
+    <string name="opdone">Done</string>
+    <string name="cambiaCorso">Change gym</string>
+    <string name="istruzioniCambio">Tap a gym to move in</string>
+    <string name="richiestaPermessi">You have to allow this app to read and write storage. To do this, go to Settings > apps > GymRegister > Permissions and tap on Storage switch button</string>
+    <string name="profilePic">Profile picture editor</string>
+    <string name="richiestaPermessiFile">You have to allow this app to read and write storage. To do this, go to Settings > apps > GymRegister > Permissions and tap on Storage switch button</string>
+    <string name="permessiError">The app was not allowed to write to your storage. Hence, it cannot function properly. Please consider granting it this permission</string>
+    <string name="title_activity_info_gdpractivity">"Info GDPR "</string>
+</resources>
